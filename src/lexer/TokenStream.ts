@@ -171,7 +171,7 @@ function isMaybeDoubleCharOperator(char: string) {
   return maybeDoubleCharOperators.includes(char)
 }
 
-const punctuationChars = ['(', ')', '[', ']', ',']
+const punctuationChars = ['(', ')', '[', ']', ',', ';']
 function isPunctuationChar(char: string) {
   return punctuationChars.includes(char)
 }

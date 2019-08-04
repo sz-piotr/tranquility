@@ -8,6 +8,9 @@ export function parse(source: string) {
 function parseStream(stream: TokenStream) {
   return parseProgram()
 
+  // HELPERS
+  // -------
+
   function at(type: string, value?: string) {
     const token = stream.peek()
     return token.type === type && (!value || token.value === value)
@@ -21,9 +24,14 @@ function parseStream(stream: TokenStream) {
   }
 
   function fail(): never {
-    const token = stream.peek()
-    throw new TypeError(`Unexpected token ${token.type}: "${token.value}" at: [${token.start}, ${token.end}]`)
+    const { type, value, start, end } = stream.peek()
+    throw new TypeError(
+      `Unexpected token ${type}: "${value}" at: [${start}, ${end}]`
+    )
   }
+
+  // CORE PARSER
+  // -----------
 
   function parseProgram(): Ast.AstNode {
     const children = []
@@ -62,10 +70,52 @@ function parseStream(stream: TokenStream) {
     const identifier = parseIdentifier()
     expect('operator', '=')
     const value = parseExpression()
-    return Ast.variableDeclaration(identifier, value, [identifier.range[0], value.range[1]])
+    return Ast.variableAssignment(identifier, value, [identifier.range[0], value.range[1]])
   }
 
-  function parseExpression() {
+  function parseExpression(): Ast.Expression {
+    let { start } = stream.peek()
+    let result: Ast.Expression = parseTerm()
+    while (at('operator', '+') || at('operator', '-')) {
+      const { value } = stream.next()
+      const right = parseTerm()
+      result = Ast.binaryOperation(
+        value as Ast.BinaryOperation['operator'],
+        result,
+        right,
+        [start, stream.peek().end]
+      )
+    }
+    return result
+  }
+
+  function parseTerm () {
+    let { start } = stream.peek()
+    let result: Ast.Expression = parseFactor()
+    while (at('operator', '*') || at('operator', '/')) {
+      const { value } = stream.next()
+      const right = parseFactor()
+      result = Ast.binaryOperation(
+        value as Ast.BinaryOperation['operator'],
+        result,
+        right,
+        [start, stream.peek().end]
+      )
+    }
+    return result
+  }
+
+  function parseFactor () {
+    if (at('punctuation', '(')) {
+      stream.next()
+      const expression = parseExpression()
+      expect('punctuation', ')')
+      return expression
+    }
+    return parseLiteral()
+  }
+
+  function parseLiteral () {
     if (at('number')) {
       return parseNumberLiteral()
     }
