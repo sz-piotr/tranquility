@@ -1,12 +1,5 @@
 import { InputStream } from './InputStream'
-import { isKeyword, isAlphanumericOperator } from './keywords'
-
-export interface Token {
-  type: string,
-  value: string,
-  start: number,
-  end: number
-}
+import { Token, TokenType } from './tokens'
 
 export class TokenStream {
   private current?: Token
@@ -32,109 +25,71 @@ export class TokenStream {
     return token
   }
 
-  private readNext() {
+  private readNext(): Token {
     this.skipWhile(isWhitespace)
 
-    const start = this.stream.location
     const char = this.stream.peek()
 
-    if (char === '') {
-      return {
-        type: 'eof',
-        value: '',
-        start,
-        end: this.stream.location
-      }
+    switch (char) {
+      case '': return this.token(TokenType.EOF, '')
+      case '\n': return this.token(TokenType.NEWLINE)
+      case '(': return this.token(TokenType.LEFT_PAREN)
+      case ')': return this.token(TokenType.RIGHT_PAREN)
+      case '[': return this.token(TokenType.LEFT_BRACKET)
+      case ']': return this.token(TokenType.RIGHT_BRACKET)
+      case '{': return this.token(TokenType.LEFT_BRACE)
+      case '}': return this.token(TokenType.RIGHT_BRACE)
+      case ',': return this.token(TokenType.COMMA)
+      case '.': return this.token(TokenType.DOT)
+      case ';': return this.token(TokenType.SEMICOLON)
+      case '-': return this.token(TokenType.MINUS)
+      case '+': return this.token(TokenType.PLUS)
+      case '*': return this.token(TokenType.STAR)
+      case '/': return this.token(TokenType.SLASH)
     }
 
-    if (char === '\r') {
-      let value = this.stream.next()
-      if (this.stream.peek() === '\n') {
-        value += this.stream.next()
-      }
-      return {
-        type: 'newline',
-        value,
-        start,
-        end: this.stream.location
-      }
-    }
+    let token =
+      this.maybeDouble('!', TokenType.BANG, '=', TokenType.BANG_EQUAL) ||
+      this.maybeDouble('=', TokenType.EQUAL, '=', TokenType.EQUAL_EQUAL) ||
+      this.maybeDouble('>', TokenType.GREATER, '=', TokenType.GREATER_EQUAL) ||
+      this.maybeDouble('<', TokenType.LESS, '=', TokenType.LESS_EQUAL) ||
+      this.maybeDouble('\r', TokenType.NEWLINE, '\n', TokenType.NEWLINE)
 
-    if (char === '\n') {
-      return {
-        type: 'newline',
-        value: this.stream.next(),
-        start,
-        end: this.stream.location
-      }
+    if (token) {
+      return token
     }
 
     if (isNumberChar(char)) {
       const value = this.readWhile(isNumberChar)
-      return {
-        type: 'number',
-        value,
-        start,
-        end: this.stream.location
-      }
+      return this.token(TokenType.NUMBER, value)
     }
 
     if (isIdentifierChar(char)) {
       const value = this.readWhile(isIdentifierChar)
-      return {
-        type: getIdentifierType(value),
-        value,
-        start,
-        end: this.stream.location
-      }
-    }
-
-    if (isPunctuationChar(char)) {
-      return {
-        type: 'punctuation',
-        value: this.stream.next(),
-        start,
-        end: this.stream.location
-      }
-    }
-
-    if (isSingleCharOperator(char)) {
-      return {
-        type: 'operator',
-        value: this.stream.next(),
-        start,
-        end: this.stream.location
-      }
-    }
-
-    if (isMaybeDoubleCharOperator(char)) {
-      let value = this.stream.next()
-      if (this.stream.peek() === '=') {
-        value += this.stream.next()
-      }
-      return {
-        type: 'operator',
-        value,
-        start,
-        end: this.stream.location
-      }
-    }
-
-    if (char === '!') {
-      this.stream.next()
-      if (this.stream.next() === '=') {
-        return {
-          type: 'operator',
-          value: '!=',
-          start,
-          end: this.stream.location
-        }
-      } else {
-        throw new Error('Unrecognized character "!"')
-      }
+      return this.token(getIdentifierType(value), value)
     }
 
     throw new Error(`Unrecognized character "${char}"`)
+  }
+
+  private token(type: TokenType, value = this.stream.next()): Token {
+    const end = this.stream.location
+    return { type, value, start: end - value.length, end }
+  }
+
+  private maybeDouble (
+    firstChar: string,
+    firstType: TokenType,
+    secondChar: string,
+    secondType: TokenType
+  ) {
+    if (this.stream.peek() === firstChar) {
+      const value = this.stream.next()
+      if (this.stream.peek() === secondChar) {
+        return this.token(secondType, value + this.stream.next())
+      }
+      return this.token(firstType, value)
+    }
   }
 
   private skipWhile(predicate: (value: string) => boolean) {
@@ -164,27 +119,17 @@ function isIdentifierChar(char: string) {
   return /\w/.test(char)
 }
 
-const singleCharOperators = ['+', '-', '*', '/', '%']
-function isSingleCharOperator(char: string) {
-  return singleCharOperators.includes(char)
-}
-
-const maybeDoubleCharOperators = ['=', '>', '<']
-function isMaybeDoubleCharOperator(char: string) {
-  return maybeDoubleCharOperators.includes(char)
-}
-
-const punctuationChars = ['(', ')', '[', ']', '{', '}', ',', ';']
-function isPunctuationChar(char: string) {
-  return punctuationChars.includes(char)
-}
-
 function getIdentifierType(identifier: string) {
-  if (isAlphanumericOperator(identifier)) {
-    return 'operator'
-  } else if(isKeyword(identifier)) {
-    return 'keyword'
-  } else {
-    return 'identifier'
+  switch (identifier) {
+    case 'let': return TokenType.LET
+    case 'function': return TokenType.FUNCTION
+    case 'for': return TokenType.FOR
+    case 'while': return TokenType.WHILE
+    case 'if': return TokenType.IF
+    case 'then': return TokenType.THEN
+    case 'else': return TokenType.ELSE
+    case 'true': return TokenType.TRUE
+    case 'false': return TokenType.FALSE
+    default: return TokenType.IDENTIFIER
   }
 }

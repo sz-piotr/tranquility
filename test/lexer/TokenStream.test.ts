@@ -2,14 +2,14 @@ import 'mocha'
 import { expect } from 'chai'
 
 import { TokenStream } from '../../src/lexer/TokenStream'
-import { keywords } from '../../src/lexer/keywords'
+import { TokenType } from '../../src/lexer/tokens'
 
 describe('TokenStream', () => {
   it('can tokenize identifiers', () => {
     const stream = TokenStream.fromString('someName')
 
     expect(stream.peek()).to.deep.equal({
-      type: 'identifier',
+      type: TokenType.IDENTIFIER,
       value: 'someName',
       start: 0,
       end: 8
@@ -20,7 +20,7 @@ describe('TokenStream', () => {
     const stream = TokenStream.fromString('  someName')
 
     expect(stream.peek()).to.deep.equal({
-      type: 'identifier',
+      type: TokenType.IDENTIFIER,
       value: 'someName',
       start: 2,
       end: 10
@@ -31,21 +31,21 @@ describe('TokenStream', () => {
     const stream = TokenStream.fromString('a bc de')
 
     expect(stream.next()).to.deep.equal({
-      type: 'identifier',
+      type: TokenType.IDENTIFIER,
       value: 'a',
       start: 0,
       end: 1
     })
 
     expect(stream.next()).to.deep.equal({
-      type: 'identifier',
+      type: TokenType.IDENTIFIER,
       value: 'bc',
       start: 2,
       end: 4
     })
 
     expect(stream.next()).to.deep.equal({
-      type: 'identifier',
+      type: TokenType.IDENTIFIER,
       value: 'de',
       start: 5,
       end: 7
@@ -66,7 +66,7 @@ describe('TokenStream', () => {
     stream.next()
 
     expect(stream.next()).to.deep.equal({
-      type: 'eof',
+      type: TokenType.EOF,
       value: '',
       start: 3,
       end: 3
@@ -77,7 +77,7 @@ describe('TokenStream', () => {
     const stream = TokenStream.fromString('123')
 
     expect(stream.next()).to.deep.equal({
-      type: 'number',
+      type: TokenType.NUMBER,
       value: '123',
       start: 0,
       end: 3
@@ -85,50 +85,67 @@ describe('TokenStream', () => {
   })
 
   it('can read keywords', () => {
-    for (const keyword of keywords) {
-      const stream = TokenStream.fromString(keyword)
+    const sequences = {
+      'let': TokenType.LET,
+      'function': TokenType.FUNCTION,
+      'for': TokenType.FOR,
+      'while': TokenType.WHILE,
+      'if': TokenType.IF,
+      'then': TokenType.THEN,
+      'else': TokenType.ELSE,
+      'true': TokenType.TRUE,
+      'false': TokenType.FALSE
+    }
+    const keys = Object.keys(sequences) as (keyof typeof sequences)[]
+
+    for (const sequence of keys) {
+      const stream = TokenStream.fromString(sequence)
 
       expect(stream.next()).to.deep.equal({
-        type: 'keyword',
-        value: keyword,
+        type: sequences[sequence],
+        value: sequence,
         start: 0,
-        end: keyword.length
+        end: sequence.length
       })
     }
   })
 
-  it('can read alphanumeric operators', () => {
-    const operators = ['and', 'or', 'not']
-    for (const operator of operators) {
-      const stream = TokenStream.fromString(`a ${operator} b`)
-
-      stream.next()
-
-      expect(stream.next()).to.deep.equal({
-        type: 'operator',
-        value: operator,
-        start: 2,
-        end: 2 + operator.length
-      })
+  it('can read special character sequences', () => {
+    const sequences = {
+      '(': TokenType.LEFT_PAREN,
+      ')': TokenType.RIGHT_PAREN,
+      '[': TokenType.LEFT_BRACKET,
+      ']': TokenType.RIGHT_BRACKET,
+      '{': TokenType.LEFT_BRACE,
+      '}': TokenType.RIGHT_BRACE,
+      ',': TokenType.COMMA,
+      '.': TokenType.DOT,
+      ';': TokenType.SEMICOLON,
+      '-': TokenType.MINUS,
+      '+': TokenType.PLUS,
+      '*': TokenType.STAR,
+      '/': TokenType.SLASH,
+      '!': TokenType.BANG,
+      '!=': TokenType.BANG_EQUAL,
+      '=': TokenType.EQUAL,
+      '==': TokenType.EQUAL_EQUAL,
+      '>': TokenType.GREATER,
+      '>=': TokenType.GREATER_EQUAL,
+      '<': TokenType.LESS,
+      '<=': TokenType.LESS_EQUAL
     }
-  })
+    const keys = Object.keys(sequences) as (keyof typeof sequences)[]
 
-  it('can read non alphanumeric operators', () => {
-    const operators = [
-      '+', '-', '*', '/', '%',
-      '<', '<=', '>', '>=',
-      '=', '==', '!='
-    ]
-    for (const operator of operators) {
-      const stream = TokenStream.fromString(`a${operator}b`)
+    for (const sequence of keys) {
+      const stream = TokenStream.fromString(`a${sequence}b`)
 
       stream.next()
 
       expect(stream.next()).to.deep.equal({
-        type: 'operator',
-        value: operator,
+        type: sequences[sequence],
+        value: sequence,
         start: 1,
-        end: 1 + operator.length
+        end: 1 + sequence.length
       })
     }
   })
@@ -138,36 +155,20 @@ describe('TokenStream', () => {
     expect(() => stream.next()).to.throw()
   })
 
-  it('can read punctuation', () => {
-    const punctuation = ['(', ')', '[', ']', ',']
-    for (const char of punctuation) {
-      const stream = TokenStream.fromString(`a${char}b`)
-
-      stream.next()
-
-      expect(stream.next()).to.deep.equal({
-        type: 'punctuation',
-        value: char,
-        start: 1,
-        end: 2
-      })
-    }
-  })
-
   it('can read \\n newline', () => {
     const stream = TokenStream.fromString('a\n\nb')
 
     stream.next()
 
     expect(stream.next()).to.deep.equal({
-      type: 'newline',
+      type: TokenType.NEWLINE,
       value: '\n',
       start: 1,
       end: 2
     })
 
     expect(stream.next()).to.deep.equal({
-      type: 'newline',
+      type: TokenType.NEWLINE,
       value: '\n',
       start: 2,
       end: 3
@@ -180,14 +181,14 @@ describe('TokenStream', () => {
     stream.next()
 
     expect(stream.next()).to.deep.equal({
-      type: 'newline',
+      type: TokenType.NEWLINE,
       value: '\r',
       start: 1,
       end: 2
     })
 
     expect(stream.next()).to.deep.equal({
-      type: 'newline',
+      type: TokenType.NEWLINE,
       value: '\r',
       start: 2,
       end: 3
@@ -200,14 +201,14 @@ describe('TokenStream', () => {
     stream.next()
 
     expect(stream.next()).to.deep.equal({
-      type: 'newline',
+      type: TokenType.NEWLINE,
       value: '\r\n',
       start: 1,
       end: 3
     })
 
     expect(stream.next()).to.deep.equal({
-      type: 'newline',
+      type: TokenType.NEWLINE,
       value: '\r\n',
       start: 3,
       end: 5

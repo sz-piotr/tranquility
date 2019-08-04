@@ -1,4 +1,5 @@
 import { TokenStream } from '../lexer/TokenStream'
+import { TokenType } from '../lexer/tokens'
 import * as Ast from './ast'
 
 export function parse(source: string) {
@@ -11,13 +12,13 @@ function parseStream(stream: TokenStream) {
   // HELPERS
   // -------
 
-  function at(type: string, value?: string) {
+  function at(type: TokenType) {
     const token = stream.peek()
-    return token.type === type && (!value || token.value === value)
+    return token.type === type
   }
 
-  function expect(type: string, value?: string) {
-    if (at(type, value)) {
+  function expect(type: TokenType) {
+    if (at(type)) {
       return stream.next()
     }
     return fail()
@@ -37,75 +38,75 @@ function parseStream(stream: TokenStream) {
     const children = []
 
     skipNewlines()
-    while (!at('eof')) {
+    while (!at(TokenType.EOF)) {
       children.push(parseStatement())
       parseEndOfStatement()
     }
-    expect('eof')
+    expect(TokenType.EOF)
 
     return Ast.program(children, [0, stream.peek().end])
   }
 
   function parseEndOfStatement () {
-    expect('newline')
+    expect(TokenType.NEWLINE)
     skipNewlines()
   }
 
   function skipNewlines () {
-    while (at('newline')) {
+    while (at(TokenType.NEWLINE)) {
       stream.next()
     }
   }
 
   function parseStatement() {
-    if (at('keyword', 'let')) {
+    if (at(TokenType.LET)) {
       return parseVariableDeclaration()
     }
-    if (at('keyword', 'function')) {
+    if (at(TokenType.FUNCTION)) {
       return parseFunctionDefinition()
     }
     return parseExpression()
   }
 
   function parseVariableDeclaration() {
-    const { start } = expect('keyword', 'let')
+    const { start } = expect(TokenType.LET)
     const identifier = parseIdentifier()
-    expect('operator', '=')
+    expect(TokenType.EQUAL)
     const value = parseExpression()
     return Ast.variableDeclaration(identifier, value, [start, value.range[1]])
   }
 
   function parseFunctionDefinition () {
-    const { start } = expect('keyword', 'function')
+    const { start } = expect(TokenType.FUNCTION)
     const identifier = parseIdentifier()
 
-    expect('punctuation', '(')
+    expect(TokenType.LEFT_PAREN)
     const parameters = parseFunctionParameters()
-    expect('punctuation', ')')
+    expect(TokenType.RIGHT_PAREN)
 
-    expect('punctuation', '{')
+    expect(TokenType.LEFT_BRACE)
     skipNewlines()
     const body = parseFunctionBody()
-    const { end } = expect('punctuation', '}')
+    const { end } = expect(TokenType.RIGHT_BRACE)
 
     return Ast.functionDefinition(identifier, parameters, body, [start, end])
   }
 
   function parseFunctionParameters () {
     const parameters: Ast.Identifier[] = []
-    while(at('identifier')) {
+    while(at(TokenType.IDENTIFIER)) {
       parameters.push(parseIdentifier())
-      if (!at('punctuation', ',')) {
+      if (!at(TokenType.COMMA)) {
         break
       }
-      expect('punctuation', ',')
+      expect(TokenType.COMMA)
     }
     return parameters
   }
 
   function parseFunctionBody () {
     const body: Ast.Statement[] = []
-    while (!at('punctuation', '}')) {
+    while (!at(TokenType.RIGHT_BRACE)) {
       body.push(parseStatement())
       parseEndOfStatement()
     }
@@ -115,7 +116,7 @@ function parseStream(stream: TokenStream) {
   function parseExpression(): Ast.Expression {
     let { start } = stream.peek()
     let result: Ast.Expression = parseTerm()
-    while (at('operator', '+') || at('operator', '-')) {
+    while (at(TokenType.PLUS) || at(TokenType.MINUS)) {
       const { value } = stream.next()
       const right = parseTerm()
       result = Ast.binaryOperation(
@@ -131,7 +132,7 @@ function parseStream(stream: TokenStream) {
   function parseTerm () {
     let { start } = stream.peek()
     let result: Ast.Expression = parseCallOrFactor()
-    while (at('operator', '*') || at('operator', '/')) {
+    while (at(TokenType.STAR) || at(TokenType.SLASH)) {
       const { value } = stream.next()
       const right = parseCallOrFactor()
       result = Ast.binaryOperation(
@@ -147,20 +148,20 @@ function parseStream(stream: TokenStream) {
   function parseCallOrFactor (): Ast.Expression {
     const { start } = stream.peek()
     let result = parseFactor()
-    while (at('punctuation', '(')) {
-      expect('punctuation', '(')
+    while (at(TokenType.LEFT_PAREN)) {
+      expect(TokenType.LEFT_PAREN)
       const parameters: Ast.Expression[] = []
       skipNewlines()
-      while(!at('punctuation', ')')) {
+      while(!at(TokenType.RIGHT_PAREN)) {
         parameters.push(parseExpression())
         skipNewlines()
-        if (!at('punctuation', ',')) {
+        if (!at(TokenType.COMMA)) {
           break
         }
-        expect('punctuation', ',')
+        expect(TokenType.COMMA)
         skipNewlines()
       }
-      const { end } = expect('punctuation', ')')
+      const { end } = expect(TokenType.RIGHT_PAREN)
       result = Ast.functionCall(
         result,
         parameters,
@@ -171,25 +172,25 @@ function parseStream(stream: TokenStream) {
   }
 
   function parseFactor () {
-    if (at('punctuation', '(')) {
+    if (at(TokenType.LEFT_PAREN)) {
       stream.next()
       const expression = parseExpression()
-      expect('punctuation', ')')
+      expect(TokenType.RIGHT_PAREN)
       return expression
     }
     return parseLiteral()
   }
 
   function parseLiteral () {
-    if (at('number')) {
+    if (at(TokenType.NUMBER)) {
       return parseNumberLiteral()
     }
 
-    if (at('keyword', 'true') || at('keyword', 'false')) {
+    if (at(TokenType.TRUE) || at(TokenType.FALSE)) {
       return parseBooleanLiteral()
     }
 
-    if (at('identifier')) {
+    if (at(TokenType.IDENTIFIER)) {
       return parseIdentifier()
     }
 
@@ -207,7 +208,7 @@ function parseStream(stream: TokenStream) {
   }
 
   function parseIdentifier() {
-    const { start, end, value } = expect('identifier')
+    const { start, end, value } = expect(TokenType.IDENTIFIER)
     return Ast.identifier(value, [start, end])
   }
 }
