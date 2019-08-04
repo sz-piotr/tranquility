@@ -4,13 +4,13 @@ import * as Ast from '../../../src/parser/ast'
 import { stripRanges } from '../stripRanges'
 
 export function basicMath () {
-  it('c002 basicMath', () => {
+  it('basicMath', () => {
     const result = parse(`
-      name = (4 + 5) / 3 - 7 * (((8)) * (2 / 3))
+      let name = (4 + 5) / 3 - 7 * (((8)) * (2 / 3))
     `)
 
     const expected = Ast.program([
-      Ast.variableAssignment(
+      Ast.variableDeclaration(
         Ast.identifier('name'),
         Ast.binaryOperation(
           '-',

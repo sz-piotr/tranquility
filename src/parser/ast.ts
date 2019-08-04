@@ -40,21 +40,43 @@ export function variableDeclaration (
   }
 }
 
-export interface VariableAssignment extends AstNodeBase {
-  type: 'VariableAssignment',
+export interface FunctionDefinition extends AstNodeBase {
+  type: 'FunctionDefinition',
   identifier: Identifier,
-  value: Expression
+  parameters: Identifier[],
+  body: Statement[]
 }
 
-export function variableAssignment (
+export function functionDefinition (
   identifier: Identifier,
-  value: Expression,
+  parameters: Identifier[],
+  body: Statement[],
   range: Range = [0, 0]
-): VariableAssignment {
+): FunctionDefinition {
   return {
-    type: 'VariableAssignment',
+    type: 'FunctionDefinition',
     identifier,
-    value,
+    parameters,
+    body,
+    range
+  }
+}
+
+export interface FunctionCall extends AstNodeBase {
+  type: 'FunctionCall',
+  callee: Expression,
+  parameters: Expression[]
+}
+
+export function functionCall (
+  callee: Expression,
+  parameters: Expression[],
+  range: Range = [0, 0]
+): FunctionCall {
+  return {
+    type: 'FunctionCall',
+    callee,
+    parameters,
     range
   }
 }
@@ -131,15 +153,16 @@ export function booleanLiteral (
 
 export type Statement
   = VariableDeclaration
-  | VariableAssignment
+  | FunctionDefinition
+  | Expression
 
 export type Expression
   = NumberLiteral
   | BooleanLiteral
   | BinaryOperation
+  | FunctionCall
+  | Identifier
 
 export type AstNode
   = Program
-  | Identifier
   | Statement
-  | Expression

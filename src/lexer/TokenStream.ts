@@ -9,7 +9,7 @@ export interface Token {
 }
 
 export class TokenStream {
-  private current: Token | null = null
+  private current?: Token
   public constructor (
     private stream: Readonly<InputStream>
   ) {
@@ -25,7 +25,7 @@ export class TokenStream {
 
   public next() {
     const token = this.current || this.readNext()
-    this.current = null
+    this.current = undefined
     return token
   }
 
@@ -171,7 +171,7 @@ function isMaybeDoubleCharOperator(char: string) {
   return maybeDoubleCharOperators.includes(char)
 }
 
-const punctuationChars = ['(', ')', '[', ']', ',', ';']
+const punctuationChars = ['(', ')', '[', ']', '{', '}', ',', ';']
 function isPunctuationChar(char: string) {
   return punctuationChars.includes(char)
 }

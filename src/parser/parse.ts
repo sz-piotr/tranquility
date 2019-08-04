@@ -26,7 +26,7 @@ function parseStream(stream: TokenStream) {
   function fail(): never {
     const { type, value, start, end } = stream.peek()
     throw new TypeError(
-      `Unexpected token ${type}: "${value}" at: [${start}, ${end}]`
+      `Unexpected token ${type}: ${JSON.stringify(value)} at: [${start}, ${end}]`
     )
   }
 
@@ -36,41 +36,80 @@ function parseStream(stream: TokenStream) {
   function parseProgram(): Ast.AstNode {
     const children = []
 
+    skipNewlines()
     while (!at('eof')) {
-      while (at('newline')) {
-        stream.next()
-      }
       children.push(parseStatement())
-      if (at('newline')) {
-        stream.next()
-      } else {
-        expect('eof')
-      }
+      parseEndOfStatement()
     }
+    expect('eof')
 
     return Ast.program(children, [0, stream.peek().end])
+  }
+
+  function parseEndOfStatement () {
+    expect('newline')
+    skipNewlines()
+  }
+
+  function skipNewlines () {
+    while (at('newline')) {
+      stream.next()
+    }
   }
 
   function parseStatement() {
     if (at('keyword', 'let')) {
       return parseVariableDeclaration()
     }
-    return parseVariableAssignment()
+    if (at('keyword', 'function')) {
+      return parseFunctionDefinition()
+    }
+    return parseExpression()
   }
 
   function parseVariableDeclaration() {
-    const { start } = stream.next()
+    const { start } = expect('keyword', 'let')
     const identifier = parseIdentifier()
     expect('operator', '=')
     const value = parseExpression()
     return Ast.variableDeclaration(identifier, value, [start, value.range[1]])
   }
 
-  function parseVariableAssignment() {
+  function parseFunctionDefinition () {
+    const { start } = expect('keyword', 'function')
     const identifier = parseIdentifier()
-    expect('operator', '=')
-    const value = parseExpression()
-    return Ast.variableAssignment(identifier, value, [identifier.range[0], value.range[1]])
+
+    expect('punctuation', '(')
+    const parameters = parseFunctionParameters()
+    expect('punctuation', ')')
+
+    expect('punctuation', '{')
+    skipNewlines()
+    const body = parseFunctionBody()
+    const { end } = expect('punctuation', '}')
+
+    return Ast.functionDefinition(identifier, parameters, body, [start, end])
+  }
+
+  function parseFunctionParameters () {
+    const parameters: Ast.Identifier[] = []
+    while(at('identifier')) {
+      parameters.push(parseIdentifier())
+      if (!at('punctuation', ',')) {
+        break
+      }
+      expect('punctuation', ',')
+    }
+    return parameters
+  }
+
+  function parseFunctionBody () {
+    const body: Ast.Statement[] = []
+    while (!at('punctuation', '}')) {
+      body.push(parseStatement())
+      parseEndOfStatement()
+    }
+    return body
   }
 
   function parseExpression(): Ast.Expression {
@@ -91,15 +130,38 @@ function parseStream(stream: TokenStream) {
 
   function parseTerm () {
     let { start } = stream.peek()
-    let result: Ast.Expression = parseFactor()
+    let result: Ast.Expression = parseCallOrFactor()
     while (at('operator', '*') || at('operator', '/')) {
       const { value } = stream.next()
-      const right = parseFactor()
+      const right = parseCallOrFactor()
       result = Ast.binaryOperation(
         value as Ast.BinaryOperation['operator'],
         result,
         right,
         [start, stream.peek().end]
+      )
+    }
+    return result
+  }
+
+  function parseCallOrFactor (): Ast.Expression {
+    const { start } = stream.peek()
+    let result = parseFactor()
+    while (at('punctuation', '(')) {
+      expect('punctuation', '(')
+      const parameters: Ast.Expression[] = []
+      while(at('identifier')) {
+        parameters.push(parseExpression())
+        if (!at('punctuation', ',')) {
+          break
+        }
+        expect('punctuation', ',')
+      }
+      const { end } = expect('punctuation', ')')
+      result = Ast.functionCall(
+        result,
+        parameters,
+        [start, end]
       )
     }
     return result
@@ -122,6 +184,10 @@ function parseStream(stream: TokenStream) {
 
     if (at('keyword', 'true') || at('keyword', 'false')) {
       return parseBooleanLiteral()
+    }
+
+    if (at('identifier')) {
+      return parseIdentifier()
     }
 
     return fail()
