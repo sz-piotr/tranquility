@@ -20,11 +20,14 @@ export class TokenStream {
   }
 
   public peek() {
-    return this.current || (this.current = this.readNext())
+    if (!this.current) {
+      this.current = this.readNext()
+    }
+    return this.current
   }
 
   public next() {
-    const token = this.current || this.readNext()
+    const token = this.peek()
     this.current = undefined
     return token
   }

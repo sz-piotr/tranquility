@@ -150,12 +150,15 @@ function parseStream(stream: TokenStream) {
     while (at('punctuation', '(')) {
       expect('punctuation', '(')
       const parameters: Ast.Expression[] = []
-      while(at('identifier')) {
+      skipNewlines()
+      while(!at('punctuation', ')')) {
         parameters.push(parseExpression())
+        skipNewlines()
         if (!at('punctuation', ',')) {
           break
         }
         expect('punctuation', ',')
+        skipNewlines()
       }
       const { end } = expect('punctuation', ')')
       result = Ast.functionCall(
