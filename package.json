@@ -9,8 +9,8 @@
     "build": "rm -rf dist && yarn build:esm && yarn build:cjs",
     "build:esm": "tsc --outDir dist/esm --module ES6",
     "build:cjs": "tsc --outDir dist/cjs --declaration false",
-    "lint": "eslint src/**/*.ts test/**/*.ts",
-    "test": "mocha -r ts-node/register --watch-extensions ts"
+    "lint": "eslint \"{src,test}/**/*.ts\"",
+    "test": "mocha -r ts-node/register --watch-extensions ts test/**/*.test.ts"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",

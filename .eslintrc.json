@@ -26,17 +26,24 @@
       "error",
       2
     ],
+    "comma-dangle": ["error", {
+      "arrays": "never",
+      "objects": "never",
+      "imports": "never",
+      "exports": "never",
+      "functions": "never"
+    }],
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/member-delimiter-style": [
       "error",
       {
         "multiline": {
           "delimiter": "comma",
-          "requireLast": true
+          "requireLast": false
         },
         "singleline": {
-            "delimiter": "comma",
-            "requireLast": false
+          "delimiter": "comma",
+          "requireLast": false
         }
       }
     ],
