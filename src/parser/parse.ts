@@ -1,12 +1,12 @@
-import { TokenStream } from '../lexer/TokenStream'
-import { TokenType } from '../lexer/tokens'
+import { Scanner } from '../scanner/Scanner'
+import { TokenType } from '../scanner/tokens'
 import * as Ast from './ast'
 
 export function parse(source: string) {
-  return parseStream(TokenStream.fromString(source))
+  return parseStream(Scanner.fromString(source))
 }
 
-function parseStream(stream: TokenStream) {
+function parseStream(stream: Scanner) {
   return parseProgram()
 
   // HELPERS

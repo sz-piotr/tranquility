@@ -1,7 +1,7 @@
 import { InputStream } from './InputStream'
 import { Token, TokenType } from './tokens'
 
-export class TokenStream {
+export class Scanner {
   private current?: Token
   public constructor (
     private stream: Readonly<InputStream>
@@ -9,7 +9,7 @@ export class TokenStream {
   }
 
   public static fromString(source: string) {
-    return new TokenStream(new InputStream(source))
+    return new Scanner(new InputStream(source))
   }
 
   public peek() {
@@ -28,53 +28,50 @@ export class TokenStream {
   private readNext(): Token {
     this.skipWhile(isWhitespace)
 
-    const char = this.stream.peek()
+    return (
+      this.maybeSingle('', TokenType.EOF, '') ||
 
-    switch (char) {
-      case '': return this.token(TokenType.EOF, '')
-      case '\n': return this.token(TokenType.NEWLINE)
-      case '(': return this.token(TokenType.LEFT_PAREN)
-      case ')': return this.token(TokenType.RIGHT_PAREN)
-      case '[': return this.token(TokenType.LEFT_BRACKET)
-      case ']': return this.token(TokenType.RIGHT_BRACKET)
-      case '{': return this.token(TokenType.LEFT_BRACE)
-      case '}': return this.token(TokenType.RIGHT_BRACE)
-      case ',': return this.token(TokenType.COMMA)
-      case '.': return this.token(TokenType.DOT)
-      case ';': return this.token(TokenType.SEMICOLON)
-      case '-': return this.token(TokenType.MINUS)
-      case '+': return this.token(TokenType.PLUS)
-      case '*': return this.token(TokenType.STAR)
-      case '/': return this.token(TokenType.SLASH)
-    }
+      this.maybeSingle('(', TokenType.LEFT_PAREN) ||
+      this.maybeSingle(')', TokenType.RIGHT_PAREN) ||
+      this.maybeSingle('[', TokenType.LEFT_BRACKET) ||
+      this.maybeSingle(']', TokenType.RIGHT_BRACKET) ||
+      this.maybeSingle('{', TokenType.LEFT_BRACE) ||
+      this.maybeSingle('}', TokenType.RIGHT_BRACE) ||
 
-    let token =
+      this.maybeSingle(',', TokenType.COMMA) ||
+      this.maybeSingle('.', TokenType.DOT) ||
+      this.maybeSingle(';', TokenType.SEMICOLON) ||
+
+      this.maybeSingle('-', TokenType.MINUS) ||
+      this.maybeSingle('+', TokenType.PLUS) ||
+      this.maybeSingle('*', TokenType.STAR) ||
+      this.maybeSingle('/', TokenType.SLASH) ||
+
       this.maybeDouble('!', TokenType.BANG, '=', TokenType.BANG_EQUAL) ||
       this.maybeDouble('=', TokenType.EQUAL, '=', TokenType.EQUAL_EQUAL) ||
       this.maybeDouble('>', TokenType.GREATER, '=', TokenType.GREATER_EQUAL) ||
       this.maybeDouble('<', TokenType.LESS, '=', TokenType.LESS_EQUAL) ||
-      this.maybeDouble('\r', TokenType.NEWLINE, '\n', TokenType.NEWLINE)
 
-    if (token) {
-      return token
-    }
+      this.maybeSingle('\n', TokenType.NEWLINE) ||
+      this.maybeDouble('\r', TokenType.NEWLINE, '\n', TokenType.NEWLINE) ||
 
-    if (isNumberChar(char)) {
-      const value = this.readWhile(isNumberChar)
-      return this.token(TokenType.NUMBER, value)
-    }
+      this.maybeNumber() ||
+      this.maybeIdentifier() ||
 
-    if (isIdentifierChar(char)) {
-      const value = this.readWhile(isIdentifierChar)
-      return this.token(getIdentifierType(value), value)
-    }
-
-    throw new Error(`Unrecognized character "${char}"`)
+      this.fail()
+    )
   }
 
-  private token(type: TokenType, value = this.stream.next()): Token {
-    const end = this.stream.location
-    return { type, value, start: end - value.length, end }
+  private skipWhile(predicate: (value: string) => boolean) {
+    while (predicate(this.stream.peek())) {
+      this.stream.next()
+    }
+  }
+
+  private maybeSingle(char: string, type: TokenType, value?: string) {
+    if (this.stream.peek() === char) {
+      return this.token(type, value)
+    }
   }
 
   private maybeDouble (
@@ -92,9 +89,17 @@ export class TokenStream {
     }
   }
 
-  private skipWhile(predicate: (value: string) => boolean) {
-    while (predicate(this.stream.peek())) {
-      this.stream.next()
+  private maybeNumber () {
+    if (isNumberChar(this.stream.peek())) {
+      const value = this.readWhile(isNumberChar)
+      return this.token(TokenType.NUMBER, value)
+    }
+  }
+
+  private maybeIdentifier () {
+    if (isIdentifierChar(this.stream.peek())) {
+      const value = this.readWhile(isIdentifierChar)
+      return this.token(getIdentifierType(value), value)
     }
   }
 
@@ -104,6 +109,17 @@ export class TokenStream {
       value += this.stream.next()
     }
     return value
+  }
+
+  private token(type: TokenType, value = this.stream.next()): Token {
+    const end = this.stream.location
+    return { type, value, start: end - value.length, end }
+  }
+
+  private fail (): never {
+    const char = this.stream.peek()
+    const at = this.stream.location
+    throw new TypeError(`Unrecognized character ${JSON.stringify(char)} at ${at}`)
   }
 }
 

@@ -1,7 +1,7 @@
 import 'mocha'
 import { expect } from 'chai'
 
-import { InputStream } from '../../src/lexer/InputStream'
+import { InputStream } from '../../src/scanner/InputStream'
 
 describe('InputStream', () => {
   it('peek should return char and not modify location', () => {

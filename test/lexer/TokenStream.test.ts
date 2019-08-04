@@ -1,12 +1,12 @@
 import 'mocha'
 import { expect } from 'chai'
 
-import { TokenStream } from '../../src/lexer/TokenStream'
-import { TokenType } from '../../src/lexer/tokens'
+import { Scanner } from '../../src/scanner/Scanner'
+import { TokenType } from '../../src/scanner/tokens'
 
 describe('TokenStream', () => {
   it('can tokenize identifiers', () => {
-    const stream = TokenStream.fromString('someName')
+    const stream = Scanner.fromString('someName')
 
     expect(stream.peek()).to.deep.equal({
       type: TokenType.IDENTIFIER,
@@ -17,7 +17,7 @@ describe('TokenStream', () => {
   })
 
   it('can strip whitespace', () => {
-    const stream = TokenStream.fromString('  someName')
+    const stream = Scanner.fromString('  someName')
 
     expect(stream.peek()).to.deep.equal({
       type: TokenType.IDENTIFIER,
@@ -28,7 +28,7 @@ describe('TokenStream', () => {
   })
 
   it('can read multiple identifiers', () => {
-    const stream = TokenStream.fromString('a bc de')
+    const stream = Scanner.fromString('a bc de')
 
     expect(stream.next()).to.deep.equal({
       type: TokenType.IDENTIFIER,
@@ -53,7 +53,7 @@ describe('TokenStream', () => {
   })
 
   it('peek does not advance the stream', () => {
-    const stream = TokenStream.fromString('a')
+    const stream = Scanner.fromString('a')
 
     const token = stream.peek()
 
@@ -61,7 +61,7 @@ describe('TokenStream', () => {
   })
 
   it('reads eof as last token', () => {
-    const stream = TokenStream.fromString('abc')
+    const stream = Scanner.fromString('abc')
 
     stream.next()
 
@@ -74,7 +74,7 @@ describe('TokenStream', () => {
   })
 
   it('can read a number token', () => {
-    const stream = TokenStream.fromString('123')
+    const stream = Scanner.fromString('123')
 
     expect(stream.next()).to.deep.equal({
       type: TokenType.NUMBER,
@@ -99,7 +99,7 @@ describe('TokenStream', () => {
     const keys = Object.keys(sequences) as (keyof typeof sequences)[]
 
     for (const sequence of keys) {
-      const stream = TokenStream.fromString(sequence)
+      const stream = Scanner.fromString(sequence)
 
       expect(stream.next()).to.deep.equal({
         type: sequences[sequence],
@@ -137,7 +137,7 @@ describe('TokenStream', () => {
     const keys = Object.keys(sequences) as (keyof typeof sequences)[]
 
     for (const sequence of keys) {
-      const stream = TokenStream.fromString(`a${sequence}b`)
+      const stream = Scanner.fromString(`a${sequence}b`)
 
       stream.next()
 
@@ -151,12 +151,12 @@ describe('TokenStream', () => {
   })
 
   it('throws for unrecognized characters', () => {
-    const stream = TokenStream.fromString('\u0000')
+    const stream = Scanner.fromString('\u0000')
     expect(() => stream.next()).to.throw()
   })
 
   it('can read \\n newline', () => {
-    const stream = TokenStream.fromString('a\n\nb')
+    const stream = Scanner.fromString('a\n\nb')
 
     stream.next()
 
@@ -176,7 +176,7 @@ describe('TokenStream', () => {
   })
 
   it('can read \\r newline', () => {
-    const stream = TokenStream.fromString('a\r\rb')
+    const stream = Scanner.fromString('a\r\rb')
 
     stream.next()
 
@@ -196,7 +196,7 @@ describe('TokenStream', () => {
   })
 
   it('can read \\r\\n newline', () => {
-    const stream = TokenStream.fromString('a\r\n\r\nb')
+    const stream = Scanner.fromString('a\r\n\r\nb')
 
     stream.next()
 
