@@ -1,0 +1,157 @@
+// Events are declared as separate entities
+event Transfer {
+  from : Address
+  to : Address
+  value: Uint
+}
+
+// Databases are an abstraction over storage manipulation
+database Token {
+  // They declare what storage they are using
+  balances : Map(Address, Uint)
+  supply : Uint
+
+  // They also declare a public api
+
+  // Functions that do not modify storage are inferred as Query (view)
+  // Argument types are also inferred from use
+  // This function has type Query(Address, Uint)
+  balanceOf (address) {
+    return balances[address]
+  }
+
+  totalSupply () {
+    return supply
+  }
+
+  mint (address, amount) {
+    // Check is the equivalent of solidity require
+    // ZERO is a special type that means a value composed of 0x00 bytes
+    check(address != ZERO)
+    check(amount != 0)
+
+    // Operations on numbers use safe math by default
+    balances[address] += amount
+    supply += amount
+
+    // Events can be emitted just like in Solidity
+    emit Transfer(ZERO, address, amount)
+  }
+
+  transfer (from, to, amount) {
+    check(from != ZERO)
+    check(to != ZERO)
+    check(amount != 0)
+
+    // Since math is safe by default it can throw
+    // To provide a custom message use the -> operator
+    balances[from] -= amount -> 'Insufficient funds'
+    balances[to] += amount
+
+    emit Transfer(from, to, amount)
+  }
+
+  // Type inference means that this function has type of
+  // Command(Address, Uint)
+  burn (address, amount) {
+    check(address != ZERO)
+    check(amount != 0)
+
+    balances[address] -= amount -> 'Insufficient funds'
+    supply -= amount
+
+    emit Transfer(address, ZERO, amount)
+  }
+}
+
+event Approval {
+  owner : Address
+  spender : Address
+  value: Uint
+}
+
+database TokenWithAllowance {
+  // Databases can include other databases as storage
+  token : Token
+  allowances : Map(Address, Map(Address, Uint))
+
+  // Databases can use (redeclare as own) functions from nested databases
+  use token.balanceOf
+  use token.totalSupply
+  use token.mint
+  use token.transfer
+  use token.burn
+
+  // This long list can be shortened as:
+  // use token.*
+
+  allowance (owner, spender) {
+    return allowances[owner][spender]
+  }
+
+  approve (owner, spender, value) {
+    check(from != ZERO)
+    check(spender != ZERO)
+
+    allowances[owner][spender] = value
+
+    emit Approval(owner, spender, value)
+  }
+
+  transferFrom (owner, spender, to, value) {
+    // To prevent long lines the -> operator can be used on the next line
+    let newAllowance = allowance(owner, spender) - value
+      -> 'Insufficient allowance'
+
+    // Calling own function is as easy as typing its name
+    approve(owner, spender, newAllowance)
+    // Calling a nested database's one means you have to specify the target
+    token.transfer(owner, to, value)
+  }
+
+  burnFrom (owner, spender, value) {
+    let newAllowance = allowance(owner, spender) - value
+      -> 'Insufficient allowance'
+
+    approve(owner, spender, newAllowance)
+    token.burn(owner, value)
+  }
+}
+
+// Contracts are different from databases in many ways:
+// 1. They can be constructed
+// 2. They can receive messages
+// 3. They can call other contracts
+// Neither databases nor contracts can nest other contracts
+// The reason for the distinction between contracts and databases is to enable
+// easy library authoring without the need for inheritance
+contract ExampleCoin {
+  token : TokenWithAllowance
+
+  // Contracts can use only view functions
+  use token.balanceOf
+  use token.totalSupply
+  use token.allowance
+
+  // Constants are compiled to view functions
+  name = 'ExampleCoin'
+  symbol = 'EXC'
+  decimals = 18
+
+  // The first argument to a contract function is always a message
+  // If the contract does not use msg.value the function is non-payable
+  transfer (msg, to, amount) {
+    token.transfer(msg.sender, to, amount)
+    return true
+  }
+
+  approve (msg, spender, amount) {
+    token.approve(msg.sender, spender, amount)
+    return true
+  }
+
+  transferFrom (msg, owner, to, amount) {
+    token.transferFrom(owner, msg.sender, to, amount)
+    return true
+  }
+}
