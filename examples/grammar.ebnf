@@ -1,0 +1,41 @@
+program ::= declaration program*
+
+declaration ::= event | function | storage | contract
+
+
+event ::= 'event' IDENTIFIER '{' field* '}'
+
+
+function ::= 'function' method
+
+
+storage ::= 'storage' IDENTIFIER storage-params? '{' object-body '}'
+
+storage-params ::= '(' IDENTIFIER (',' IDENTIFIER)* ')'
+
+
+contract ::= 'contract' IDENTIFIER '{' object-body '}'
+
+
+object-body ::= (field | use | method)*
+
+
+field ::= IDENTIFIER ':' type
+
+
+use ::= 'use' IDENTIFIER '.' (IDENTIFIER | '*')
+
+
+method ::= IDENTIFIER '(' method-params? ')' '{' statement* '}'
+
+method-params ::= method-param (',' method-param)*
+
+method-param ::= IDENTIFIER (':' type)?
+
+
+type ::= IDENTIFIER type-params?
+
+type-params ::= '(' type (',' type)* ')'
+
+
+statement ::= ???

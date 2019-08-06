@@ -1,11 +1,11 @@
-storage Set('t) {
-  map : Map('t, Uint)
-  array : Array('t)
+storage Set (a) {
+  map : Map(a, Uint)
+  array : Array(a)
 
   use array.get
   use array.length
 
-  has (value : 't) {
+  has (value) {
     return map[value] != 0
   }
 
