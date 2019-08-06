@@ -5,8 +5,8 @@ event Transfer {
   value: Uint
 }
 
-// Databases are an abstraction over storage manipulation
-database Token {
+// Storages are an abstraction over contract storage manipulation
+storage Token {
   // They declare what storage they are using
   balances : Map(Address, Uint)
   supply : Uint
@@ -70,12 +70,12 @@ event Approval {
   value: Uint
 }
 
-database TokenWithAllowance {
-  // Databases can include other databases as storage
+storage TokenWithAllowance {
+  // Storages can include other storages as storage
   token : Token
   allowances : Map(Address, Map(Address, Uint))
 
-  // Databases can use (redeclare as own) functions from nested databases
+  // Storages can use (redeclare as own) functions from nested storages
   use token.balanceOf
   use token.totalSupply
   use token.mint
@@ -105,7 +105,7 @@ database TokenWithAllowance {
 
     // Calling own function is as easy as typing its name
     approve(owner, spender, newAllowance)
-    // Calling a nested database's one means you have to specify the target
+    // Calling a nested storage's one means you have to specify the target
     token.transfer(owner, to, value)
   }
 
@@ -118,12 +118,12 @@ database TokenWithAllowance {
   }
 }
 
-// Contracts are different from databases in many ways:
+// Contracts are different from storages in many ways:
 // 1. They can be constructed
 // 2. They can receive messages
 // 3. They can call other contracts
-// Neither databases nor contracts can nest other contracts
-// The reason for the distinction between contracts and databases is to enable
+// Neither storages nor contracts can nest other contracts
+// The reason for the distinction between contracts and storages is to enable
 // easy library authoring without the need for inheritance
 contract ExampleCoin {
   token : TokenWithAllowance

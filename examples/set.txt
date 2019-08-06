@@ -1,0 +1,28 @@
+storage Set('t) {
+  map : Map('t, Uint)
+  array : Array('t)
+
+  use array.get
+  use array.length
+
+  has (value : 't) {
+    return map[value] != 0
+  }
+
+  add (value) {
+    if (has(value)) {
+      array.push(value)
+      map[value] = array.length()
+    }
+  }
+
+  remove (value) {
+    let index = map[value]
+    if (index != 0) {
+      let last = array.last()
+      array[index - 1] = last
+      map[last] = index
+      map[value] = 0
+    }
+  }
+}
