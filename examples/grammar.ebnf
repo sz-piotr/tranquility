@@ -9,15 +9,15 @@ event ::= 'event' IDENTIFIER '{' field* '}'
 function ::= 'function' method
 
 
-storage ::= 'storage' IDENTIFIER storage-params? '{' object-body '}'
+storage ::= 'storage' IDENTIFIER storage_params? '{' object_body '}'
 
-storage-params ::= '(' IDENTIFIER (',' IDENTIFIER)* ')'
-
-
-contract ::= 'contract' IDENTIFIER '{' object-body '}'
+storage_params ::= '(' IDENTIFIER (',' IDENTIFIER)* ')'
 
 
-object-body ::= (field | use | method)*
+contract ::= 'contract' IDENTIFIER '{' object_body '}'
+
+
+object_body ::= (field | use | method)*
 
 
 field ::= IDENTIFIER ':' type
@@ -26,16 +26,16 @@ field ::= IDENTIFIER ':' type
 use ::= 'use' IDENTIFIER '.' (IDENTIFIER | '*')
 
 
-method ::= IDENTIFIER '(' method-params? ')' '{' statement* '}'
+method ::= IDENTIFIER '(' method_params? ')' '{' statement* '}'
 
-method-params ::= method-param (',' method-param)*
+method_params ::= method_param (',' method_param)*
 
-method-param ::= IDENTIFIER (':' type)?
+method_param ::= IDENTIFIER (':' type)?
 
 
-type ::= IDENTIFIER type-params?
+type ::= IDENTIFIER type_params?
 
-type-params ::= '(' type (',' type)* ')'
+type_params ::= '(' type (',' type)* ')'
 
 
 statement ::= ???
