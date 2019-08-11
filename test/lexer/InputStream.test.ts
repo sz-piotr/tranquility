@@ -11,7 +11,7 @@ describe('InputStream', () => {
     stream.next()
 
     expect(stream.location).to.deep.equal(location(1, 0, 1))
-    expect(stream.peek()).to.equal('b')
+    expect(stream.peek()).to.equals('b')
     expect(stream.location).to.deep.equal(location(1, 0, 1))
   })
 
@@ -21,7 +21,7 @@ describe('InputStream', () => {
     stream.next()
 
     expect(stream.location).to.deep.equal(location(1, 0, 1))
-    expect(stream.next()).to.equal('b')
+    expect(stream.next()).to.equals('b')
     expect(stream.location).to.deep.equal(location(2, 0, 2))
   })
 
@@ -32,8 +32,8 @@ describe('InputStream', () => {
     stream.next()
     stream.next()
 
-    expect(stream.peek()).to.equal(undefined)
-    expect(stream.next()).to.equal(undefined)
+    expect(stream.peek()).to.equals(undefined)
+    expect(stream.next()).to.equals(undefined)
   })
 
   it('calling next at the end does not change location', () => {

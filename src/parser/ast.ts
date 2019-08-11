@@ -1,14 +1,18 @@
 import { Location } from '../scanner/tokens'
 
-export const RANGE_ZERO: [Location, Location] = [
-  { position: 0, line: 0, column: 0 },
-  { position: 0, line: 0, column: 0 },
-]
-
 export interface AstNodeBase {
   type: string,
-  range: [Location, Location]
+  loc: {
+    start: Location,
+    end: Location
+  }
 }
+
+export const LOC_ZERO: AstNodeBase['loc'] = {
+  start: { position: 0, line: 0, column: 0 },
+  end: { position: 0, line: 0, column: 0 },
+}
+
 
 export interface Program extends AstNodeBase {
   type: 'Program',
@@ -17,12 +21,12 @@ export interface Program extends AstNodeBase {
 
 export function program (
   children: Statement[],
-  range = RANGE_ZERO
+  loc = LOC_ZERO
 ): Program {
   return {
     type: 'Program',
     children,
-    range
+    loc
   }
 }
 
@@ -35,13 +39,13 @@ export interface VariableDeclaration extends AstNodeBase {
 export function variableDeclaration (
   identifier: Identifier,
   value: Expression,
-  range = RANGE_ZERO
+  loc = LOC_ZERO
 ): VariableDeclaration {
   return {
     type: 'VariableDeclaration',
     identifier,
     value,
-    range
+    loc
   }
 }
 
@@ -56,14 +60,14 @@ export function functionDefinition (
   identifier: Identifier,
   parameters: Identifier[],
   body: Statement[],
-  range = RANGE_ZERO
+  loc = LOC_ZERO
 ): FunctionDefinition {
   return {
     type: 'FunctionDefinition',
     identifier,
     parameters,
     body,
-    range
+    loc
   }
 }
 
@@ -76,13 +80,13 @@ export interface FunctionCall extends AstNodeBase {
 export function functionCall (
   callee: Expression,
   parameters: Expression[],
-  range = RANGE_ZERO
+  loc = LOC_ZERO
 ): FunctionCall {
   return {
     type: 'FunctionCall',
     callee,
     parameters,
-    range
+    loc
   }
 }
 
@@ -93,12 +97,12 @@ export interface Identifier extends AstNodeBase {
 
 export function identifier (
   value: string,
-  range = RANGE_ZERO
+  loc = LOC_ZERO
 ): Identifier {
   return {
     type: 'Identifier',
     value,
-    range
+    loc
   }
 }
 
@@ -113,14 +117,14 @@ export function binaryOperation (
   operator: BinaryOperation['operator'],
   left: Expression,
   right: Expression,
-  range = RANGE_ZERO
+  loc = LOC_ZERO
 ): BinaryOperation {
   return {
     type: 'BinaryOperation',
     operator,
     left,
     right,
-    range
+    loc
   }
 }
 
@@ -131,12 +135,12 @@ export interface NumberLiteral extends AstNodeBase {
 
 export function numberLiteral (
   value: string,
-  range = RANGE_ZERO
+  loc = LOC_ZERO
 ): NumberLiteral {
   return {
     type: 'NumberLiteral',
     value,
-    range
+    loc
   }
 }
 
@@ -147,12 +151,12 @@ export interface BooleanLiteral extends AstNodeBase {
 
 export function booleanLiteral (
   value: boolean,
-  range = RANGE_ZERO
+  loc = LOC_ZERO
 ): BooleanLiteral {
   return {
     type: 'BooleanLiteral',
     value,
-    range
+    loc
   }
 }
 

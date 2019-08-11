@@ -43,7 +43,7 @@ function parseStream(stream: Scanner) {
     }
     expect(TokenType.EOF)
 
-    return Ast.program(children, [start, stream.peek().end])
+    return Ast.program(children, { start, end: stream.peek().end })
   }
 
   function parseStatement() {
@@ -59,24 +59,24 @@ function parseStream(stream: Scanner) {
   function parseVariableDeclaration() {
     const { start } = expect(TokenType.LET)
     const identifier = parseIdentifier()
-    expect(TokenType.EQUAL)
+    expect(TokenType.EQUALS)
     const value = parseExpression()
-    return Ast.variableDeclaration(identifier, value, [start, value.range[1]])
+    return Ast.variableDeclaration(identifier, value, { start, end: value.loc.end })
   }
 
   function parseFunctionDefinition () {
     const { start } = expect(TokenType.FUNCTION)
     const identifier = parseIdentifier()
 
-    expect(TokenType.PAREN_LEFT)
+    expect(TokenType.PAREN_OPEN)
     const parameters = parseFunctionParameters()
-    expect(TokenType.PAREN_RIGHT)
+    expect(TokenType.PAREN_CLOSE)
 
-    expect(TokenType.CURLY_LEFT)
+    expect(TokenType.CURLY_OPEN)
     const body = parseFunctionBody()
-    const { end } = expect(TokenType.CURLY_RIGHT)
+    const { end } = expect(TokenType.CURLY_CLOSE)
 
-    return Ast.functionDefinition(identifier, parameters, body, [start, end])
+    return Ast.functionDefinition(identifier, parameters, body, { start, end })
   }
 
   function parseFunctionParameters () {
@@ -93,7 +93,7 @@ function parseStream(stream: Scanner) {
 
   function parseFunctionBody () {
     const body: Ast.Statement[] = []
-    while (!at(TokenType.CURLY_RIGHT)) {
+    while (!at(TokenType.CURLY_CLOSE)) {
       body.push(parseStatement())
     }
     return body
@@ -109,7 +109,7 @@ function parseStream(stream: Scanner) {
         value as Ast.BinaryOperation['operator'],
         result,
         right,
-        [start, stream.peek().end]
+        { start, end: stream.peek().end }
       )
     }
     return result
@@ -125,7 +125,7 @@ function parseStream(stream: Scanner) {
         value as Ast.BinaryOperation['operator'],
         result,
         right,
-        [start, stream.peek().end]
+        { start, end: stream.peek().end }
       )
     }
     return result
@@ -134,31 +134,31 @@ function parseStream(stream: Scanner) {
   function parseCallOrFactor (): Ast.Expression {
     const { start } = stream.peek()
     let result = parseFactor()
-    while (at(TokenType.PAREN_LEFT)) {
-      expect(TokenType.PAREN_LEFT)
+    while (at(TokenType.PAREN_OPEN)) {
+      expect(TokenType.PAREN_OPEN)
       const parameters: Ast.Expression[] = []
-      while(!at(TokenType.PAREN_RIGHT)) {
+      while(!at(TokenType.PAREN_CLOSE)) {
         parameters.push(parseExpression())
         if (!at(TokenType.COMMA)) {
           break
         }
         expect(TokenType.COMMA)
       }
-      const { end } = expect(TokenType.PAREN_RIGHT)
+      const { end } = expect(TokenType.PAREN_CLOSE)
       result = Ast.functionCall(
         result,
         parameters,
-        [start, end]
+        { start, end }
       )
     }
     return result
   }
 
   function parseFactor () {
-    if (at(TokenType.PAREN_LEFT)) {
+    if (at(TokenType.PAREN_OPEN)) {
       stream.next()
       const expression = parseExpression()
-      expect(TokenType.PAREN_RIGHT)
+      expect(TokenType.PAREN_CLOSE)
       return expression
     }
     return parseLiteral()
@@ -178,11 +178,11 @@ function parseStream(stream: Scanner) {
 
   function parseNumberLiteral() {
     const { start, end, value } = stream.next()
-    return Ast.numberLiteral(value, [start, end])
+    return Ast.numberLiteral(value, { start, end })
   }
 
   function parseIdentifier() {
     const { start, end, value } = expect(TokenType.IDENTIFIER)
-    return Ast.identifier(value, [start, end])
+    return Ast.identifier(value, { start, end })
   }
 }

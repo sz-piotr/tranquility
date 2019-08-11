@@ -6,12 +6,12 @@ export interface Token {
 }
 
 export enum TokenType {
-  PAREN_LEFT, // (
-  PAREN_RIGHT, // )
-  BRACKET_LEFT, // [
-  BRACKET_RIGHT, // ]
-  CURLY_LEFT, // {
-  CURLY_RIGHT, // }
+  PAREN_OPEN, // (
+  PAREN_CLOSE, // )
+  BRACKET_OPEN, // [
+  BRACKET_CLOSE, // ]
+  CURLY_OPEN, // {
+  CURLY_CLOSE, // }
 
   COMMA, // ,
   DOT, // .
@@ -20,56 +20,56 @@ export enum TokenType {
   SEMICOLON, // ;
 
   COLON, // :
-  COLON_EQUAL, // :=
+  COLON_EQUALS, // :=
 
-  EQUAL, // =
-  EQUAL_EQUAL, // ==
-  EQUAL_EQUAL_EQUAL, // ===
-  EQUAL_RIGHT, // =>
+  EQUALS, // =
+  EQUALS_EQUALS, // ==
+  EQUALS_EQUALS_EQUALS, // ===
+  EQUALS_RIGHT, // =>
 
   MINUS, // -
   MINUS_MINUS, // --
-  MINUS_EQUAL, // -=
+  MINUS_EQUALS, // -=
   MINUS_RIGHT, // ->
 
   PLUS, // +
   PLUS_PLUS, // ++
-  PLUS_EQUAL, // +=
+  PLUS_EQUALS, // +=
 
   STAR, // *
   STAR_STAR, // **
-  STAR_EQUAL, // *=
+  STAR_EQUALS, // *=
 
   SLASH, // /
-  SLASH_EQUAL, // /=
+  SLASH_EQUALS, // /=
 
   PERCENT, // %
-  PERCENT_EQUAL, // %=
+  PERCENT_EQUALS, // %=
 
   CARET, // ^
-  CARET_EQUAL, // ^=
+  CARET_EQUALS, // ^=
 
   HASH, // #
 
   AMPERSAND, // &
   AMPERSAND_AMPERSAND, // &&
-  AMPERSAND_EQUAL, // &=
+  AMPERSAND_EQUALS, // &=
 
   BAR, // |
   BAR_BAR, // ||
-  BAR_EQUAL, // |=
+  BAR_EQUALS, // |=
 
   BANG, // !
-  BANG_EQUAL, // !=
-  BANG_EQUAL_EQUAL, // !==
+  BANG_EQUALS, // !=
+  BANG_EQUALS_EQUALS, // !==
 
   RIGHT, // >
   RIGHT_RIGHT, // >>
-  RIGHT_EQUAL, // >=
+  RIGHT_EQUALS, // >=
 
   LEFT, // <
   LEFT_LEFT, // <<
-  LEFT_EQUAL, // <=
+  LEFT_EQUALS, // <=
 
   LEFT_RIGHT, // <>
 

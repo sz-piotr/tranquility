@@ -1,7 +1,7 @@
-import { AstNode, RANGE_ZERO } from '../../src/parser/ast'
+import { AstNode, LOC_ZERO } from '../../src/parser/ast'
 
 export function stripRanges (ast: AstNode): AstNode {
-  ast.range = RANGE_ZERO
+  ast.loc = LOC_ZERO
   if (ast.type === 'Program') {
     ast.children.forEach(stripRanges)
   } else if (ast.type === 'VariableDeclaration') {

@@ -3,9 +3,9 @@ import { Token, TokenType } from './tokens'
 
 export class Scanner {
   private current?: Token
-  public constructor (
-    private stream: Readonly<InputStream>
-  ) {
+  private start = this.stream.location
+
+  public constructor (private stream: Readonly<InputStream>) {
   }
 
   public static fromString(source: string) {
@@ -36,36 +36,36 @@ export class Scanner {
 
   private readNext(): Token {
     this.skipWhile(isWhitespace)
+    this.start = this.stream.location
 
-    return (
-      this.maybeSingle('', TokenType.EOF, '') ||
+    const char = this.stream.peek()
+    switch (char) {
+      case undefined: return this.token(TokenType.EOF)
+      case '(': return this.token(TokenType.PAREN_OPEN)
+      case ')': return this.token(TokenType.PAREN_CLOSE)
+      case '[': return this.token(TokenType.BRACKET_OPEN)
+      case ']': return this.token(TokenType.BRACKET_CLOSE)
+      case '{': return this.token(TokenType.CURLY_OPEN)
+      case '}': return this.token(TokenType.CURLY_CLOSE)
+      case ',': return this.token(TokenType.COMMA)
+      case '.': return this.token(TokenType.DOT)
+      case '?': return this.token(TokenType.QUESTION)
+      case '~': return this.token(TokenType.TILDE)
+      case ';': return this.token(TokenType.SEMICOLON)
+      case ':': return this.maybeDouble(
+        TokenType.COLON,
+        ['=', TokenType.COLON_EQUALS],
+      )
+      case '=': return this.equals()
+      case '-': return this.maybeDouble(
+        TokenType.MINUS,
+        ['-', TokenType.MINUS_MINUS],
+        ['=', TokenType.MINUS_EQUALS],
+        ['>', TokenType.MINUS_RIGHT],
+      )
+    }
 
-      this.maybeSingle('(', TokenType.PAREN_LEFT) ||
-      this.maybeSingle(')', TokenType.PAREN_RIGHT) ||
-      this.maybeSingle('[', TokenType.BRACKET_LEFT) ||
-      this.maybeSingle(']', TokenType.BRACKET_RIGHT) ||
-      this.maybeSingle('{', TokenType.CURLY_LEFT) ||
-      this.maybeSingle('}', TokenType.CURLY_RIGHT) ||
-
-      this.maybeSingle(',', TokenType.COMMA) ||
-      this.maybeSingle('.', TokenType.DOT) ||
-      this.maybeSingle(';', TokenType.SEMICOLON) ||
-
-      this.maybeSingle('-', TokenType.MINUS) ||
-      this.maybeSingle('+', TokenType.PLUS) ||
-      this.maybeSingle('*', TokenType.STAR) ||
-      this.maybeSingle('/', TokenType.SLASH) ||
-
-      this.maybeDouble('!', TokenType.BANG, '=', TokenType.BANG_EQUAL) ||
-      this.maybeDouble('=', TokenType.EQUAL, '=', TokenType.EQUAL_EQUAL) ||
-      this.maybeDouble('>', TokenType.RIGHT, '=', TokenType.RIGHT_EQUAL) ||
-      this.maybeDouble('<', TokenType.LEFT, '=', TokenType.LEFT_EQUAL) ||
-
-      this.maybeNumber() ||
-      this.maybeIdentifier() ||
-
-      this.fail()
-    )
+    return this.fail()
   }
 
   private skipWhile(predicate: (value: string) => boolean) {
@@ -78,27 +78,36 @@ export class Scanner {
     }
   }
 
-  private maybeSingle(char: string, type: TokenType, value?: string) {
-    if (this.stream.peek() === char) {
-      return this.token(type, value)
-    }
-  }
-
   private maybeDouble (
-    firstChar: string,
-    firstType: TokenType,
-    secondChar: string,
-    secondType: TokenType
+    baseType: TokenType,
+    ...extensions: [string, TokenType][]
   ) {
     const first = this.stream.next()
-    if (first === firstChar) {
-      const second = this.stream.peek()
-      if (second === secondChar) {
+    const second = this.stream.peek()
+    for (const [char, type] of extensions) {
+      if (this.stream.peek() === char) {
         this.stream.next()
-        return this.token(secondType, first + second)
+        return this.token(type, first + char)
       }
-      return this.token(firstType, first)
     }
+    return this.token(baseType, first)
+  }
+
+  private equals () {
+    this.stream.next()
+    const second = this.stream.peek()
+    if (second === '=') {
+      this.stream.next()
+      if (this.stream.peek() === '=') {
+        this.stream.next()
+        return this.token(TokenType.EQUALS_EQUALS_EQUALS, '===')
+      }
+      return this.token(TokenType.EQUALS_EQUALS, '==')
+    } else if (second === '>') {
+      this.stream.next()
+      return this.token(TokenType.EQUALS_RIGHT, '=>')
+    }
+    return this.token(TokenType.EQUALS, '=')
   }
 
   private maybeNumber () {
@@ -130,7 +139,7 @@ export class Scanner {
     return {
       type,
       value: value || '',
-      start: this.stream.location, // FIXME: This is incorrect
+      start: this.start,
       end: this.stream.location
     }
   }
@@ -142,17 +151,10 @@ export class Scanner {
   }
 }
 
-function isWhitespace(char: string) {
-  return /[^\S\r\n]/.test(char)
-}
-
-function isNumberChar(char: string) {
-  return /\d/.test(char)
-}
-
-function isIdentifierChar(char: string) {
-  return /\w/.test(char)
-}
+const isRegex = (re: RegExp) => (char: string) => re.test(char)
+const isWhitespace = isRegex(/\s/)
+const isNumberChar = isRegex(/\d/)
+const isIdentifierChar = isRegex(/\w/)
 
 function getIdentifierType(identifier: string) {
   switch (identifier) {
