@@ -26,8 +26,8 @@ storage Token {
 
   mint (address, amount) {
     // Check is the equivalent of solidity require
-    // ZERO is a special type that means a value composed of 0x00 bytes
-    check(address != ZERO)
+    // zero is a special type that means a value composed of 0x00 bytes
+    check(address != zero)
     check(amount != 0)
 
     // Operations on numbers use safe math by default
@@ -35,12 +35,12 @@ storage Token {
     supply += amount
 
     // Events can be emitted just like in Solidity
-    emit Transfer(ZERO, address, amount)
+    emit Transfer(zero, address, amount)
   }
 
   transfer (from, to, amount) {
-    check(from != ZERO)
-    check(to != ZERO)
+    check(from != zero)
+    check(to != zero)
     check(amount != 0)
 
     // Since math is safe by default it can throw
@@ -54,13 +54,13 @@ storage Token {
   // Type inference means that this function has type of
   // Command(Address, Uint)
   burn (address, amount) {
-    check(address != ZERO)
+    check(address != zero)
     check(amount != 0)
 
     balances[address] -= amount -> 'Insufficient funds'
     supply -= amount
 
-    emit Transfer(address, ZERO, amount)
+    emit Transfer(address, zero, amount)
   }
 }
 
@@ -90,8 +90,8 @@ storage TokenWithAllowance {
   }
 
   approve (owner, spender, value) {
-    check(from != ZERO)
-    check(spender != ZERO)
+    check(from != zero)
+    check(spender != zero)
 
     allowances[owner][spender] = value
 
