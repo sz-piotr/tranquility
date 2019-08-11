@@ -9,7 +9,7 @@ export function empty () {
     const tokens = Scanner.tokenize(source)
 
     expect(tokens).to.deep.equal([
-      token(TokenType.EOF, '', [0, 0, 0], [0, 0, 0]),
+      token(TokenType.EOF, '', [0, 0, 0], [0, 0, 0])
     ])
   })
 }

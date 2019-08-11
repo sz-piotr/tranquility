@@ -69,10 +69,10 @@ export function operators () {
       [TokenType.LEFT, '<'],
       [TokenType.LEFT_LEFT, '<<'],
       [TokenType.LEFT_EQUALS, '<='],
-      [TokenType.LEFT_RIGHT, '<>'],
+      [TokenType.LEFT_RIGHT, '<>']
     ]
 
-    const source = operators.map(([type, value]) => value).join(' ')
+    const source = operators.map(([, value]) => value).join(' ')
     const tokens = Scanner.tokenize(source)
 
     let i = 0

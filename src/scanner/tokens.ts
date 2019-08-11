@@ -97,7 +97,7 @@ export enum TokenType {
 }
 
 export interface Location {
-  readonly position: number
-  readonly line: number
+  readonly position: number,
+  readonly line: number,
   readonly column: number
 }

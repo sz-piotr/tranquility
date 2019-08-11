@@ -22,10 +22,9 @@ export function keywords () {
       [TokenType.BOOLEAN, 'true'],
       [TokenType.BOOLEAN, 'false'],
 
-      [TokenType.IDENTIFIER, 'blah'],
+      [TokenType.IDENTIFIER, 'blah']
     ]
-
-    const source = keywords.map(([type, value]) => value).join(' ')
+    const source = keywords.map(([, value]) => value).join(' ')
     const tokens = Scanner.tokenize(source)
 
     let i = 0

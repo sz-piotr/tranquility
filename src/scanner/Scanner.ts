@@ -55,36 +55,36 @@ export class Scanner {
       case ';': return this.token(TokenType.SEMICOLON)
       case ':': return this.doubleToken(
         TokenType.COLON,
-        ['=', TokenType.COLON_EQUALS],
+        ['=', TokenType.COLON_EQUALS]
       )
       case '-': return this.doubleToken(
         TokenType.MINUS,
         ['-', TokenType.MINUS_MINUS],
         ['=', TokenType.MINUS_EQUALS],
-        ['>', TokenType.MINUS_RIGHT],
+        ['>', TokenType.MINUS_RIGHT]
       )
       case '+': return this.doubleToken(
         TokenType.PLUS,
         ['+', TokenType.PLUS_PLUS],
-        ['=', TokenType.PLUS_EQUALS],
+        ['=', TokenType.PLUS_EQUALS]
       )
       case '*': return this.doubleToken(
         TokenType.STAR,
         ['*', TokenType.STAR_STAR],
-        ['=', TokenType.STAR_EQUALS],
+        ['=', TokenType.STAR_EQUALS]
       )
       // TODO: Handle comments
       case '/': return this.doubleToken(
         TokenType.SLASH,
-        ['=', TokenType.SLASH_EQUALS],
+        ['=', TokenType.SLASH_EQUALS]
       )
       case '%': return this.doubleToken(
         TokenType.PERCENT,
-        ['=', TokenType.PERCENT_EQUALS],
+        ['=', TokenType.PERCENT_EQUALS]
       )
       case '^': return this.doubleToken(
         TokenType.CARET,
-        ['=', TokenType.CARET_EQUALS],
+        ['=', TokenType.CARET_EQUALS]
       )
       case '&': return this.doubleToken(
         TokenType.AMPERSAND,
@@ -105,7 +105,7 @@ export class Scanner {
         TokenType.LEFT,
         ['<', TokenType.LEFT_LEFT],
         ['=', TokenType.LEFT_EQUALS],
-        ['>', TokenType.LEFT_RIGHT],
+        ['>', TokenType.LEFT_RIGHT]
       )
       case '=': return this.equals()
       case '!': return this.bang()
