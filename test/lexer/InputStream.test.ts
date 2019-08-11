@@ -47,4 +47,64 @@ describe('InputStream', () => {
     stream.next()
     expect(stream.location).to.deep.equal(location(1, 0, 1))
   })
+
+  it('handles uniform LF newlines', () => {
+    const stream = new InputStream(
+      '\n\n\n'
+    )
+
+    expect(stream.location).to.deep.equal(location(0, 0, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(1, 1, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(2, 2, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(3, 3, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(3, 3, 0))
+  })
+
+  it('handles uniform CRLF newlines', () => {
+    const stream = new InputStream(
+      '\r\n\r\n\r\n'
+    )
+
+    expect(stream.location).to.deep.equal(location(0, 0, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(1, 0, 1))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(2, 1, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(3, 1, 1))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(4, 2, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(5, 2, 1))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(6, 3, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(6, 3, 0))
+  })
+
+  it('handles mixed newlines', () => {
+    const stream = new InputStream(
+      '\n\r' + '\r' + '\r\n' + '\n'
+    )
+
+    expect(stream.location).to.deep.equal(location(0, 0, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(1, 0, 1))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(2, 1, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(3, 2, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(4, 2, 1))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(5, 3, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(6, 4, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(6, 4, 0))
+  })
 })

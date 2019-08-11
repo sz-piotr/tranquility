@@ -7,10 +7,12 @@ export class InputStream {
     column: 0
   }
 
-  private hadCR = false
-  private hadLF = false
+  private hadCR: boolean
+  private hadLF: boolean
 
   public constructor (private source: string) {
+    this.hadCR = source[0] === '\r'
+    this.hadLF = source[0] === '\n'
   }
 
   public peek(): string | undefined {
@@ -24,9 +26,9 @@ export class InputStream {
   }
 
   private nextLocation () {
-    const char = this.peek()
+    const char = this.source[this.location.position + 1]
 
-    if (char === undefined) {
+    if (this.peek() === undefined) {
       return this.location
     }
 
