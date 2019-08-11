@@ -2,29 +2,17 @@ import 'mocha'
 import { expect } from 'chai'
 
 import { InputStream } from '../../src/scanner/InputStream'
+import { location } from './utils'
 
 describe('InputStream', () => {
-  it('peek should return char and not modify location', () => {
-    const stream = new InputStream('abc')
-
-    expect(stream.peek()).to.equal('a')
-    expect(stream.location).to.equal(0)
-  })
-
-  it('next should return char and increment location', () => {
-    const stream = new InputStream('abc')
-
-    expect(stream.next()).to.equal('a')
-    expect(stream.location).to.equal(1)
-  })
-
   it('peek should return the char at location', () => {
     const stream = new InputStream('abc')
 
     stream.next()
 
-    expect(stream.location).to.equal(1)
+    expect(stream.location).to.deep.equal(location(1, 0, 1))
     expect(stream.peek()).to.equal('b')
+    expect(stream.location).to.deep.equal(location(1, 0, 1))
   })
 
   it('next should return the char at location', () => {
@@ -32,8 +20,9 @@ describe('InputStream', () => {
 
     stream.next()
 
-    expect(stream.location).to.equal(1)
+    expect(stream.location).to.deep.equal(location(1, 0, 1))
     expect(stream.next()).to.equal('b')
+    expect(stream.location).to.deep.equal(location(2, 0, 2))
   })
 
   it('calling peak or next at the end returns ""', () => {
@@ -43,7 +32,19 @@ describe('InputStream', () => {
     stream.next()
     stream.next()
 
-    expect(stream.peek()).to.equal('')
-    expect(stream.next()).to.equal('')
+    expect(stream.peek()).to.equal(undefined)
+    expect(stream.next()).to.equal(undefined)
+  })
+
+  it('calling next at the end does not change location', () => {
+    const stream = new InputStream('a')
+
+    expect(stream.location).to.deep.equal(location(0, 0, 0))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(1, 0, 1))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(1, 0, 1))
+    stream.next()
+    expect(stream.location).to.deep.equal(location(1, 0, 1))
   })
 })

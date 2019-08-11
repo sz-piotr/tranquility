@@ -1,8 +1,13 @@
-type Range = [number, number]
+import { Location } from '../scanner/tokens'
+
+export const RANGE_ZERO: [Location, Location] = [
+  { position: 0, line: 0, column: 0 },
+  { position: 0, line: 0, column: 0 },
+]
 
 export interface AstNodeBase {
   type: string,
-  range: [number, number]
+  range: [Location, Location]
 }
 
 export interface Program extends AstNodeBase {
@@ -12,7 +17,7 @@ export interface Program extends AstNodeBase {
 
 export function program (
   children: Statement[],
-  range: Range = [0, 0]
+  range = RANGE_ZERO
 ): Program {
   return {
     type: 'Program',
@@ -30,7 +35,7 @@ export interface VariableDeclaration extends AstNodeBase {
 export function variableDeclaration (
   identifier: Identifier,
   value: Expression,
-  range: Range = [0, 0]
+  range = RANGE_ZERO
 ): VariableDeclaration {
   return {
     type: 'VariableDeclaration',
@@ -51,7 +56,7 @@ export function functionDefinition (
   identifier: Identifier,
   parameters: Identifier[],
   body: Statement[],
-  range: Range = [0, 0]
+  range = RANGE_ZERO
 ): FunctionDefinition {
   return {
     type: 'FunctionDefinition',
@@ -71,7 +76,7 @@ export interface FunctionCall extends AstNodeBase {
 export function functionCall (
   callee: Expression,
   parameters: Expression[],
-  range: Range = [0, 0]
+  range = RANGE_ZERO
 ): FunctionCall {
   return {
     type: 'FunctionCall',
@@ -88,7 +93,7 @@ export interface Identifier extends AstNodeBase {
 
 export function identifier (
   value: string,
-  range: Range = [0, 0]
+  range = RANGE_ZERO
 ): Identifier {
   return {
     type: 'Identifier',
@@ -108,7 +113,7 @@ export function binaryOperation (
   operator: BinaryOperation['operator'],
   left: Expression,
   right: Expression,
-  range: Range = [0, 0]
+  range = RANGE_ZERO
 ): BinaryOperation {
   return {
     type: 'BinaryOperation',
@@ -126,7 +131,7 @@ export interface NumberLiteral extends AstNodeBase {
 
 export function numberLiteral (
   value: string,
-  range: Range = [0, 0]
+  range = RANGE_ZERO
 ): NumberLiteral {
   return {
     type: 'NumberLiteral',
@@ -142,7 +147,7 @@ export interface BooleanLiteral extends AstNodeBase {
 
 export function booleanLiteral (
   value: boolean,
-  range: Range = [0, 0]
+  range = RANGE_ZERO
 ): BooleanLiteral {
   return {
     type: 'BooleanLiteral',

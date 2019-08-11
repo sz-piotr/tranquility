@@ -36,26 +36,14 @@ function parseStream(stream: Scanner) {
 
   function parseProgram(): Ast.AstNode {
     const children = []
+    const { start } = stream.peek()
 
-    skipNewlines()
     while (!at(TokenType.EOF)) {
       children.push(parseStatement())
-      parseEndOfStatement()
     }
     expect(TokenType.EOF)
 
-    return Ast.program(children, [0, stream.peek().end])
-  }
-
-  function parseEndOfStatement () {
-    expect(TokenType.NEWLINE)
-    skipNewlines()
-  }
-
-  function skipNewlines () {
-    while (at(TokenType.NEWLINE)) {
-      stream.next()
-    }
+    return Ast.program(children, [start, stream.peek().end])
   }
 
   function parseStatement() {
@@ -80,14 +68,13 @@ function parseStream(stream: Scanner) {
     const { start } = expect(TokenType.FUNCTION)
     const identifier = parseIdentifier()
 
-    expect(TokenType.LEFT_PAREN)
+    expect(TokenType.PAREN_LEFT)
     const parameters = parseFunctionParameters()
-    expect(TokenType.RIGHT_PAREN)
+    expect(TokenType.PAREN_RIGHT)
 
-    expect(TokenType.LEFT_BRACE)
-    skipNewlines()
+    expect(TokenType.CURLY_LEFT)
     const body = parseFunctionBody()
-    const { end } = expect(TokenType.RIGHT_BRACE)
+    const { end } = expect(TokenType.CURLY_RIGHT)
 
     return Ast.functionDefinition(identifier, parameters, body, [start, end])
   }
@@ -106,9 +93,8 @@ function parseStream(stream: Scanner) {
 
   function parseFunctionBody () {
     const body: Ast.Statement[] = []
-    while (!at(TokenType.RIGHT_BRACE)) {
+    while (!at(TokenType.CURLY_RIGHT)) {
       body.push(parseStatement())
-      parseEndOfStatement()
     }
     return body
   }
@@ -148,20 +134,17 @@ function parseStream(stream: Scanner) {
   function parseCallOrFactor (): Ast.Expression {
     const { start } = stream.peek()
     let result = parseFactor()
-    while (at(TokenType.LEFT_PAREN)) {
-      expect(TokenType.LEFT_PAREN)
+    while (at(TokenType.PAREN_LEFT)) {
+      expect(TokenType.PAREN_LEFT)
       const parameters: Ast.Expression[] = []
-      skipNewlines()
-      while(!at(TokenType.RIGHT_PAREN)) {
+      while(!at(TokenType.PAREN_RIGHT)) {
         parameters.push(parseExpression())
-        skipNewlines()
         if (!at(TokenType.COMMA)) {
           break
         }
         expect(TokenType.COMMA)
-        skipNewlines()
       }
-      const { end } = expect(TokenType.RIGHT_PAREN)
+      const { end } = expect(TokenType.PAREN_RIGHT)
       result = Ast.functionCall(
         result,
         parameters,
@@ -172,10 +155,10 @@ function parseStream(stream: Scanner) {
   }
 
   function parseFactor () {
-    if (at(TokenType.LEFT_PAREN)) {
+    if (at(TokenType.PAREN_LEFT)) {
       stream.next()
       const expression = parseExpression()
-      expect(TokenType.RIGHT_PAREN)
+      expect(TokenType.PAREN_RIGHT)
       return expression
     }
     return parseLiteral()
@@ -184,10 +167,6 @@ function parseStream(stream: Scanner) {
   function parseLiteral () {
     if (at(TokenType.NUMBER)) {
       return parseNumberLiteral()
-    }
-
-    if (at(TokenType.TRUE) || at(TokenType.FALSE)) {
-      return parseBooleanLiteral()
     }
 
     if (at(TokenType.IDENTIFIER)) {
@@ -200,11 +179,6 @@ function parseStream(stream: Scanner) {
   function parseNumberLiteral() {
     const { start, end, value } = stream.next()
     return Ast.numberLiteral(value, [start, end])
-  }
-
-  function parseBooleanLiteral() {
-    const { start, end, value } = stream.next()
-    return Ast.booleanLiteral(value === 'true', [start, end])
   }
 
   function parseIdentifier() {

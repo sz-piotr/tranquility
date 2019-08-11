@@ -12,6 +12,15 @@ export class Scanner {
     return new Scanner(new InputStream(source))
   }
 
+  public static tokenize(source: string) {
+    const scanner = Scanner.fromString(source)
+    const tokens: Token[] = []
+    do {
+      tokens.push(scanner.next())
+    } while (tokens[tokens.length - 1].type !== TokenType.EOF)
+    return tokens
+  }
+
   public peek() {
     if (!this.current) {
       this.current = this.readNext()
@@ -31,12 +40,12 @@ export class Scanner {
     return (
       this.maybeSingle('', TokenType.EOF, '') ||
 
-      this.maybeSingle('(', TokenType.LEFT_PAREN) ||
-      this.maybeSingle(')', TokenType.RIGHT_PAREN) ||
-      this.maybeSingle('[', TokenType.LEFT_BRACKET) ||
-      this.maybeSingle(']', TokenType.RIGHT_BRACKET) ||
-      this.maybeSingle('{', TokenType.LEFT_BRACE) ||
-      this.maybeSingle('}', TokenType.RIGHT_BRACE) ||
+      this.maybeSingle('(', TokenType.PAREN_LEFT) ||
+      this.maybeSingle(')', TokenType.PAREN_RIGHT) ||
+      this.maybeSingle('[', TokenType.BRACKET_LEFT) ||
+      this.maybeSingle(']', TokenType.BRACKET_RIGHT) ||
+      this.maybeSingle('{', TokenType.CURLY_LEFT) ||
+      this.maybeSingle('}', TokenType.CURLY_RIGHT) ||
 
       this.maybeSingle(',', TokenType.COMMA) ||
       this.maybeSingle('.', TokenType.DOT) ||
@@ -49,11 +58,8 @@ export class Scanner {
 
       this.maybeDouble('!', TokenType.BANG, '=', TokenType.BANG_EQUAL) ||
       this.maybeDouble('=', TokenType.EQUAL, '=', TokenType.EQUAL_EQUAL) ||
-      this.maybeDouble('>', TokenType.GREATER, '=', TokenType.GREATER_EQUAL) ||
-      this.maybeDouble('<', TokenType.LESS, '=', TokenType.LESS_EQUAL) ||
-
-      this.maybeSingle('\n', TokenType.NEWLINE) ||
-      this.maybeDouble('\r', TokenType.NEWLINE, '\n', TokenType.NEWLINE) ||
+      this.maybeDouble('>', TokenType.RIGHT, '=', TokenType.RIGHT_EQUAL) ||
+      this.maybeDouble('<', TokenType.LEFT, '=', TokenType.LEFT_EQUAL) ||
 
       this.maybeNumber() ||
       this.maybeIdentifier() ||
@@ -63,7 +69,11 @@ export class Scanner {
   }
 
   private skipWhile(predicate: (value: string) => boolean) {
-    while (predicate(this.stream.peek())) {
+    while (true) {
+      const char = this.stream.peek()
+      if (!char || !predicate(char)) {
+        break
+      }
       this.stream.next()
     }
   }
@@ -80,24 +90,28 @@ export class Scanner {
     secondChar: string,
     secondType: TokenType
   ) {
-    if (this.stream.peek() === firstChar) {
-      const value = this.stream.next()
-      if (this.stream.peek() === secondChar) {
-        return this.token(secondType, value + this.stream.next())
+    const first = this.stream.next()
+    if (first === firstChar) {
+      const second = this.stream.peek()
+      if (second === secondChar) {
+        this.stream.next()
+        return this.token(secondType, first + second)
       }
-      return this.token(firstType, value)
+      return this.token(firstType, first)
     }
   }
 
   private maybeNumber () {
-    if (isNumberChar(this.stream.peek())) {
+    const char = this.stream.peek()
+    if (char && isNumberChar(char)) {
       const value = this.readWhile(isNumberChar)
       return this.token(TokenType.NUMBER, value)
     }
   }
 
   private maybeIdentifier () {
-    if (isIdentifierChar(this.stream.peek())) {
+    const char = this.stream.peek()
+    if (char && isIdentifierChar(char)) {
       const value = this.readWhile(isIdentifierChar)
       return this.token(getIdentifierType(value), value)
     }
@@ -105,15 +119,20 @@ export class Scanner {
 
   private readWhile(predicate: (value: string) => boolean) {
     let value = ''
-    while (predicate(this.stream.peek())) {
+    const char = this.stream.peek()
+    while (char && predicate(char)) {
       value += this.stream.next()
     }
     return value
   }
 
   private token(type: TokenType, value = this.stream.next()): Token {
-    const end = this.stream.location
-    return { type, value, start: end - value.length, end }
+    return {
+      type,
+      value: value || '',
+      start: this.stream.location, // FIXME: This is incorrect
+      end: this.stream.location
+    }
   }
 
   private fail (): never {
@@ -142,10 +161,7 @@ function getIdentifierType(identifier: string) {
     case 'for': return TokenType.FOR
     case 'while': return TokenType.WHILE
     case 'if': return TokenType.IF
-    case 'then': return TokenType.THEN
     case 'else': return TokenType.ELSE
-    case 'true': return TokenType.TRUE
-    case 'false': return TokenType.FALSE
     default: return TokenType.IDENTIFIER
   }
 }
