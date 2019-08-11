@@ -1,46 +1,92 @@
 import { expect } from 'chai'
 import { Scanner } from '../../../src/scanner/Scanner'
-import { token } from '../utils'
 import { TokenType } from '../../../src/scanner/tokens'
+import { token } from '../utils'
 
 export function operators () {
   it('operators', () => {
-    const source =
-      '()[]{} ' +
-      ',.?~; ' +
-      ': := ' +
-      '= == === => ' +
-      '- -- -= ->'
+    const operators: [TokenType, string][] = [
+      [TokenType.PAREN_OPEN, '('],
+      [TokenType.PAREN_CLOSE, ')'],
+      [TokenType.BRACKET_OPEN, '['],
+      [TokenType.BRACKET_CLOSE, ']'],
+      [TokenType.CURLY_OPEN, '{'],
+      [TokenType.CURLY_CLOSE, '}'],
+
+      [TokenType.COMMA, ','],
+      [TokenType.DOT, '.'],
+      [TokenType.QUESTION, '?'],
+      [TokenType.TILDE, '~'],
+      [TokenType.HASH, '#'],
+      [TokenType.SEMICOLON, ';'],
+
+      [TokenType.COLON, ':'],
+      [TokenType.COLON_EQUALS, ':='],
+
+      [TokenType.EQUALS, '='],
+      [TokenType.EQUALS_EQUALS, '=='],
+      [TokenType.EQUALS_EQUALS_EQUALS, '==='],
+      [TokenType.EQUALS_RIGHT, '=>'],
+
+      [TokenType.BANG, '!'],
+      [TokenType.BANG_EQUALS, '!='],
+      [TokenType.BANG_EQUALS_EQUALS, '!=='],
+
+      [TokenType.MINUS, '-'],
+      [TokenType.MINUS_MINUS, '--'],
+      [TokenType.MINUS_EQUALS, '-='],
+      [TokenType.MINUS_RIGHT, '->'],
+
+      [TokenType.PLUS, '+'],
+      [TokenType.PLUS_PLUS, '++'],
+      [TokenType.PLUS_EQUALS, '+='],
+
+      [TokenType.STAR, '*'],
+      [TokenType.STAR_STAR, '**'],
+      [TokenType.STAR_EQUALS, '*='],
+
+      [TokenType.SLASH, '/'],
+      [TokenType.SLASH_EQUALS, '/='],
+
+      [TokenType.PERCENT, '%'],
+      [TokenType.PERCENT_EQUALS, '%='],
+
+      [TokenType.CARET, '^'],
+      [TokenType.CARET_EQUALS, '^='],
+
+      [TokenType.AMPERSAND, '&'],
+      [TokenType.AMPERSAND_AMPERSAND, '&&'],
+      [TokenType.AMPERSAND_EQUALS, '&='],
+
+      [TokenType.BAR, '|'],
+      [TokenType.BAR_BAR, '||'],
+      [TokenType.BAR_EQUALS, '|='],
+
+      [TokenType.RIGHT, '>'],
+      [TokenType.RIGHT_RIGHT, '>>'],
+      [TokenType.RIGHT_EQUALS, '>='],
+
+      [TokenType.LEFT, '<'],
+      [TokenType.LEFT_LEFT, '<<'],
+      [TokenType.LEFT_EQUALS, '<='],
+      [TokenType.LEFT_RIGHT, '<>'],
+    ]
+
+    const source = operators.map(([type, value]) => value).join(' ')
     const tokens = Scanner.tokenize(source)
 
+    let i = 0
+    let last = 0
+
+    function t (type: TokenType, value: string) {
+      i += last
+      last = value.length + 1
+      return token(type, value, i)
+    }
+
     expect(tokens).to.deep.equal([
-      token(TokenType.PAREN_OPEN, '(', 0),
-      token(TokenType.PAREN_CLOSE, ')', 1),
-      token(TokenType.BRACKET_OPEN, '[', 2),
-      token(TokenType.BRACKET_CLOSE, ']', 3),
-      token(TokenType.CURLY_OPEN, '{', 4),
-      token(TokenType.CURLY_CLOSE, '}', 5),
-
-      token(TokenType.COMMA, ',', 7),
-      token(TokenType.DOT, '.', 8),
-      token(TokenType.QUESTION, '?', 9),
-      token(TokenType.TILDE, '~', 10),
-      token(TokenType.SEMICOLON, ';', 11),
-
-      token(TokenType.COLON, ':', 13),
-      token(TokenType.COLON_EQUALS, ':=', 15),
-
-      token(TokenType.EQUALS, '=', 18),
-      token(TokenType.EQUALS_EQUALS, '==', 20),
-      token(TokenType.EQUALS_EQUALS_EQUALS, '===', 23),
-      token(TokenType.EQUALS_RIGHT, '=>', 27),
-
-      token(TokenType.MINUS, '-', 30),
-      token(TokenType.MINUS_MINUS, '--', 32),
-      token(TokenType.MINUS_EQUALS, '-=', 35),
-      token(TokenType.MINUS_RIGHT, '->', 38),
-
-      token(TokenType.EOF, '', 40),
+      ...operators.map(([type, value]) => t(type, value)),
+      token(TokenType.EOF, '', source.length)
     ])
   })
 }

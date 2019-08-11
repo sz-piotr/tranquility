@@ -17,6 +17,7 @@ export enum TokenType {
   DOT, // .
   QUESTION, // ?
   TILDE, // ~
+  HASH, // #
   SEMICOLON, // ;
 
   COLON, // :
@@ -26,6 +27,10 @@ export enum TokenType {
   EQUALS_EQUALS, // ==
   EQUALS_EQUALS_EQUALS, // ===
   EQUALS_RIGHT, // =>
+
+  BANG, // !
+  BANG_EQUALS, // !=
+  BANG_EQUALS_EQUALS, // !==
 
   MINUS, // -
   MINUS_MINUS, // --
@@ -49,8 +54,6 @@ export enum TokenType {
   CARET, // ^
   CARET_EQUALS, // ^=
 
-  HASH, // #
-
   AMPERSAND, // &
   AMPERSAND_AMPERSAND, // &&
   AMPERSAND_EQUALS, // &=
@@ -59,10 +62,6 @@ export enum TokenType {
   BAR_BAR, // ||
   BAR_EQUALS, // |=
 
-  BANG, // !
-  BANG_EQUALS, // !=
-  BANG_EQUALS_EQUALS, // !==
-
   RIGHT, // >
   RIGHT_RIGHT, // >>
   RIGHT_EQUALS, // >=
@@ -70,7 +69,6 @@ export enum TokenType {
   LEFT, // <
   LEFT_LEFT, // <<
   LEFT_EQUALS, // <=
-
   LEFT_RIGHT, // <>
 
   FUNCTION,
@@ -91,7 +89,10 @@ export enum TokenType {
 
   IDENTIFIER,
 
-  EOF
+  COMMENT,
+
+  EOF,
+  UNRECOGNIZED
 }
 
 export interface Location {
