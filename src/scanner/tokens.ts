@@ -81,6 +81,7 @@ export enum TokenType {
   WHILE,
   IF,
   ELSE,
+  ZERO,
   RETURN,
 
   NUMBER,

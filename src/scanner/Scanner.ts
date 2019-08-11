@@ -110,6 +110,15 @@ export class Scanner {
       case '=': return this.equals()
       case '!': return this.bang()
     }
+
+    if (isNumberChar(char)) {
+      return this.number()
+    }
+
+    if (isIdentifierChar(char)) {
+      return this.identifier()
+    }
+
     return this.token(TokenType.UNRECOGNIZED)
   }
 
@@ -177,45 +186,46 @@ export class Scanner {
     return this.token(TokenType.BANG, '!')
   }
 
-  private maybeNumber () {
-    const char = this.stream.peek()
-    if (char && isNumberChar(char)) {
-      const value = this.readWhile(isNumberChar)
-      return this.token(TokenType.NUMBER, value)
-    }
+  private number () {
+    const value = this.readWhile(isNumberChar)
+    return this.token(TokenType.NUMBER, value)
   }
 
-  private maybeIdentifier () {
-    const char = this.stream.peek()
-    if (char && isIdentifierChar(char)) {
-      const value = this.readWhile(isIdentifierChar)
-      return this.token(getIdentifierType(value), value)
-    }
+  private identifier () {
+    const value = this.readWhile(isIdentifierChar)
+    return this.token(getIdentifierType(value), value)
   }
 
-  private readWhile(predicate: (value: string) => boolean) {
+  private readWhile(predicate: (value?: string) => boolean) {
     let value = ''
-    const char = this.stream.peek()
-    while (char && predicate(char)) {
+    while (predicate(this.stream.peek())) {
       value += this.stream.next()
     }
     return value
   }
 }
 
-const isRegex = (re: RegExp) => (char: string) => re.test(char)
+const isRegex = (re: RegExp) => (char?: string) => !!char && re.test(char)
 const isWhitespace = isRegex(/\s/)
 const isNumberChar = isRegex(/\d/)
 const isIdentifierChar = isRegex(/\w/)
 
 function getIdentifierType(identifier: string) {
   switch (identifier) {
-    case 'let': return TokenType.LET
     case 'function': return TokenType.FUNCTION
+    case 'event': return TokenType.EVENT
+    case 'storage': return TokenType.STORAGE
+    case 'contract': return TokenType.CONTRACT
+    case 'let': return TokenType.LET
+    case 'use': return TokenType.USE
     case 'for': return TokenType.FOR
     case 'while': return TokenType.WHILE
     case 'if': return TokenType.IF
     case 'else': return TokenType.ELSE
+    case 'zero': return TokenType.ZERO
+    case 'return': return TokenType.RETURN
+    case 'true': return TokenType.BOOLEAN
+    case 'false': return TokenType.BOOLEAN
     default: return TokenType.IDENTIFIER
   }
 }

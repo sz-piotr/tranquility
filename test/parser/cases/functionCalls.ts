@@ -27,35 +27,39 @@ export function functionCalls() {
         []
       ),
       Ast.functionCall(
-        Ast.identifier('foo'),
-        [
-          Ast.numberLiteral('1'),
-          Ast.identifier('bar'),
-          Ast.binaryOperation(
-            '+',
-            Ast.identifier('a'),
-            Ast.functionCall(
-              Ast.identifier('b'),
-              []
-            )
-          )
-        ]
-      ),
-      Ast.functionCall(
-        Ast.binaryOperation(
-          '+',
+        Ast.functionCall(
           Ast.functionCall(
-            Ast.identifier('x'),
-            []
+            Ast.identifier('foo'),
+            [
+              Ast.numberLiteral('1'),
+              Ast.identifier('bar'),
+              Ast.binaryOperation(
+                '+',
+                Ast.identifier('a'),
+                Ast.functionCall(
+                  Ast.identifier('b'),
+                  []
+                )
+              )
+            ]
           ),
-          Ast.functionCall(
+          [
             Ast.binaryOperation(
               '+',
-              Ast.identifier('a'),
-              Ast.identifier('b')
+              Ast.functionCall(
+                Ast.identifier('x'),
+                []
+              ),
+              Ast.functionCall(
+                Ast.binaryOperation(
+                  '+',
+                  Ast.identifier('a'),
+                  Ast.identifier('b')
+                ),
+                []
+              )
             ),
-            []
-          )
+          ]
         ),
         []
       ),
