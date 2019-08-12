@@ -1,39 +1,39 @@
 {
+  "env": {
+    "es6": true
+  },
+  "extends": "plugin:@typescript-eslint/recommended",
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "project": "./tsconfig.json",
     "sourceType": "module"
   },
-  "env": {
-    "es6": true
-  },
-  "extends": "plugin:@typescript-eslint/recommended",
   "rules": {
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/indent": [
       "error",
       2,
       {
-        "SwitchCase": 1,
-        "VariableDeclarator": 1,
-        "outerIIFEBody": 1,
-        "MemberExpression": 1,
-        "FunctionDeclaration": {
-          "parameters": 1,
-          "body": 1
-        },
-        "FunctionExpression": {
-          "parameters": 1,
-          "body": 1
-        },
+        "ArrayExpression": 1,
         "CallExpression": {
           "arguments": 1
         },
-        "ArrayExpression": 1,
-        "ObjectExpression": 1,
+        "FunctionDeclaration": {
+          "body": 1,
+          "parameters": 1
+        },
+        "FunctionExpression": {
+          "body": 1,
+          "parameters": 1
+        },
         "ImportDeclaration": 1,
+        "MemberExpression": 1,
+        "ObjectExpression": 1,
+        "SwitchCase": 1,
+        "VariableDeclarator": 1,
         "flatTernaryExpressions": false,
-        "ignoreComments": false
+        "ignoreComments": false,
+        "outerIIFEBody": 1
       }
     ],
     "@typescript-eslint/member-delimiter-style": [
@@ -50,7 +50,16 @@
       }
     ],
     "@typescript-eslint/no-parameter-properties": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "args": "none",
+        "ignoreRestSiblings": true,
+        "vars": "all"
+      }
+    ],
     "@typescript-eslint/no-use-before-define": "off",
+    "@typescript-eslint/no-useless-constructor": "error",
     "accessor-pairs": "error",
     "array-bracket-spacing": [
       "error",
@@ -314,14 +323,6 @@
         "allowTernary": true
       }
     ],
-    "no-unused-vars": [
-      "error",
-      {
-        "args": "none",
-        "ignoreRestSiblings": true,
-        "vars": "all"
-      }
-    ],
     "no-use-before-define": [
       "error",
       {
@@ -333,7 +334,6 @@
     "no-useless-call": "error",
     "no-useless-catch": "error",
     "no-useless-computed-key": "error",
-    "@typescript-eslint/no-useless-constructor": "error",
     "no-useless-escape": "error",
     "no-useless-rename": "error",
     "no-useless-return": "error",
