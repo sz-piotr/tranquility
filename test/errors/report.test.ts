@@ -13,8 +13,8 @@ describe('report', () => {
       end: location(22, 1, 9)
     })
     expect(report(error, source)).to.equal(
-      'Error: some message at 1:6\n' +
-      '   1|   foo(bar + 1)\n' +
+      'Error: some message at 2:7\n' +
+      '   2|   foo(bar + 1)\n' +
       '            ^^^'
     )
   })
