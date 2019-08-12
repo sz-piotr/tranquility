@@ -1,5 +1,5 @@
-import { Scanner } from '../scanner/Scanner'
-import { TokenType } from '../scanner/tokens'
+import { Scanner } from './Scanner'
+import { TokenType } from './tokens'
 import * as Ast from './ast'
 
 export function parse (source: string) {

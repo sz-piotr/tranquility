@@ -1,4 +1,4 @@
-import { Location } from '../scanner/tokens'
+import { Location } from './location'
 
 export interface AstNodeBase {
   type: string,

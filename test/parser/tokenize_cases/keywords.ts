@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { Scanner } from '../../../src/scanner/Scanner'
-import { TokenType } from '../../../src/scanner/tokens'
+import { Scanner } from '../../../src/parser/Scanner'
+import { TokenType } from '../../../src/parser/tokens'
 import { token } from '../utils'
 
 export function keywords () {

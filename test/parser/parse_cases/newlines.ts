@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { parse } from '../../../src/parser/parse'
-import { location } from '../../../src/scanner/tokens'
+import { location } from '../../../src/parser/location'
 import * as Ast from '../../../src/parser/ast'
 
 export function newlines () {

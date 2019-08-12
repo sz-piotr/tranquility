@@ -1,4 +1,4 @@
-import { Location, location } from './tokens'
+import { Location, location } from './location'
 
 export class InputStream {
   public location: Location = {
