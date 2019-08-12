@@ -1,52 +1,39 @@
-program ::= declaration program*
-
-declaration ::= event | function | storage | contract
-
-
-event ::= 'event' IDENTIFIER '{' field* '}'
-
-
-function ::= 'function' method
-
-
-storage ::= 'storage' IDENTIFIER storage_params? '{' object_body '}'
-
-storage_params ::= '(' IDENTIFIER (',' IDENTIFIER)* ')'
-
-
-contract ::= 'contract' IDENTIFIER '{' object_body '}'
-
-
-object_body ::= (field | use | method)*
-
-
-field ::= IDENTIFIER ':' type ('=' expression)?
-
-
-use ::= 'use' IDENTIFIER '.' (IDENTIFIER | '*')
-
-
-method ::= IDENTIFIER '(' method_params? ')' '{' statement* '}'
-
-method_params ::= method_param (',' method_param)*
-
-method_param ::= IDENTIFIER (':' type)?
-
-
-type ::= IDENTIFIER type_params?
-
-type_params ::= '(' type (',' type)* ')'
-
+program ::= statement program*
 
 statement ::=
+  event_declaration |
+  function_declaration |
+  storage_declaration |
+  contract_declaration |
   variable_declaration |
   variable_assignment |
   if_statement |
   for_loop |
   while_loop |
   return_statement |
-  expression |
+  expression
 
+event_declaration ::= 'event' IDENTIFIER '{' field* '}'
+
+function_declaration ::= 'function' method
+
+storage_declaration ::= 'storage' IDENTIFIER storage_params? '{' object_body '}'
+storage_params ::= '(' IDENTIFIER (',' IDENTIFIER)* ')'
+
+contract_declaration ::= 'contract' IDENTIFIER '{' object_body '}'
+
+object_body ::= (field | use | method)*
+
+field ::= IDENTIFIER ':' type ('=' expression)?
+
+use ::= 'use' IDENTIFIER '.' (IDENTIFIER | '*')
+
+method ::= IDENTIFIER '(' method_params? ')' '{' statement* '}'
+method_params ::= method_param (',' method_param)*
+method_param ::= IDENTIFIER (':' type)?
+
+type ::= IDENTIFIER type_params?
+type_params ::= '(' type (',' type)* ')'
 
 variable_declaration ::= 'let' IDENTIFIER (':' type)? '=' expression
 
@@ -74,6 +61,5 @@ while_loop ::=
   'while' expression '{' statement* '}'
 
 return_statement ::= 'return' expression
-
 
 expression ::= ???
