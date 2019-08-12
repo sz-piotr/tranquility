@@ -73,11 +73,6 @@ export class Scanner {
         ['*', TokenType.STAR_STAR],
         ['=', TokenType.STAR_EQUALS]
       )
-      // TODO: Handle comments
-      case '/': return this.doubleToken(
-        TokenType.SLASH,
-        ['=', TokenType.SLASH_EQUALS]
-      )
       case '%': return this.doubleToken(
         TokenType.PERCENT,
         ['=', TokenType.PERCENT_EQUALS]
@@ -109,6 +104,7 @@ export class Scanner {
       )
       case '=': return this.equals()
       case '!': return this.bang()
+      case '/': return this.slash()
     }
 
     if (isNumberChar(char)) {
@@ -184,6 +180,67 @@ export class Scanner {
       return this.token(TokenType.BANG_EQUALS, '!=')
     }
     return this.token(TokenType.BANG, '!')
+  }
+
+  private slash () {
+    this.stream.next()
+    const second = this.stream.peek()
+    if (second === '=') {
+      this.stream.next()
+      return this.token(TokenType.SLASH_EQUALS, '/=')
+    } else if (second === '/') {
+      this.stream.next()
+      this.skipCommentLine()
+      return this.next()
+    } else if (second === '*') {
+      this.stream.next()
+      this.skipCommentBlock()
+      return this.next()
+    }
+    return this.token(TokenType.SLASH, '/')
+  }
+
+  private skipCommentLine () {
+    while (true) {
+      const char = this.stream.peek()
+      if (char === undefined || char === '\n' || char === '\r') {
+        break
+      }
+      this.stream.next()
+    }
+  }
+
+  private skipCommentBlock () {
+    let hadStar = false
+    let hadSlash = false
+    let level = 1
+    while (true) {
+      const char = this.stream.peek()
+      if (char === undefined) {
+        break
+      } else if (char === '*') {
+        if (hadSlash) {
+          hadSlash = false
+          level += 1
+        } else {
+          hadStar = true
+        }
+      } else if (char === '/') {
+        if (hadStar) {
+          hadStar = false
+          level -= 1
+        } else {
+          hadSlash = true
+        }
+      } else {
+        hadStar = false
+        hadSlash = false
+      }
+      this.stream.next()
+      if (level === 0) {
+        break
+      }
+    }
   }
 
   private number () {

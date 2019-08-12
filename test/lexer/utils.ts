@@ -5,7 +5,7 @@ type LocationArray = [number, number, number]
 export function token (
   type: TokenType,
   value: string,
-  start: LocationArray | number,
+  start: LocationArray | number = 0,
   end?: LocationArray
 ): Token {
   const startValue = typeof start === 'number'
@@ -23,6 +23,14 @@ export function token (
     value,
     start: startValue,
     end: endValue
+  }
+}
+
+export function resetLocation (token: Token): Token {
+  return {
+    ...token,
+    start: location(0, 0, 0),
+    end: location(token.value.length, 0, token.value.length)
   }
 }
 

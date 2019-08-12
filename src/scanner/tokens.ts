@@ -90,8 +90,6 @@ export enum TokenType {
 
   IDENTIFIER,
 
-  COMMENT,
-
   EOF,
   UNRECOGNIZED
 }
