@@ -38,6 +38,6 @@ export function newlines () {
       end: location(source.length, 4, 1)
     })
 
-    expect(result).to.deep.equal(expected)
+    expect(result.ast).to.deep.equal(expected)
   })
 }

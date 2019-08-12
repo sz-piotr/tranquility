@@ -83,6 +83,6 @@ export function functionCalls () {
       )
     ])
 
-    expect(resetRanges(result)).to.deep.equal(expected)
+    expect(resetRanges(result.ast)).to.deep.equal(expected)
   })
 }

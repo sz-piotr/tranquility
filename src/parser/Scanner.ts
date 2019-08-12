@@ -5,14 +5,14 @@ export class Scanner {
   private current?: Token
   private start = this.stream.location
 
-  public constructor (private stream: Readonly<InputStream>) {
+  constructor (private stream: Readonly<InputStream>) {
   }
 
-  public static fromString (source: string) {
+  static fromString (source: string) {
     return new Scanner(new InputStream(source))
   }
 
-  public static tokenize (source: string) {
+  static tokenize (source: string) {
     const scanner = Scanner.fromString(source)
     const tokens: Token[] = []
     do {
@@ -21,14 +21,14 @@ export class Scanner {
     return tokens
   }
 
-  public peek () {
+  peek () {
     if (!this.current) {
       this.current = this.readNext()
     }
     return this.current
   }
 
-  public next () {
+  next () {
     const token = this.peek()
     this.current = undefined
     return token
