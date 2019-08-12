@@ -1,22 +1,22 @@
 storage Set (a) {
-  map : Map(a, Uint)
-  array : Array(a)
+  map: Map(a, Uint)
+  array: Array(a)
 
   use array.get
   use array.length
 
-  has (value) {
+  has (value: a): Boolean {
     return map[value] != 0
   }
 
-  add (value) {
+  add (value: a) {
     if (has(value)) {
       array.push(value)
       map[value] = array.length()
     }
   }
 
-  remove (value) {
+  remove (value: a) {
     let index = map[value]
     if (index != 0) {
       let last = array.last()

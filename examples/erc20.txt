@@ -1,30 +1,28 @@
 // Events are declared as separate entities
 event Transfer {
-  from : Address
-  to : Address
+  from: Address
+  to: Address
   value: Uint
 }
 
 // Storages are an abstraction over contract storage manipulation
 storage Token {
   // They declare what storage they are using
-  balances : Map(Address, Uint)
-  supply : Uint
+  balances: Map(Address, Uint)
+  supply: Uint
 
   // They also declare a public api
 
-  // Functions that do not modify storage are inferred as Query (view)
-  // Argument types are also inferred from use
-  // This function has type Query(Address, Uint)
-  balanceOf (address) {
+  // Functions that do not modify storage are inferred as view
+  balanceOf (address: Address): Uint {
     return balances[address]
   }
 
-  totalSupply () {
+  totalSupply (): Uint {
     return supply
   }
 
-  mint (address, amount) {
+  mint (address: Address, amount: Uint) {
     // Check is the equivalent of solidity require
     // zero is a special type that means a value composed of 0x00 bytes
     check(address != zero)
@@ -38,7 +36,7 @@ storage Token {
     emit Transfer(zero, address, amount)
   }
 
-  transfer (from, to, amount) {
+  transfer (from: Address, to: Address, amount: Uint) {
     check(from != zero)
     check(to != zero)
     check(amount != 0)
@@ -51,9 +49,7 @@ storage Token {
     emit Transfer(from, to, amount)
   }
 
-  // Type inference means that this function has type of
-  // Command(Address, Uint)
-  burn (address, amount) {
+  burn (address: Address, amount: Uint) {
     check(address != zero)
     check(amount != 0)
 
@@ -65,15 +61,15 @@ storage Token {
 }
 
 event Approval {
-  owner : Address
-  spender : Address
+  owner: Address
+  spender: Address
   value: Uint
 }
 
 storage TokenWithAllowance {
   // Storages can include other storages as storage
-  token : Token
-  allowances : Map(Address, Map(Address, Uint))
+  token: Token
+  allowances: Map(Address, Map(Address, Uint))
 
   // Storages can use (redeclare as own) functions from nested storages
   use token.balanceOf
@@ -85,11 +81,11 @@ storage TokenWithAllowance {
   // This long list can be shortened as:
   // use token.*
 
-  allowance (owner, spender) {
+  allowance (owner: Address, spender: Address) {
     return allowances[owner][spender]
   }
 
-  approve (owner, spender, value) {
+  approve (owner: Address, spender: Address, value: Uint) {
     check(from != zero)
     check(spender != zero)
 
@@ -98,7 +94,7 @@ storage TokenWithAllowance {
     emit Approval(owner, spender, value)
   }
 
-  transferFrom (owner, spender, to, value) {
+  transferFrom (owner: Address, spender: Address, to: Address, value: Uint) {
     // To prevent long lines the -> operator can be used on the next line
     let newAllowance = allowance(owner, spender) - value
       -> 'Insufficient allowance'
@@ -109,7 +105,7 @@ storage TokenWithAllowance {
     token.transfer(owner, to, value)
   }
 
-  burnFrom (owner, spender, value) {
+  burnFrom (owner: Address, spender: Address, value: Uint) {
     let newAllowance = allowance(owner, spender) - value
       -> 'Insufficient allowance'
 
@@ -126,7 +122,7 @@ storage TokenWithAllowance {
 // The reason for the distinction between contracts and storages is to enable
 // easy library authoring without the need for inheritance
 contract ExampleCoin {
-  token : TokenWithAllowance
+  token: TokenWithAllowance
 
   // Contracts can use only view functions
   use token.balanceOf
@@ -140,17 +136,17 @@ contract ExampleCoin {
 
   // The first argument to a contract function is always a message
   // If the contract does not use msg.value the function is non-payable
-  transfer (msg, to, amount) {
+  transfer (msg: Message, to: Address, amount: Uint) {
     token.transfer(msg.sender, to, amount)
     return true
   }
 
-  approve (msg, spender, amount) {
+  approve (msg: Message, spender: Address, amount: Uint) {
     token.approve(msg.sender, spender, amount)
     return true
   }
 
-  transferFrom (msg, owner, to, amount) {
+  transferFrom (msg: Message, owner: Address, to: Address, amount: Uint) {
     token.transferFrom(owner, msg.sender, to, amount)
     return true
   }
