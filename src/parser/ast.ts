@@ -2,13 +2,18 @@ import { Location } from './location'
 
 export interface AstNodeBase {
   type: string,
-  loc: {
+  span: {
     start: Location,
     end: Location
   }
 }
 
-export const LOC_ZERO: AstNodeBase['loc'] = {
+export interface Span {
+  start: Location,
+  end: Location
+}
+
+export const SPAN_ZERO: Span = {
   start: { position: 0, line: 0, column: 0 },
   end: { position: 0, line: 0, column: 0 }
 }
@@ -20,12 +25,12 @@ export interface Program extends AstNodeBase {
 
 export function program (
   children: Statement[],
-  loc = LOC_ZERO
+  span = SPAN_ZERO
 ): Program {
   return {
     type: 'Program',
     children,
-    loc
+    span
   }
 }
 
@@ -38,13 +43,13 @@ export interface VariableDeclaration extends AstNodeBase {
 export function variableDeclaration (
   identifier: Identifier,
   value: Expression,
-  loc = LOC_ZERO
+  span = SPAN_ZERO
 ): VariableDeclaration {
   return {
     type: 'VariableDeclaration',
     identifier,
     value,
-    loc
+    span
   }
 }
 
@@ -59,14 +64,14 @@ export function functionDefinition (
   identifier: Identifier,
   parameters: Identifier[],
   body: Statement[],
-  loc = LOC_ZERO
+  span = SPAN_ZERO
 ): FunctionDefinition {
   return {
     type: 'FunctionDefinition',
     identifier,
     parameters,
     body,
-    loc
+    span
   }
 }
 
@@ -79,13 +84,13 @@ export interface FunctionCall extends AstNodeBase {
 export function functionCall (
   callee: Expression,
   parameters: Expression[],
-  loc = LOC_ZERO
+  span = SPAN_ZERO
 ): FunctionCall {
   return {
     type: 'FunctionCall',
     callee,
     parameters,
-    loc
+    span
   }
 }
 
@@ -96,12 +101,12 @@ export interface Identifier extends AstNodeBase {
 
 export function identifier (
   value: string,
-  loc = LOC_ZERO
+  span = SPAN_ZERO
 ): Identifier {
   return {
     type: 'Identifier',
     value,
-    loc
+    span
   }
 }
 
@@ -116,14 +121,14 @@ export function binaryOperation (
   operator: BinaryOperation['operator'],
   left: Expression,
   right: Expression,
-  loc = LOC_ZERO
+  span = SPAN_ZERO
 ): BinaryOperation {
   return {
     type: 'BinaryOperation',
     operator,
     left,
     right,
-    loc
+    span
   }
 }
 
@@ -134,12 +139,12 @@ export interface NumberLiteral extends AstNodeBase {
 
 export function numberLiteral (
   value: string,
-  loc = LOC_ZERO
+  span = SPAN_ZERO
 ): NumberLiteral {
   return {
     type: 'NumberLiteral',
     value,
-    loc
+    span
   }
 }
 
@@ -150,12 +155,12 @@ export interface BooleanLiteral extends AstNodeBase {
 
 export function booleanLiteral (
   value: boolean,
-  loc = LOC_ZERO
+  span = SPAN_ZERO
 ): BooleanLiteral {
   return {
     type: 'BooleanLiteral',
     value,
-    loc
+    span
   }
 }
 

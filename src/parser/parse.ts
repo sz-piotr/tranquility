@@ -61,7 +61,7 @@ function parseStream (stream: Scanner) {
     const identifier = parseIdentifier()
     expect(TokenType.EQUALS)
     const value = parseExpression()
-    return Ast.variableDeclaration(identifier, value, { start, end: value.loc.end })
+    return Ast.variableDeclaration(identifier, value, { start, end: value.span.end })
   }
 
   function parseFunctionDefinition () {

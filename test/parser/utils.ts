@@ -1,9 +1,9 @@
 import { Token, TokenType } from '../../src/parser/tokens'
 import { location } from '../../src/parser/location'
-import { AstNode, LOC_ZERO } from '../../src/parser/ast'
+import { AstNode, SPAN_ZERO } from '../../src/parser/ast'
 
 export function resetRanges (ast: AstNode): AstNode {
-  ast.loc = LOC_ZERO
+  ast.span = SPAN_ZERO
   if (ast.type === 'Program') {
     ast.children.forEach(resetRanges)
   } else if (ast.type === 'VariableDeclaration') {
