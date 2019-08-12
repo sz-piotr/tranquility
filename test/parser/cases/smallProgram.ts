@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { parse } from '../../../src/parser/parse'
 import * as Ast from '../../../src/parser/ast'
-import { stripRanges } from '../stripRanges'
+import { resetRanges } from '../utils'
 
 export function smallProgram () {
   it('smallProgram', () => {
@@ -55,6 +55,6 @@ export function smallProgram () {
       )
     ])
 
-    expect(stripRanges(result)).to.deep.equal(expected)
+    expect(resetRanges(result)).to.deep.equal(expected)
   })
 }
