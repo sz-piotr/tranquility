@@ -10,7 +10,7 @@
     "build:esm": "tsc --outDir dist/esm --module ES6",
     "build:cjs": "tsc --outDir dist/cjs --declaration false",
     "lint": "eslint \"{src,test}/**/*.ts\"",
-    "test": "mocha -r ts-node/register --watch-extensions ts test/**/*.test.ts",
+    "test": "mocha -r ts-node/register --watch-extensions ts \"test/**/*.test.ts\"",
     "start": "ts-node src/index.ts"
   },
   "devDependencies": {

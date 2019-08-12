@@ -1,12 +1,23 @@
 import { Scanner } from './Scanner'
-import { TokenType } from './tokens'
+import { TokenType, Token } from './tokens'
 import * as Ast from './ast'
+import * as Err from '../errors'
+
+export interface ParseResult {
+  ast: Ast.AstNode,
+  errors: Err.Error[]
+}
 
 export function parse (source: string) {
   return parseStream(Scanner.fromString(source))
 }
 
+class UnexpectedToken {
+  constructor (public token: Token) {}
+}
+
 function parseStream (stream: Scanner) {
+  const errors: Err.Error[] = []
   return parseProgram()
 
   // HELPERS
@@ -25,25 +36,61 @@ function parseStream (stream: Scanner) {
   }
 
   function fail (): never {
-    const { type, value, start, end } = stream.peek()
-    throw new TypeError(
-      `Unexpected token ${type}: ${JSON.stringify(value)} at: [${start}, ${end}]`
-    )
+    throw new UnexpectedToken(stream.peek())
   }
 
   // CORE PARSER
   // -----------
 
-  function parseProgram (): Ast.AstNode {
+  function parseProgram (): ParseResult {
     const children = []
     const { start } = stream.peek()
 
     while (!at(TokenType.EOF)) {
-      children.push(parseStatement())
+      try {
+        children.push(parseStatement())
+      } catch (e) {
+        handleError(e)
+      }
     }
     expect(TokenType.EOF)
 
-    return Ast.program(children, { start, end: stream.peek().end })
+    return {
+      ast: Ast.program(children, { start, end: stream.peek().end }),
+      errors
+    }
+  }
+
+  function handleError (e: unknown) {
+    if (e instanceof UnexpectedToken) {
+      const token = e.token
+      if (token.type === TokenType.UNRECOGNIZED) {
+        errors.push(Err.InvalidCharacter(token.value, token))
+      } else {
+        errors.push(Err.UnexpectedToken(token.value, token))
+      }
+      synchronize()
+    } else {
+      throw e
+    }
+  }
+
+  function synchronize () {
+    while (true) {
+      switch (stream.next().type) {
+        case TokenType.EOF:
+        case TokenType.EVENT:
+        case TokenType.FUNCTION:
+        case TokenType.STORAGE:
+        case TokenType.CONTRACT:
+        case TokenType.LET:
+        case TokenType.IF:
+        case TokenType.FOR:
+        case TokenType.WHILE:
+        case TokenType.RETURN:
+          return
+      }
+    }
   }
 
   function parseStatement () {

@@ -1,10 +1,13 @@
 import { parse } from '../parser/parse'
+import { report } from '../errors'
 
 export function run (source: string) {
-  try {
-    const ast = parse(source)
-    console.log(ast)
-  } catch (e) {
-    console.error(e)
+  const result = parse(source)
+  if (result.errors.length > 0) {
+    for (const error of result.errors) {
+      console.error(report(error, source) + '\n')
+    }
+  } else {
+    console.log(result.ast)
   }
 }
