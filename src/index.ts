@@ -8,7 +8,7 @@ function main (args: string[]) {
   if (args.length > 1) {
     console.log('Usage: yarn start [script]')
     process.exit(64)
-  } else if (args.length == 1) {
+  } else if (args.length === 1) {
     runFile(args[0])
   } else {
     runPrompt()

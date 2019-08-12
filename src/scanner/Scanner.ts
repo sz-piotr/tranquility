@@ -8,11 +8,11 @@ export class Scanner {
   public constructor (private stream: Readonly<InputStream>) {
   }
 
-  public static fromString(source: string) {
+  public static fromString (source: string) {
     return new Scanner(new InputStream(source))
   }
 
-  public static tokenize(source: string) {
+  public static tokenize (source: string) {
     const scanner = Scanner.fromString(source)
     const tokens: Token[] = []
     do {
@@ -21,20 +21,20 @@ export class Scanner {
     return tokens
   }
 
-  public peek() {
+  public peek () {
     if (!this.current) {
       this.current = this.readNext()
     }
     return this.current
   }
 
-  public next() {
+  public next () {
     const token = this.peek()
     this.current = undefined
     return token
   }
 
-  private readNext(): Token {
+  private readNext (): Token {
     this.skipWhile(isWhitespace)
     this.start = this.stream.location
 
@@ -122,7 +122,7 @@ export class Scanner {
     return this.token(TokenType.UNRECOGNIZED)
   }
 
-  private skipWhile(predicate: (value: string) => boolean) {
+  private skipWhile (predicate: (value: string) => boolean) {
     while (true) {
       const char = this.stream.peek()
       if (!char || !predicate(char)) {
@@ -132,7 +132,7 @@ export class Scanner {
     }
   }
 
-  private token(type: TokenType, value = this.stream.next()): Token {
+  private token (type: TokenType, value = this.stream.next()): Token {
     return {
       type,
       value: value || '',
@@ -196,7 +196,7 @@ export class Scanner {
     return this.token(getIdentifierType(value), value)
   }
 
-  private readWhile(predicate: (value?: string) => boolean) {
+  private readWhile (predicate: (value?: string) => boolean) {
     let value = ''
     while (predicate(this.stream.peek())) {
       value += this.stream.next()
@@ -210,7 +210,7 @@ const isWhitespace = isRegex(/\s/)
 const isNumberChar = isRegex(/\d/)
 const isIdentifierChar = isRegex(/\w/)
 
-function getIdentifierType(identifier: string) {
+function getIdentifierType (identifier: string) {
   switch (identifier) {
     case 'function': return TokenType.FUNCTION
     case 'event': return TokenType.EVENT

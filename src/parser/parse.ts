@@ -2,29 +2,29 @@ import { Scanner } from '../scanner/Scanner'
 import { TokenType } from '../scanner/tokens'
 import * as Ast from './ast'
 
-export function parse(source: string) {
+export function parse (source: string) {
   return parseStream(Scanner.fromString(source))
 }
 
-function parseStream(stream: Scanner) {
+function parseStream (stream: Scanner) {
   return parseProgram()
 
   // HELPERS
   // -------
 
-  function at(type: TokenType) {
+  function at (type: TokenType) {
     const token = stream.peek()
     return token.type === type
   }
 
-  function expect(type: TokenType) {
+  function expect (type: TokenType) {
     if (at(type)) {
       return stream.next()
     }
     return fail()
   }
 
-  function fail(): never {
+  function fail (): never {
     const { type, value, start, end } = stream.peek()
     throw new TypeError(
       `Unexpected token ${type}: ${JSON.stringify(value)} at: [${start}, ${end}]`
@@ -34,7 +34,7 @@ function parseStream(stream: Scanner) {
   // CORE PARSER
   // -----------
 
-  function parseProgram(): Ast.AstNode {
+  function parseProgram (): Ast.AstNode {
     const children = []
     const { start } = stream.peek()
 
@@ -46,7 +46,7 @@ function parseStream(stream: Scanner) {
     return Ast.program(children, { start, end: stream.peek().end })
   }
 
-  function parseStatement() {
+  function parseStatement () {
     if (at(TokenType.LET)) {
       return parseVariableDeclaration()
     }
@@ -56,7 +56,7 @@ function parseStream(stream: Scanner) {
     return parseExpression()
   }
 
-  function parseVariableDeclaration() {
+  function parseVariableDeclaration () {
     const { start } = expect(TokenType.LET)
     const identifier = parseIdentifier()
     expect(TokenType.EQUALS)
@@ -81,7 +81,7 @@ function parseStream(stream: Scanner) {
 
   function parseFunctionParameters () {
     const parameters: Ast.Identifier[] = []
-    while(at(TokenType.IDENTIFIER)) {
+    while (at(TokenType.IDENTIFIER)) {
       parameters.push(parseIdentifier())
       if (!at(TokenType.COMMA)) {
         break
@@ -99,8 +99,8 @@ function parseStream(stream: Scanner) {
     return body
   }
 
-  function parseExpression(): Ast.Expression {
-    let { start } = stream.peek()
+  function parseExpression (): Ast.Expression {
+    const { start } = stream.peek()
     let result: Ast.Expression = parseTerm()
     while (at(TokenType.PLUS) || at(TokenType.MINUS)) {
       const { value } = stream.next()
@@ -116,7 +116,7 @@ function parseStream(stream: Scanner) {
   }
 
   function parseTerm () {
-    let { start } = stream.peek()
+    const { start } = stream.peek()
     let result: Ast.Expression = parseCallOrFactor()
     while (at(TokenType.STAR) || at(TokenType.SLASH)) {
       const { value } = stream.next()
@@ -137,7 +137,7 @@ function parseStream(stream: Scanner) {
     while (at(TokenType.PAREN_OPEN)) {
       expect(TokenType.PAREN_OPEN)
       const parameters: Ast.Expression[] = []
-      while(!at(TokenType.PAREN_CLOSE)) {
+      while (!at(TokenType.PAREN_CLOSE)) {
         parameters.push(parseExpression())
         if (!at(TokenType.COMMA)) {
           break
@@ -176,12 +176,12 @@ function parseStream(stream: Scanner) {
     return fail()
   }
 
-  function parseNumberLiteral() {
+  function parseNumberLiteral () {
     const { start, end, value } = stream.next()
     return Ast.numberLiteral(value, { start, end })
   }
 
-  function parseIdentifier() {
+  function parseIdentifier () {
     const { start, end, value } = expect(TokenType.IDENTIFIER)
     return Ast.identifier(value, { start, end })
   }

@@ -3,7 +3,7 @@ import { parse } from '../../../src/parser/parse'
 import * as Ast from '../../../src/parser/ast'
 import { stripRanges } from '../stripRanges'
 
-export function functionCalls() {
+export function functionCalls () {
   it('functionCalls', () => {
     const result = parse(`
       foo()

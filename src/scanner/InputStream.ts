@@ -15,11 +15,11 @@ export class InputStream {
     this.hadLF = source[0] === '\n'
   }
 
-  public peek(): string | undefined {
+  public peek (): string | undefined {
     return this.source[this.location.position]
   }
 
-  public next(): string | undefined {
+  public next (): string | undefined {
     const char = this.peek()
     this.location = this.nextLocation()
     return char

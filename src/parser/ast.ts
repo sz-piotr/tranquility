@@ -13,7 +13,6 @@ export const LOC_ZERO: AstNodeBase['loc'] = {
   end: { position: 0, line: 0, column: 0 }
 }
 
-
 export interface Program extends AstNodeBase {
   type: 'Program',
   children: Statement[]
