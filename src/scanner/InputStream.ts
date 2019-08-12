@@ -1,4 +1,4 @@
-import { Location } from './tokens'
+import { Location, location } from './tokens'
 
 export class InputStream {
   public location: Location = {
@@ -52,18 +52,14 @@ export class InputStream {
       return this.nextLine()
     }
 
-    return {
-      position: this.location.position + 1,
-      line: this.location.line,
-      column: this.location.column + 1
-    }
+    return location(
+      this.location.position + 1,
+      this.location.line,
+      this.location.column + 1
+    )
   }
 
   private nextLine () {
-    return {
-      position: this.location.position + 1,
-      line: this.location.line + 1,
-      column: 0
-    }
+    return location(this.location.position + 1, this.location.line + 1, 0)
   }
 }

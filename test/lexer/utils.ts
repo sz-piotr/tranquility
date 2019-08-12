@@ -1,4 +1,4 @@
-import { Token, TokenType, Location } from '../../src/scanner/tokens'
+import { Token, TokenType, location } from '../../src/scanner/tokens'
 
 type LocationArray = [number, number, number]
 
@@ -32,8 +32,4 @@ export function resetLocation (token: Token): Token {
     start: location(0, 0, 0),
     end: location(token.value.length, 0, token.value.length)
   }
-}
-
-export function location (position: number, line: number, column: number): Location {
-  return { position, line, column }
 }

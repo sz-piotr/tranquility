@@ -99,3 +99,7 @@ export interface Location {
   readonly line: number,
   readonly column: number
 }
+
+export function location (position: number, line: number, column: number): Location {
+  return { position, line, column }
+}
