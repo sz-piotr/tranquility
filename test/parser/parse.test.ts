@@ -5,6 +5,7 @@ import { emptyProgram } from './parse_cases/emptyProgram'
 import { functionCalls } from './parse_cases/functionCalls'
 import { newlines } from './parse_cases/newlines'
 import { errorInvalidCharacter } from './parse_cases/errorInvalidCharacter'
+import { literals } from './parse_cases/literals'
 
 describe('parse', () => {
   variableDeclaration()
@@ -14,4 +15,5 @@ describe('parse', () => {
   functionCalls()
   newlines()
   errorInvalidCharacter()
+  literals()
 })

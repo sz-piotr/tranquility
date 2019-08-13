@@ -216,6 +216,10 @@ function parseStream (stream: Scanner) {
       return parseNumberLiteral()
     }
 
+    if (at(TokenType.BOOLEAN)) {
+      return parseBooleanLiteral()
+    }
+
     if (at(TokenType.IDENTIFIER)) {
       return parseIdentifier()
     }
@@ -226,6 +230,11 @@ function parseStream (stream: Scanner) {
   function parseNumberLiteral () {
     const { start, end, value } = stream.next()
     return Ast.numberLiteral(value, { start, end })
+  }
+
+  function parseBooleanLiteral () {
+    const { start, end, value } = stream.next()
+    return Ast.booleanLiteral(value === 'true', { start, end })
   }
 
   function parseIdentifier () {
