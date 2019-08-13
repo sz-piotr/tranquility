@@ -4,14 +4,18 @@ import * as Ast from '../parser/ast'
 import { Error, report } from '../errors'
 
 export class Interpreter {
-  environment = new Environment()
+  private environment = new Environment()
 
   eval (source: string) {
     const { ast, errors } = parse(source)
     if (errors.length > 0) {
       this.report(errors, source)
     } else {
-      return this.evalNode(ast)
+      try {
+        return this.evalNode(ast)
+      } catch (e) {
+        console.error(e)
+      }
     }
   }
 
@@ -28,6 +32,8 @@ export class Interpreter {
       case 'BinaryOperation': return this.evalBinaryOperation(node)
       case 'NumberLiteral': return this.evalNumberLiteral(node)
       case 'BooleanLiteral': return this.evalBooleanLiteral(node)
+      case 'VariableDeclaration': return this.evalVariableDeclaration(node)
+      case 'Identifier': return this.evalIdentifier(node)
       default: throw new TypeError('Unsupported node type')
     }
   }
@@ -38,6 +44,13 @@ export class Interpreter {
       result = this.evalNode(child)
     }
     return result
+  }
+
+  private evalVariableDeclaration (node: Ast.VariableDeclaration) {
+    this.environment.define(
+      node.identifier.value,
+      this.evalNode(node.value)
+    )
   }
 
   private evalBinaryOperation (node: Ast.BinaryOperation) {
@@ -58,5 +71,9 @@ export class Interpreter {
 
   private evalBooleanLiteral (node: Ast.BooleanLiteral) {
     return node.value
+  }
+
+  private evalIdentifier (node: Ast.Identifier) {
+    return this.environment.get(node.value)
   }
 }
