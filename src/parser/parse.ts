@@ -100,7 +100,7 @@ function parseStream (stream: Scanner) {
     if (at(TokenType.FUNCTION)) {
       return parseFunctionDefinition()
     }
-    return parseExpression()
+    return parseAssignmentOrExpression()
   }
 
   function parseVariableDeclaration () {
@@ -144,6 +144,20 @@ function parseStream (stream: Scanner) {
       body.push(parseStatement())
     }
     return body
+  }
+
+  function parseAssignmentOrExpression () {
+    const left = parseExpression()
+    if (at(TokenType.EQUALS)) {
+      stream.next()
+      const right = parseExpression()
+      return Ast.variableAssignment(
+        left,
+        right,
+        { start: left.span.start, end: right.span.end }
+      )
+    }
+    return left
   }
 
   function parseExpression (): Ast.Expression {

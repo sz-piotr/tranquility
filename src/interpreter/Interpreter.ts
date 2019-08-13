@@ -33,6 +33,7 @@ export class Interpreter {
       case 'NumberLiteral': return this.evalNumberLiteral(node)
       case 'BooleanLiteral': return this.evalBooleanLiteral(node)
       case 'VariableDeclaration': return this.evalVariableDeclaration(node)
+      case 'VariableAssignment': return this.evalVariableAssignment(node)
       case 'Identifier': return this.evalIdentifier(node)
       default: throw new TypeError('Unsupported node type')
     }
@@ -50,6 +51,16 @@ export class Interpreter {
     this.environment.define(
       node.identifier.value,
       this.evalNode(node.value)
+    )
+  }
+
+  private evalVariableAssignment (node: Ast.VariableAssignment) {
+    if (node.left.type !== 'Identifier') {
+      throw new TypeError('Invalid assignment target')
+    }
+    this.environment.assign(
+      node.left.value,
+      this.evalNode(node.right)
     )
   }
 

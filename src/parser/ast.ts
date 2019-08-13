@@ -53,6 +53,25 @@ export function variableDeclaration (
   }
 }
 
+export interface VariableAssignment extends AstNodeBase {
+  type: 'VariableAssignment',
+  left: Expression,
+  right: Expression
+}
+
+export function variableAssignment (
+  left: Expression,
+  right: Expression,
+  span = SPAN_ZERO
+): VariableAssignment {
+  return {
+    type: 'VariableAssignment',
+    left,
+    right,
+    span
+  }
+}
+
 export interface FunctionDefinition extends AstNodeBase {
   type: 'FunctionDefinition',
   identifier: Identifier,
@@ -166,6 +185,7 @@ export function booleanLiteral (
 
 export type Statement
   = VariableDeclaration
+  | VariableAssignment
   | FunctionDefinition
   | Expression
 

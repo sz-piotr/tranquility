@@ -7,6 +7,14 @@ export class Environment {
     this.values.set(name, value)
   }
 
+  assign (name: string, value: any) {
+    if (this.values.has(name)) {
+      return this.values.set(name, value)
+    } else {
+      throw new TypeError(`Variable ${name} is not defined`)
+    }
+  }
+
   get (name: string) {
     if (this.values.has(name)) {
       return this.values.get(name)

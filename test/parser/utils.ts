@@ -9,6 +9,9 @@ export function resetRanges (ast: AstNode): AstNode {
   } else if (ast.type === 'VariableDeclaration') {
     resetRanges(ast.identifier)
     resetRanges(ast.value)
+  } else if (ast.type === 'VariableAssignment') {
+    resetRanges(ast.left)
+    resetRanges(ast.right)
   } else if (ast.type === 'BinaryOperation') {
     resetRanges(ast.left)
     resetRanges(ast.right)

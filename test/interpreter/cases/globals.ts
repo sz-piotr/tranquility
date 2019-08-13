@@ -7,9 +7,10 @@ export function globals () {
       let a = 100
       let b = 200
       let c = a + b
+      c = c + a
       c
     `
     const interpreter = new Interpreter()
-    expect(interpreter.eval(source)).to.equal(300)
+    expect(interpreter.eval(source)).to.equal(400)
   })
 }
