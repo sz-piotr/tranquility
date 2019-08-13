@@ -1,6 +1,6 @@
 import { readFileSync } from 'fs'
 import { createInterface } from 'readline'
-import { run } from './interpreter/run'
+import { Interpreter } from './interpreter/Interpreter'
 
 main(process.argv.slice(2))
 
@@ -17,10 +17,11 @@ function main (args: string[]) {
 
 function runFile (fileName: string) {
   const source = readFileSync(fileName, 'utf-8')
-  return run(source)
+  return new Interpreter().eval(source)
 }
 
 function runPrompt () {
+  const interpreter = new Interpreter()
   const rl = createInterface({ input: process.stdin, output: process.stdout })
 
   console.log('Welcome. Type "exit" or use ^C to exit.')
@@ -31,7 +32,8 @@ function runPrompt () {
       return
     }
 
-    run(source)
+    const result = interpreter.eval(source)
+    console.log(result)
 
     rl.prompt()
   }).on('close', () => {
