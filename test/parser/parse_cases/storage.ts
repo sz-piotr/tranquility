@@ -82,7 +82,7 @@ export function storage () {
               Ast.identifier('check'),
               [
                 Ast.binaryOperation(
-                  Ast.Operator.NOT_EQUAL,
+                  Ast.Operation.NOT_EQUAL,
                   Ast.identifier('address'),
                   Ast.identifier('zero'),
                 )
@@ -92,7 +92,7 @@ export function storage () {
               Ast.identifier('check'),
               [
                 Ast.binaryOperation(
-                  Ast.Operator.NOT_EQUAL,
+                  Ast.Operation.NOT_EQUAL,
                   Ast.identifier('amount'),
                   Ast.numberLiteral('0'),
                 )

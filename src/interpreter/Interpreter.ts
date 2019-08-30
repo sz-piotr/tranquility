@@ -69,10 +69,10 @@ export class Interpreter {
     const left = this.evalNode(node.left)
     const right = this.evalNode(node.right)
     switch (operator) {
-      case Ast.Operator.ADD: return left + right
-      case Ast.Operator.SUBTRACT: return left - right
-      case Ast.Operator.MULTIPLY: return left * right
-      case Ast.Operator.DIVIDE: return left / right
+      case Ast.Operation.ADD: return left + right
+      case Ast.Operation.SUBTRACT: return left - right
+      case Ast.Operation.MULTIPLY: return left * right
+      case Ast.Operation.DIVIDE: return left / right
     }
   }
 

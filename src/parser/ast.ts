@@ -270,7 +270,7 @@ export function identifier (
   }
 }
 
-export enum Operator {
+export enum Operation {
   ADD,
   SUBTRACT,
   MULTIPLY,
@@ -285,13 +285,13 @@ export enum Operator {
 
 export interface BinaryOperation extends AstNodeBase {
   kind: 'BinaryOperation',
-  operator: Operator,
+  operator: Operation,
   left: Expression,
   right: Expression
 }
 
 export function binaryOperation (
-  operator: Operator,
+  operator: Operation,
   left: Expression,
   right: Expression,
   span = SPAN_ZERO

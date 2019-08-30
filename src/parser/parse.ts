@@ -167,7 +167,7 @@ function parseStream (stream: Scanner) {
       const { kind } = stream.next()
       const right = parseTerm()
       result = Ast.binaryOperation(
-        getOperator(kind),
+        getOperation(kind),
         result,
         right,
         { start, end: stream.peek().end }
@@ -183,7 +183,7 @@ function parseStream (stream: Scanner) {
       const { kind } = stream.next()
       const right = parseCallOrFactor()
       result = Ast.binaryOperation(
-        getOperator(kind),
+        getOperation(kind),
         result,
         right,
         { start, end: stream.peek().end }
@@ -257,18 +257,18 @@ function parseStream (stream: Scanner) {
   }
 }
 
-function getOperator (kind: TokenKind): Ast.Operator {
+function getOperation (kind: TokenKind): Ast.Operation {
   switch (kind) {
-    case TokenKind.PLUS: return Ast.Operator.ADD
-    case TokenKind.MINUS: return Ast.Operator.SUBTRACT
-    case TokenKind.STAR: return Ast.Operator.MULTIPLY
-    case TokenKind.SLASH: return Ast.Operator.DIVIDE
-    case TokenKind.EQUALS_EQUALS: return Ast.Operator.EQUAL
-    case TokenKind.BANG_EQUALS: return Ast.Operator.NOT_EQUAL
-    case TokenKind.LEFT: return Ast.Operator.LESS
-    case TokenKind.LEFT_EQUALS: return Ast.Operator.LESS_OR_EQUAL
-    case TokenKind.RIGHT: return Ast.Operator.GREATER
-    case TokenKind.RIGHT_EQUALS: return Ast.Operator.GREATER_OR_EQUAL
+    case TokenKind.PLUS: return Ast.Operation.ADD
+    case TokenKind.MINUS: return Ast.Operation.SUBTRACT
+    case TokenKind.STAR: return Ast.Operation.MULTIPLY
+    case TokenKind.SLASH: return Ast.Operation.DIVIDE
+    case TokenKind.EQUALS_EQUALS: return Ast.Operation.EQUAL
+    case TokenKind.BANG_EQUALS: return Ast.Operation.NOT_EQUAL
+    case TokenKind.LEFT: return Ast.Operation.LESS
+    case TokenKind.LEFT_EQUALS: return Ast.Operation.LESS_OR_EQUAL
+    case TokenKind.RIGHT: return Ast.Operation.GREATER
+    case TokenKind.RIGHT_EQUALS: return Ast.Operation.GREATER_OR_EQUAL
   }
   throw new TypeError('Invalid operator')
 }

@@ -34,7 +34,7 @@ export function functionCalls () {
               Ast.numberLiteral('1'),
               Ast.identifier('bar'),
               Ast.binaryOperation(
-                Ast.Operator.ADD,
+                Ast.Operation.ADD,
                 Ast.identifier('a'),
                 Ast.functionCall(
                   Ast.identifier('b'),
@@ -45,14 +45,14 @@ export function functionCalls () {
           ),
           [
             Ast.binaryOperation(
-              Ast.Operator.ADD,
+              Ast.Operation.ADD,
               Ast.functionCall(
                 Ast.identifier('x'),
                 []
               ),
               Ast.functionCall(
                 Ast.binaryOperation(
-                  Ast.Operator.ADD,
+                  Ast.Operation.ADD,
                   Ast.identifier('a'),
                   Ast.identifier('b')
                 ),

@@ -47,7 +47,7 @@ export function smallProgram () {
         ],
         [
           Ast.binaryOperation(
-            Ast.Operator.ADD,
+            Ast.Operation.ADD,
             Ast.identifier('a'),
             Ast.identifier('b')
           )
