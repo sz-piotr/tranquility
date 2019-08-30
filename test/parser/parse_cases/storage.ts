@@ -69,11 +69,11 @@ export function storage () {
           [
             Ast.functionParameter(
               Ast.identifier('address'),
-              Ast.type(Ast.identifier('Address'), []),
+              Ast.type(Ast.identifier('Address'), [])
             ),
             Ast.functionParameter(
               Ast.identifier('amount'),
-              Ast.type(Ast.identifier('Uint'), []),
+              Ast.type(Ast.identifier('Uint'), [])
             )
           ],
           undefined,
@@ -84,7 +84,7 @@ export function storage () {
                 Ast.binaryOperation(
                   Ast.Operation.NOT_EQUAL,
                   Ast.identifier('address'),
-                  Ast.identifier('zero'),
+                  Ast.identifier('zero')
                 )
               ]
             ),
@@ -94,7 +94,7 @@ export function storage () {
                 Ast.binaryOperation(
                   Ast.Operation.NOT_EQUAL,
                   Ast.identifier('amount'),
-                  Ast.numberLiteral('0'),
+                  Ast.numberLiteral('0')
                 )
               ]
             )
