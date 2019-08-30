@@ -72,21 +72,21 @@ export function variableAssignment (
   }
 }
 
-export interface FunctionDefinition extends AstNodeBase {
-  kind: 'FunctionDefinition',
+export interface FunctionDeclaration extends AstNodeBase {
+  kind: 'FunctionDeclaration',
   identifier: Identifier,
   parameters: Identifier[],
   body: Statement[]
 }
 
-export function functionDefinition (
+export function functionDeclaration (
   identifier: Identifier,
   parameters: Identifier[],
   body: Statement[],
   span = SPAN_ZERO
-): FunctionDefinition {
+): FunctionDeclaration {
   return {
-    kind: 'FunctionDefinition',
+    kind: 'FunctionDeclaration',
     identifier,
     parameters,
     body,
@@ -113,6 +113,147 @@ export function functionCall (
   }
 }
 
+export interface StorageDeclaration extends AstNodeBase {
+  kind: 'StorageDeclaration',
+  children: MemberDeclaration[],
+}
+
+export function storageDeclaration (
+  children: MemberDeclaration[],
+  span = SPAN_ZERO
+): StorageDeclaration {
+  return {
+    kind: 'StorageDeclaration',
+    children,
+    span
+  }
+}
+
+export type MemberDeclaration
+  = FieldDeclaration
+  | UsingDeclaration
+  | MethodDeclaration
+
+export interface FieldDeclaration extends AstNodeBase {
+  kind: 'FieldDeclaration',
+  identifier: Identifier,
+  type: Type,
+}
+
+export function fieldDeclaration (
+  identifier: Identifier,
+  type: Type,
+  span = SPAN_ZERO
+): FieldDeclaration {
+  return {
+    kind: 'FieldDeclaration',
+    identifier,
+    type,
+    span
+  }
+}
+
+export interface UsingDeclaration extends AstNodeBase {
+  kind: 'UsingDeclaration',
+  field: Identifier,
+  method: Identifier | undefined,
+  alias: Identifier | undefined
+}
+
+export function usingDeclaration (
+  field: Identifier,
+  method: Identifier | undefined,
+  alias: Identifier | undefined,
+  span = SPAN_ZERO
+): UsingDeclaration {
+  return {
+    kind: 'UsingDeclaration',
+    field,
+    method,
+    alias,
+    span
+  }
+}
+
+export interface MethodDeclaration extends AstNodeBase {
+  kind: 'MethodDeclaration',
+  identifier: Identifier,
+  parameters: FunctionParameter[],
+  returnType: Type | undefined,
+  body: Statement[]
+}
+
+export function methodDeclaration (
+  identifier: Identifier,
+  parameters: FunctionParameter[],
+  returnType: Type | undefined,
+  body: Statement[],
+  span = SPAN_ZERO
+): MethodDeclaration {
+  return {
+    kind: 'MethodDeclaration',
+    identifier,
+    parameters,
+    returnType,
+    body,
+    span
+  }
+}
+
+export interface FunctionParameter extends AstNodeBase {
+  kind: 'FunctionParameter',
+  identifier: Identifier,
+  type: Type | undefined
+}
+
+export function functionParameter (
+  identifier: Identifier,
+  type: Type | undefined,
+  span = SPAN_ZERO
+): FunctionParameter {
+  return {
+    kind: 'FunctionParameter',
+    identifier,
+    type,
+    span
+  }
+}
+
+export interface ReturnStatement extends AstNodeBase {
+  kind: 'ReturnStatement'
+  value: Expression
+}
+
+export function returnStatement (
+  value: Expression,
+  span = SPAN_ZERO
+): ReturnStatement {
+  return {
+    kind: 'ReturnStatement',
+    value,
+    span
+  }
+}
+
+export interface Type extends AstNodeBase {
+  kind: 'Type',
+  identifier: Identifier,
+  parameters: Type[]
+}
+
+export function type (
+  identifier: Identifier,
+  parameters: Type[],
+  span = SPAN_ZERO
+): Type {
+  return {
+    kind: 'Type',
+    identifier,
+    parameters,
+    span
+  }
+}
+
 export interface Identifier extends AstNodeBase {
   kind: 'Identifier',
   value: string
@@ -129,15 +270,28 @@ export function identifier (
   }
 }
 
+export enum Operator {
+  ADD,
+  SUBTRACT,
+  MULTIPLY,
+  DIVIDE,
+  EQUAL,
+  NOT_EQUAL,
+  GREATER,
+  GREATER_OR_EQUAL,
+  LESS,
+  LESS_OR_EQUAL
+}
+
 export interface BinaryOperation extends AstNodeBase {
   kind: 'BinaryOperation',
-  operator: '+' | '-' | '*' | '/',
+  operator: Operator,
   left: Expression,
   right: Expression
 }
 
 export function binaryOperation (
-  operator: BinaryOperation['operator'],
+  operator: Operator,
   left: Expression,
   right: Expression,
   span = SPAN_ZERO
@@ -183,10 +337,13 @@ export function booleanLiteral (
   }
 }
 
+
 export type Statement
   = VariableDeclaration
   | VariableAssignment
-  | FunctionDefinition
+  | FunctionDeclaration
+  | StorageDeclaration
+  | ReturnStatement
   | Expression
 
 export type Expression

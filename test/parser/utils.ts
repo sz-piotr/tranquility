@@ -18,7 +18,7 @@ export function resetRanges (ast: AstNode): AstNode {
   } else if (ast.kind === 'FunctionCall') {
     resetRanges(ast.callee)
     ast.parameters.forEach(resetRanges)
-  } else if (ast.kind === 'FunctionDefinition') {
+  } else if (ast.kind === 'FunctionDeclaration') {
     resetRanges(ast.identifier)
     ast.parameters.forEach(resetRanges)
     ast.body.forEach(resetRanges)

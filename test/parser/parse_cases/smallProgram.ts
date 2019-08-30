@@ -18,7 +18,7 @@ export function smallProgram () {
     `)
 
     const expected = Ast.program([
-      Ast.functionDefinition(
+      Ast.functionDeclaration(
         Ast.identifier('main'),
         [],
         [
@@ -39,7 +39,7 @@ export function smallProgram () {
           )
         ]
       ),
-      Ast.functionDefinition(
+      Ast.functionDeclaration(
         Ast.identifier('add'),
         [
           Ast.identifier('a'),
@@ -47,7 +47,7 @@ export function smallProgram () {
         ],
         [
           Ast.binaryOperation(
-            '+',
+            Ast.Operator.ADD,
             Ast.identifier('a'),
             Ast.identifier('b')
           )

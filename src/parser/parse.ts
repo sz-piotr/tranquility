@@ -123,7 +123,7 @@ function parseStream (stream: Scanner) {
     const body = parseFunctionBody()
     const { end } = expect(TokenKind.CURLY_CLOSE)
 
-    return Ast.functionDefinition(identifier, parameters, body, { start, end })
+    return Ast.functionDeclaration(identifier, parameters, body, { start, end })
   }
 
   function parseFunctionParameters () {
@@ -164,10 +164,10 @@ function parseStream (stream: Scanner) {
     const { start } = stream.peek()
     let result: Ast.Expression = parseTerm()
     while (at(TokenKind.PLUS) || at(TokenKind.MINUS)) {
-      const { value } = stream.next()
+      const { kind } = stream.next()
       const right = parseTerm()
       result = Ast.binaryOperation(
-        value as Ast.BinaryOperation['operator'],
+        getOperator(kind),
         result,
         right,
         { start, end: stream.peek().end }
@@ -180,10 +180,10 @@ function parseStream (stream: Scanner) {
     const { start } = stream.peek()
     let result: Ast.Expression = parseCallOrFactor()
     while (at(TokenKind.STAR) || at(TokenKind.SLASH)) {
-      const { value } = stream.next()
+      const { kind } = stream.next()
       const right = parseCallOrFactor()
       result = Ast.binaryOperation(
-        value as Ast.BinaryOperation['operator'],
+        getOperator(kind),
         result,
         right,
         { start, end: stream.peek().end }
@@ -255,4 +255,20 @@ function parseStream (stream: Scanner) {
     const { start, end, value } = expect(TokenKind.IDENTIFIER)
     return Ast.identifier(value, { start, end })
   }
+}
+
+function getOperator (kind: TokenKind): Ast.Operator {
+  switch (kind) {
+    case TokenKind.PLUS: return Ast.Operator.ADD
+    case TokenKind.MINUS: return Ast.Operator.SUBTRACT
+    case TokenKind.STAR: return Ast.Operator.MULTIPLY
+    case TokenKind.SLASH: return Ast.Operator.DIVIDE
+    case TokenKind.EQUALS_EQUALS: return Ast.Operator.EQUAL
+    case TokenKind.BANG_EQUALS: return Ast.Operator.NOT_EQUAL
+    case TokenKind.LEFT: return Ast.Operator.LESS
+    case TokenKind.LEFT_EQUALS: return Ast.Operator.LESS_OR_EQUAL
+    case TokenKind.RIGHT: return Ast.Operator.GREATER
+    case TokenKind.RIGHT_EQUALS: return Ast.Operator.GREATER_OR_EQUAL
+  }
+  throw new TypeError('Invalid operator')
 }

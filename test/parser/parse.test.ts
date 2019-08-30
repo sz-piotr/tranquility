@@ -7,6 +7,7 @@ import { newlines } from './parse_cases/newlines'
 import { errorInvalidCharacter } from './parse_cases/errorInvalidCharacter'
 import { literals } from './parse_cases/literals'
 import { assignment } from './parse_cases/assignment'
+import { storage } from './parse_cases/storage'
 
 describe('parse', () => {
   variableDeclaration()
@@ -18,4 +19,5 @@ describe('parse', () => {
   errorInvalidCharacter()
   literals()
   assignment()
+  storage()
 })
