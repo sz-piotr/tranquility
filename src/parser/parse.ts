@@ -1,5 +1,5 @@
 import { Scanner } from './Scanner'
-import { TokenType, Token } from './tokens'
+import { TokenKind, Token } from './tokens'
 import * as Ast from './ast'
 import * as Err from '../errors'
 
@@ -23,13 +23,13 @@ function parseStream (stream: Scanner) {
   // HELPERS
   // -------
 
-  function at (type: TokenType) {
+  function at (kind: TokenKind) {
     const token = stream.peek()
-    return token.type === type
+    return token.kind === kind
   }
 
-  function expect (type: TokenType) {
-    if (at(type)) {
+  function expect (kind: TokenKind) {
+    if (at(kind)) {
       return stream.next()
     }
     return fail()
@@ -46,14 +46,14 @@ function parseStream (stream: Scanner) {
     const children = []
     const { start } = stream.peek()
 
-    while (!at(TokenType.EOF)) {
+    while (!at(TokenKind.EOF)) {
       try {
         children.push(parseStatement())
       } catch (e) {
         handleError(e)
       }
     }
-    expect(TokenType.EOF)
+    expect(TokenKind.EOF)
 
     return {
       ast: Ast.program(children, { start, end: stream.peek().end }),
@@ -64,7 +64,7 @@ function parseStream (stream: Scanner) {
   function handleError (e: unknown) {
     if (e instanceof UnexpectedToken) {
       const token = e.token
-      if (token.type === TokenType.UNRECOGNIZED) {
+      if (token.kind === TokenKind.UNRECOGNIZED) {
         errors.push(Err.InvalidCharacter(token.value, token))
       } else {
         errors.push(Err.UnexpectedToken(token.value, token))
@@ -77,70 +77,70 @@ function parseStream (stream: Scanner) {
 
   function synchronize () {
     while (true) {
-      switch (stream.next().type) {
-        case TokenType.EOF:
-        case TokenType.EVENT:
-        case TokenType.FUNCTION:
-        case TokenType.STORAGE:
-        case TokenType.CONTRACT:
-        case TokenType.LET:
-        case TokenType.IF:
-        case TokenType.FOR:
-        case TokenType.WHILE:
-        case TokenType.RETURN:
+      switch (stream.next().kind) {
+        case TokenKind.EOF:
+        case TokenKind.EVENT:
+        case TokenKind.FUNCTION:
+        case TokenKind.STORAGE:
+        case TokenKind.CONTRACT:
+        case TokenKind.LET:
+        case TokenKind.IF:
+        case TokenKind.FOR:
+        case TokenKind.WHILE:
+        case TokenKind.RETURN:
           return
       }
     }
   }
 
   function parseStatement () {
-    if (at(TokenType.LET)) {
+    if (at(TokenKind.LET)) {
       return parseVariableDeclaration()
     }
-    if (at(TokenType.FUNCTION)) {
+    if (at(TokenKind.FUNCTION)) {
       return parseFunctionDefinition()
     }
     return parseAssignmentOrExpression()
   }
 
   function parseVariableDeclaration () {
-    const { start } = expect(TokenType.LET)
+    const { start } = expect(TokenKind.LET)
     const identifier = parseIdentifier()
-    expect(TokenType.EQUALS)
+    expect(TokenKind.EQUALS)
     const value = parseExpression()
     return Ast.variableDeclaration(identifier, value, { start, end: value.span.end })
   }
 
   function parseFunctionDefinition () {
-    const { start } = expect(TokenType.FUNCTION)
+    const { start } = expect(TokenKind.FUNCTION)
     const identifier = parseIdentifier()
 
-    expect(TokenType.PAREN_OPEN)
+    expect(TokenKind.PAREN_OPEN)
     const parameters = parseFunctionParameters()
-    expect(TokenType.PAREN_CLOSE)
+    expect(TokenKind.PAREN_CLOSE)
 
-    expect(TokenType.CURLY_OPEN)
+    expect(TokenKind.CURLY_OPEN)
     const body = parseFunctionBody()
-    const { end } = expect(TokenType.CURLY_CLOSE)
+    const { end } = expect(TokenKind.CURLY_CLOSE)
 
     return Ast.functionDefinition(identifier, parameters, body, { start, end })
   }
 
   function parseFunctionParameters () {
     const parameters: Ast.Identifier[] = []
-    while (at(TokenType.IDENTIFIER)) {
+    while (at(TokenKind.IDENTIFIER)) {
       parameters.push(parseIdentifier())
-      if (!at(TokenType.COMMA)) {
+      if (!at(TokenKind.COMMA)) {
         break
       }
-      expect(TokenType.COMMA)
+      expect(TokenKind.COMMA)
     }
     return parameters
   }
 
   function parseFunctionBody () {
     const body: Ast.Statement[] = []
-    while (!at(TokenType.CURLY_CLOSE)) {
+    while (!at(TokenKind.CURLY_CLOSE)) {
       body.push(parseStatement())
     }
     return body
@@ -148,7 +148,7 @@ function parseStream (stream: Scanner) {
 
   function parseAssignmentOrExpression () {
     const left = parseExpression()
-    if (at(TokenType.EQUALS)) {
+    if (at(TokenKind.EQUALS)) {
       stream.next()
       const right = parseExpression()
       return Ast.variableAssignment(
@@ -163,7 +163,7 @@ function parseStream (stream: Scanner) {
   function parseExpression (): Ast.Expression {
     const { start } = stream.peek()
     let result: Ast.Expression = parseTerm()
-    while (at(TokenType.PLUS) || at(TokenType.MINUS)) {
+    while (at(TokenKind.PLUS) || at(TokenKind.MINUS)) {
       const { value } = stream.next()
       const right = parseTerm()
       result = Ast.binaryOperation(
@@ -179,7 +179,7 @@ function parseStream (stream: Scanner) {
   function parseTerm () {
     const { start } = stream.peek()
     let result: Ast.Expression = parseCallOrFactor()
-    while (at(TokenType.STAR) || at(TokenType.SLASH)) {
+    while (at(TokenKind.STAR) || at(TokenKind.SLASH)) {
       const { value } = stream.next()
       const right = parseCallOrFactor()
       result = Ast.binaryOperation(
@@ -195,17 +195,17 @@ function parseStream (stream: Scanner) {
   function parseCallOrFactor (): Ast.Expression {
     const { start } = stream.peek()
     let result = parseFactor()
-    while (at(TokenType.PAREN_OPEN)) {
-      expect(TokenType.PAREN_OPEN)
+    while (at(TokenKind.PAREN_OPEN)) {
+      expect(TokenKind.PAREN_OPEN)
       const parameters: Ast.Expression[] = []
-      while (!at(TokenType.PAREN_CLOSE)) {
+      while (!at(TokenKind.PAREN_CLOSE)) {
         parameters.push(parseExpression())
-        if (!at(TokenType.COMMA)) {
+        if (!at(TokenKind.COMMA)) {
           break
         }
-        expect(TokenType.COMMA)
+        expect(TokenKind.COMMA)
       }
-      const { end } = expect(TokenType.PAREN_CLOSE)
+      const { end } = expect(TokenKind.PAREN_CLOSE)
       result = Ast.functionCall(
         result,
         parameters,
@@ -216,25 +216,25 @@ function parseStream (stream: Scanner) {
   }
 
   function parseFactor () {
-    if (at(TokenType.PAREN_OPEN)) {
+    if (at(TokenKind.PAREN_OPEN)) {
       stream.next()
       const expression = parseExpression()
-      expect(TokenType.PAREN_CLOSE)
+      expect(TokenKind.PAREN_CLOSE)
       return expression
     }
     return parseLiteral()
   }
 
   function parseLiteral () {
-    if (at(TokenType.NUMBER)) {
+    if (at(TokenKind.NUMBER)) {
       return parseNumberLiteral()
     }
 
-    if (at(TokenType.BOOLEAN)) {
+    if (at(TokenKind.BOOLEAN)) {
       return parseBooleanLiteral()
     }
 
-    if (at(TokenType.IDENTIFIER)) {
+    if (at(TokenKind.IDENTIFIER)) {
       return parseIdentifier()
     }
 
@@ -252,7 +252,7 @@ function parseStream (stream: Scanner) {
   }
 
   function parseIdentifier () {
-    const { start, end, value } = expect(TokenType.IDENTIFIER)
+    const { start, end, value } = expect(TokenKind.IDENTIFIER)
     return Ast.identifier(value, { start, end })
   }
 }

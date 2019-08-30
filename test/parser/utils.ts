@@ -1,24 +1,24 @@
-import { Token, TokenType } from '../../src/parser/tokens'
+import { Token, TokenKind } from '../../src/parser/tokens'
 import { location } from '../../src/parser/location'
 import { AstNode, SPAN_ZERO } from '../../src/parser/ast'
 
 export function resetRanges (ast: AstNode): AstNode {
   ast.span = SPAN_ZERO
-  if (ast.type === 'Program') {
+  if (ast.kind === 'Program') {
     ast.children.forEach(resetRanges)
-  } else if (ast.type === 'VariableDeclaration') {
+  } else if (ast.kind === 'VariableDeclaration') {
     resetRanges(ast.identifier)
     resetRanges(ast.value)
-  } else if (ast.type === 'VariableAssignment') {
+  } else if (ast.kind === 'VariableAssignment') {
     resetRanges(ast.left)
     resetRanges(ast.right)
-  } else if (ast.type === 'BinaryOperation') {
+  } else if (ast.kind === 'BinaryOperation') {
     resetRanges(ast.left)
     resetRanges(ast.right)
-  } else if (ast.type === 'FunctionCall') {
+  } else if (ast.kind === 'FunctionCall') {
     resetRanges(ast.callee)
     ast.parameters.forEach(resetRanges)
-  } else if (ast.type === 'FunctionDefinition') {
+  } else if (ast.kind === 'FunctionDefinition') {
     resetRanges(ast.identifier)
     ast.parameters.forEach(resetRanges)
     ast.body.forEach(resetRanges)
@@ -29,7 +29,7 @@ export function resetRanges (ast: AstNode): AstNode {
 type LocationArray = [number, number, number]
 
 export function token (
-  type: TokenType,
+  kind: TokenKind,
   value: string,
   start: LocationArray | number = 0,
   end?: LocationArray
@@ -45,7 +45,7 @@ export function token (
       startValue.column + value.length
     )
   return {
-    type,
+    kind,
     value,
     start: startValue,
     end: endValue

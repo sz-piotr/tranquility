@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Scanner } from '../../../src/parser/Scanner'
-import { TokenType } from '../../../src/parser/tokens'
+import { TokenKind } from '../../../src/parser/tokens'
 import { token } from '../utils'
 
 export function empty () {
@@ -9,7 +9,7 @@ export function empty () {
     const tokens = Scanner.tokenize(source)
 
     expect(tokens).to.deep.equal([
-      token(TokenType.EOF, '', [0, 0, 0], [0, 0, 0])
+      token(TokenKind.EOF, '', [0, 0, 0], [0, 0, 0])
     ])
   })
 }

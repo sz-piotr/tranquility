@@ -1,28 +1,28 @@
 import { expect } from 'chai'
 import { Scanner } from '../../../src/parser/Scanner'
-import { TokenType } from '../../../src/parser/tokens'
+import { TokenKind } from '../../../src/parser/tokens'
 import { token } from '../utils'
 
 export function keywords () {
   it('keywords', () => {
-    const keywords: [TokenType, string][] = [
-      [TokenType.FUNCTION, 'function'],
-      [TokenType.EVENT, 'event'],
-      [TokenType.STORAGE, 'storage'],
-      [TokenType.CONTRACT, 'contract'],
-      [TokenType.LET, 'let'],
-      [TokenType.USE, 'use'],
-      [TokenType.FOR, 'for'],
-      [TokenType.WHILE, 'while'],
-      [TokenType.IF, 'if'],
-      [TokenType.ELSE, 'else'],
-      [TokenType.ZERO, 'zero'],
-      [TokenType.RETURN, 'return'],
+    const keywords: [TokenKind, string][] = [
+      [TokenKind.FUNCTION, 'function'],
+      [TokenKind.EVENT, 'event'],
+      [TokenKind.STORAGE, 'storage'],
+      [TokenKind.CONTRACT, 'contract'],
+      [TokenKind.LET, 'let'],
+      [TokenKind.USE, 'use'],
+      [TokenKind.FOR, 'for'],
+      [TokenKind.WHILE, 'while'],
+      [TokenKind.IF, 'if'],
+      [TokenKind.ELSE, 'else'],
+      [TokenKind.ZERO, 'zero'],
+      [TokenKind.RETURN, 'return'],
 
-      [TokenType.BOOLEAN, 'true'],
-      [TokenType.BOOLEAN, 'false'],
+      [TokenKind.BOOLEAN, 'true'],
+      [TokenKind.BOOLEAN, 'false'],
 
-      [TokenType.IDENTIFIER, 'blah']
+      [TokenKind.IDENTIFIER, 'blah']
     ]
     const source = keywords.map(([, value]) => value).join(' ')
     const tokens = Scanner.tokenize(source)
@@ -30,15 +30,15 @@ export function keywords () {
     let i = 0
     let last = 0
 
-    function t (type: TokenType, value: string) {
+    function t (kind: TokenKind, value: string) {
       i += last
       last = value.length + 1
-      return token(type, value, i)
+      return token(kind, value, i)
     }
 
     expect(tokens).to.deep.equal([
-      ...keywords.map(([type, value]) => t(type, value)),
-      token(TokenType.EOF, '', source.length)
+      ...keywords.map(([kind, value]) => t(kind, value)),
+      token(TokenKind.EOF, '', source.length)
     ])
   })
 }

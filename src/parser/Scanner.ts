@@ -1,5 +1,5 @@
 import { InputStream } from './InputStream'
-import { Token, TokenType } from './tokens'
+import { Token, TokenKind } from './tokens'
 
 export class Scanner {
   private current?: Token
@@ -17,7 +17,7 @@ export class Scanner {
     const tokens: Token[] = []
     do {
       tokens.push(scanner.next())
-    } while (tokens[tokens.length - 1].type !== TokenType.EOF)
+    } while (tokens[tokens.length - 1].kind !== TokenKind.EOF)
     return tokens
   }
 
@@ -40,67 +40,67 @@ export class Scanner {
 
     const char = this.stream.peek()
     switch (char) {
-      case undefined: return this.token(TokenType.EOF)
-      case '(': return this.token(TokenType.PAREN_OPEN)
-      case ')': return this.token(TokenType.PAREN_CLOSE)
-      case '[': return this.token(TokenType.BRACKET_OPEN)
-      case ']': return this.token(TokenType.BRACKET_CLOSE)
-      case '{': return this.token(TokenType.CURLY_OPEN)
-      case '}': return this.token(TokenType.CURLY_CLOSE)
-      case ',': return this.token(TokenType.COMMA)
-      case '.': return this.token(TokenType.DOT)
-      case '?': return this.token(TokenType.QUESTION)
-      case '~': return this.token(TokenType.TILDE)
-      case '#': return this.token(TokenType.HASH)
-      case ';': return this.token(TokenType.SEMICOLON)
+      case undefined: return this.token(TokenKind.EOF)
+      case '(': return this.token(TokenKind.PAREN_OPEN)
+      case ')': return this.token(TokenKind.PAREN_CLOSE)
+      case '[': return this.token(TokenKind.BRACKET_OPEN)
+      case ']': return this.token(TokenKind.BRACKET_CLOSE)
+      case '{': return this.token(TokenKind.CURLY_OPEN)
+      case '}': return this.token(TokenKind.CURLY_CLOSE)
+      case ',': return this.token(TokenKind.COMMA)
+      case '.': return this.token(TokenKind.DOT)
+      case '?': return this.token(TokenKind.QUESTION)
+      case '~': return this.token(TokenKind.TILDE)
+      case '#': return this.token(TokenKind.HASH)
+      case ';': return this.token(TokenKind.SEMICOLON)
       case ':': return this.doubleToken(
-        TokenType.COLON,
-        ['=', TokenType.COLON_EQUALS]
+        TokenKind.COLON,
+        ['=', TokenKind.COLON_EQUALS]
       )
       case '-': return this.doubleToken(
-        TokenType.MINUS,
-        ['-', TokenType.MINUS_MINUS],
-        ['=', TokenType.MINUS_EQUALS],
-        ['>', TokenType.MINUS_RIGHT]
+        TokenKind.MINUS,
+        ['-', TokenKind.MINUS_MINUS],
+        ['=', TokenKind.MINUS_EQUALS],
+        ['>', TokenKind.MINUS_RIGHT]
       )
       case '+': return this.doubleToken(
-        TokenType.PLUS,
-        ['+', TokenType.PLUS_PLUS],
-        ['=', TokenType.PLUS_EQUALS]
+        TokenKind.PLUS,
+        ['+', TokenKind.PLUS_PLUS],
+        ['=', TokenKind.PLUS_EQUALS]
       )
       case '*': return this.doubleToken(
-        TokenType.STAR,
-        ['*', TokenType.STAR_STAR],
-        ['=', TokenType.STAR_EQUALS]
+        TokenKind.STAR,
+        ['*', TokenKind.STAR_STAR],
+        ['=', TokenKind.STAR_EQUALS]
       )
       case '%': return this.doubleToken(
-        TokenType.PERCENT,
-        ['=', TokenType.PERCENT_EQUALS]
+        TokenKind.PERCENT,
+        ['=', TokenKind.PERCENT_EQUALS]
       )
       case '^': return this.doubleToken(
-        TokenType.CARET,
-        ['=', TokenType.CARET_EQUALS]
+        TokenKind.CARET,
+        ['=', TokenKind.CARET_EQUALS]
       )
       case '&': return this.doubleToken(
-        TokenType.AMPERSAND,
-        ['&', TokenType.AMPERSAND_AMPERSAND],
-        ['=', TokenType.AMPERSAND_EQUALS]
+        TokenKind.AMPERSAND,
+        ['&', TokenKind.AMPERSAND_AMPERSAND],
+        ['=', TokenKind.AMPERSAND_EQUALS]
       )
       case '|': return this.doubleToken(
-        TokenType.BAR,
-        ['|', TokenType.BAR_BAR],
-        ['=', TokenType.BAR_EQUALS]
+        TokenKind.BAR,
+        ['|', TokenKind.BAR_BAR],
+        ['=', TokenKind.BAR_EQUALS]
       )
       case '>': return this.doubleToken(
-        TokenType.RIGHT,
-        ['>', TokenType.RIGHT_RIGHT],
-        ['=', TokenType.RIGHT_EQUALS]
+        TokenKind.RIGHT,
+        ['>', TokenKind.RIGHT_RIGHT],
+        ['=', TokenKind.RIGHT_EQUALS]
       )
       case '<': return this.doubleToken(
-        TokenType.LEFT,
-        ['<', TokenType.LEFT_LEFT],
-        ['=', TokenType.LEFT_EQUALS],
-        ['>', TokenType.LEFT_RIGHT]
+        TokenKind.LEFT,
+        ['<', TokenKind.LEFT_LEFT],
+        ['=', TokenKind.LEFT_EQUALS],
+        ['>', TokenKind.LEFT_RIGHT]
       )
       case '=': return this.equals()
       case '!': return this.bang()
@@ -115,7 +115,7 @@ export class Scanner {
       return this.identifier()
     }
 
-    return this.token(TokenType.UNRECOGNIZED)
+    return this.token(TokenKind.UNRECOGNIZED)
   }
 
   private skipWhile (predicate: (value: string) => boolean) {
@@ -128,9 +128,9 @@ export class Scanner {
     }
   }
 
-  private token (type: TokenType, value = this.stream.next()): Token {
+  private token (kind: TokenKind, value = this.stream.next()): Token {
     return {
-      type,
+      kind,
       value: value || '',
       start: this.start,
       end: this.stream.location
@@ -138,14 +138,14 @@ export class Scanner {
   }
 
   private doubleToken (
-    baseType: TokenType,
-    ...extensions: [string, TokenType][]
+    baseType: TokenKind,
+    ...extensions: [string, TokenKind][]
   ) {
     const first = this.stream.next()
-    for (const [char, type] of extensions) {
+    for (const [char, kind] of extensions) {
       if (this.stream.peek() === char) {
         this.stream.next()
-        return this.token(type, first + char)
+        return this.token(kind, first + char)
       }
     }
     return this.token(baseType, first)
@@ -158,14 +158,14 @@ export class Scanner {
       this.stream.next()
       if (this.stream.peek() === '=') {
         this.stream.next()
-        return this.token(TokenType.EQUALS_EQUALS_EQUALS, '===')
+        return this.token(TokenKind.EQUALS_EQUALS_EQUALS, '===')
       }
-      return this.token(TokenType.EQUALS_EQUALS, '==')
+      return this.token(TokenKind.EQUALS_EQUALS, '==')
     } else if (second === '>') {
       this.stream.next()
-      return this.token(TokenType.EQUALS_RIGHT, '=>')
+      return this.token(TokenKind.EQUALS_RIGHT, '=>')
     }
-    return this.token(TokenType.EQUALS, '=')
+    return this.token(TokenKind.EQUALS, '=')
   }
 
   private bang () {
@@ -175,11 +175,11 @@ export class Scanner {
       this.stream.next()
       if (this.stream.peek() === '=') {
         this.stream.next()
-        return this.token(TokenType.BANG_EQUALS_EQUALS, '!==')
+        return this.token(TokenKind.BANG_EQUALS_EQUALS, '!==')
       }
-      return this.token(TokenType.BANG_EQUALS, '!=')
+      return this.token(TokenKind.BANG_EQUALS, '!=')
     }
-    return this.token(TokenType.BANG, '!')
+    return this.token(TokenKind.BANG, '!')
   }
 
   private slash () {
@@ -187,7 +187,7 @@ export class Scanner {
     const second = this.stream.peek()
     if (second === '=') {
       this.stream.next()
-      return this.token(TokenType.SLASH_EQUALS, '/=')
+      return this.token(TokenKind.SLASH_EQUALS, '/=')
     } else if (second === '/') {
       this.stream.next()
       this.skipCommentLine()
@@ -197,7 +197,7 @@ export class Scanner {
       this.skipCommentBlock()
       return this.next()
     }
-    return this.token(TokenType.SLASH, '/')
+    return this.token(TokenKind.SLASH, '/')
   }
 
   private skipCommentLine () {
@@ -245,7 +245,7 @@ export class Scanner {
 
   private number () {
     const value = this.readWhile(isNumberChar)
-    return this.token(TokenType.NUMBER, value)
+    return this.token(TokenKind.NUMBER, value)
   }
 
   private identifier () {
@@ -269,20 +269,20 @@ const isIdentifierChar = isRegex(/\w/)
 
 function getIdentifierType (identifier: string) {
   switch (identifier) {
-    case 'function': return TokenType.FUNCTION
-    case 'event': return TokenType.EVENT
-    case 'storage': return TokenType.STORAGE
-    case 'contract': return TokenType.CONTRACT
-    case 'let': return TokenType.LET
-    case 'use': return TokenType.USE
-    case 'for': return TokenType.FOR
-    case 'while': return TokenType.WHILE
-    case 'if': return TokenType.IF
-    case 'else': return TokenType.ELSE
-    case 'zero': return TokenType.ZERO
-    case 'return': return TokenType.RETURN
-    case 'true': return TokenType.BOOLEAN
-    case 'false': return TokenType.BOOLEAN
-    default: return TokenType.IDENTIFIER
+    case 'function': return TokenKind.FUNCTION
+    case 'event': return TokenKind.EVENT
+    case 'storage': return TokenKind.STORAGE
+    case 'contract': return TokenKind.CONTRACT
+    case 'let': return TokenKind.LET
+    case 'use': return TokenKind.USE
+    case 'for': return TokenKind.FOR
+    case 'while': return TokenKind.WHILE
+    case 'if': return TokenKind.IF
+    case 'else': return TokenKind.ELSE
+    case 'zero': return TokenKind.ZERO
+    case 'return': return TokenKind.RETURN
+    case 'true': return TokenKind.BOOLEAN
+    case 'false': return TokenKind.BOOLEAN
+    default: return TokenKind.IDENTIFIER
   }
 }

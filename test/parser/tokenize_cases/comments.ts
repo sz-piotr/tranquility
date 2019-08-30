@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { Scanner } from '../../../src/parser/Scanner'
-import { TokenType } from '../../../src/parser/tokens'
+import { TokenKind } from '../../../src/parser/tokens'
 import { token, resetLocation } from '../utils'
 
 export function comments () {
@@ -25,11 +25,11 @@ export function comments () {
     const tokens = Scanner.tokenize(source).map(resetLocation)
 
     expect(tokens).to.deep.equal([
-      token(TokenType.IDENTIFIER, 'hello'),
-      token(TokenType.IDENTIFIER, 'foo'),
-      token(TokenType.IDENTIFIER, 'bar'),
-      token(TokenType.IDENTIFIER, 'yo'),
-      token(TokenType.EOF, '')
+      token(TokenKind.IDENTIFIER, 'hello'),
+      token(TokenKind.IDENTIFIER, 'foo'),
+      token(TokenKind.IDENTIFIER, 'bar'),
+      token(TokenKind.IDENTIFIER, 'yo'),
+      token(TokenKind.EOF, '')
     ])
   })
 }

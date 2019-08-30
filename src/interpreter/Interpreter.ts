@@ -27,7 +27,7 @@ export class Interpreter {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private evalNode (node: Ast.AstNode): any {
-    switch (node.type) {
+    switch (node.kind) {
       case 'Program': return this.evalProgram(node)
       case 'BinaryOperation': return this.evalBinaryOperation(node)
       case 'NumberLiteral': return this.evalNumberLiteral(node)
@@ -35,7 +35,7 @@ export class Interpreter {
       case 'VariableDeclaration': return this.evalVariableDeclaration(node)
       case 'VariableAssignment': return this.evalVariableAssignment(node)
       case 'Identifier': return this.evalIdentifier(node)
-      default: throw new TypeError('Unsupported node type')
+      default: throw new TypeError('Unsupported node kind')
     }
   }
 
@@ -55,7 +55,7 @@ export class Interpreter {
   }
 
   private evalVariableAssignment (node: Ast.VariableAssignment) {
-    if (node.left.type !== 'Identifier') {
+    if (node.left.kind !== 'Identifier') {
       throw new TypeError('Invalid assignment target')
     }
     this.environment.assign(

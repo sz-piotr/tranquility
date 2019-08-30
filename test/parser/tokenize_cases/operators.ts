@@ -1,75 +1,75 @@
 import { expect } from 'chai'
 import { Scanner } from '../../../src/parser/Scanner'
-import { TokenType } from '../../../src/parser/tokens'
+import { TokenKind } from '../../../src/parser/tokens'
 import { token } from '../utils'
 
 export function operators () {
   it('operators', () => {
-    const operators: [TokenType, string][] = [
-      [TokenType.PAREN_OPEN, '('],
-      [TokenType.PAREN_CLOSE, ')'],
-      [TokenType.BRACKET_OPEN, '['],
-      [TokenType.BRACKET_CLOSE, ']'],
-      [TokenType.CURLY_OPEN, '{'],
-      [TokenType.CURLY_CLOSE, '}'],
+    const operators: [TokenKind, string][] = [
+      [TokenKind.PAREN_OPEN, '('],
+      [TokenKind.PAREN_CLOSE, ')'],
+      [TokenKind.BRACKET_OPEN, '['],
+      [TokenKind.BRACKET_CLOSE, ']'],
+      [TokenKind.CURLY_OPEN, '{'],
+      [TokenKind.CURLY_CLOSE, '}'],
 
-      [TokenType.COMMA, ','],
-      [TokenType.DOT, '.'],
-      [TokenType.QUESTION, '?'],
-      [TokenType.TILDE, '~'],
-      [TokenType.HASH, '#'],
-      [TokenType.SEMICOLON, ';'],
+      [TokenKind.COMMA, ','],
+      [TokenKind.DOT, '.'],
+      [TokenKind.QUESTION, '?'],
+      [TokenKind.TILDE, '~'],
+      [TokenKind.HASH, '#'],
+      [TokenKind.SEMICOLON, ';'],
 
-      [TokenType.COLON, ':'],
-      [TokenType.COLON_EQUALS, ':='],
+      [TokenKind.COLON, ':'],
+      [TokenKind.COLON_EQUALS, ':='],
 
-      [TokenType.EQUALS, '='],
-      [TokenType.EQUALS_EQUALS, '=='],
-      [TokenType.EQUALS_EQUALS_EQUALS, '==='],
-      [TokenType.EQUALS_RIGHT, '=>'],
+      [TokenKind.EQUALS, '='],
+      [TokenKind.EQUALS_EQUALS, '=='],
+      [TokenKind.EQUALS_EQUALS_EQUALS, '==='],
+      [TokenKind.EQUALS_RIGHT, '=>'],
 
-      [TokenType.BANG, '!'],
-      [TokenType.BANG_EQUALS, '!='],
-      [TokenType.BANG_EQUALS_EQUALS, '!=='],
+      [TokenKind.BANG, '!'],
+      [TokenKind.BANG_EQUALS, '!='],
+      [TokenKind.BANG_EQUALS_EQUALS, '!=='],
 
-      [TokenType.MINUS, '-'],
-      [TokenType.MINUS_MINUS, '--'],
-      [TokenType.MINUS_EQUALS, '-='],
-      [TokenType.MINUS_RIGHT, '->'],
+      [TokenKind.MINUS, '-'],
+      [TokenKind.MINUS_MINUS, '--'],
+      [TokenKind.MINUS_EQUALS, '-='],
+      [TokenKind.MINUS_RIGHT, '->'],
 
-      [TokenType.PLUS, '+'],
-      [TokenType.PLUS_PLUS, '++'],
-      [TokenType.PLUS_EQUALS, '+='],
+      [TokenKind.PLUS, '+'],
+      [TokenKind.PLUS_PLUS, '++'],
+      [TokenKind.PLUS_EQUALS, '+='],
 
-      [TokenType.STAR, '*'],
-      [TokenType.STAR_STAR, '**'],
-      [TokenType.STAR_EQUALS, '*='],
+      [TokenKind.STAR, '*'],
+      [TokenKind.STAR_STAR, '**'],
+      [TokenKind.STAR_EQUALS, '*='],
 
-      [TokenType.SLASH, '/'],
-      [TokenType.SLASH_EQUALS, '/='],
+      [TokenKind.SLASH, '/'],
+      [TokenKind.SLASH_EQUALS, '/='],
 
-      [TokenType.PERCENT, '%'],
-      [TokenType.PERCENT_EQUALS, '%='],
+      [TokenKind.PERCENT, '%'],
+      [TokenKind.PERCENT_EQUALS, '%='],
 
-      [TokenType.CARET, '^'],
-      [TokenType.CARET_EQUALS, '^='],
+      [TokenKind.CARET, '^'],
+      [TokenKind.CARET_EQUALS, '^='],
 
-      [TokenType.AMPERSAND, '&'],
-      [TokenType.AMPERSAND_AMPERSAND, '&&'],
-      [TokenType.AMPERSAND_EQUALS, '&='],
+      [TokenKind.AMPERSAND, '&'],
+      [TokenKind.AMPERSAND_AMPERSAND, '&&'],
+      [TokenKind.AMPERSAND_EQUALS, '&='],
 
-      [TokenType.BAR, '|'],
-      [TokenType.BAR_BAR, '||'],
-      [TokenType.BAR_EQUALS, '|='],
+      [TokenKind.BAR, '|'],
+      [TokenKind.BAR_BAR, '||'],
+      [TokenKind.BAR_EQUALS, '|='],
 
-      [TokenType.RIGHT, '>'],
-      [TokenType.RIGHT_RIGHT, '>>'],
-      [TokenType.RIGHT_EQUALS, '>='],
+      [TokenKind.RIGHT, '>'],
+      [TokenKind.RIGHT_RIGHT, '>>'],
+      [TokenKind.RIGHT_EQUALS, '>='],
 
-      [TokenType.LEFT, '<'],
-      [TokenType.LEFT_LEFT, '<<'],
-      [TokenType.LEFT_EQUALS, '<='],
-      [TokenType.LEFT_RIGHT, '<>']
+      [TokenKind.LEFT, '<'],
+      [TokenKind.LEFT_LEFT, '<<'],
+      [TokenKind.LEFT_EQUALS, '<='],
+      [TokenKind.LEFT_RIGHT, '<>']
     ]
 
     const source = operators.map(([, value]) => value).join(' ')
@@ -78,15 +78,15 @@ export function operators () {
     let i = 0
     let last = 0
 
-    function t (type: TokenType, value: string) {
+    function t (kind: TokenKind, value: string) {
       i += last
       last = value.length + 1
-      return token(type, value, i)
+      return token(kind, value, i)
     }
 
     expect(tokens).to.deep.equal([
-      ...operators.map(([type, value]) => t(type, value)),
-      token(TokenType.EOF, '', source.length)
+      ...operators.map(([kind, value]) => t(kind, value)),
+      token(TokenKind.EOF, '', source.length)
     ])
   })
 }

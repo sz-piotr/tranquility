@@ -1,7 +1,7 @@
 import { Location } from './location'
 
 export interface AstNodeBase {
-  type: string,
+  kind: string,
   span: {
     start: Location,
     end: Location
@@ -19,7 +19,7 @@ export const SPAN_ZERO: Span = {
 }
 
 export interface Program extends AstNodeBase {
-  type: 'Program',
+  kind: 'Program',
   children: Statement[]
 }
 
@@ -28,14 +28,14 @@ export function program (
   span = SPAN_ZERO
 ): Program {
   return {
-    type: 'Program',
+    kind: 'Program',
     children,
     span
   }
 }
 
 export interface VariableDeclaration extends AstNodeBase {
-  type: 'VariableDeclaration',
+  kind: 'VariableDeclaration',
   identifier: Identifier,
   value: Expression
 }
@@ -46,7 +46,7 @@ export function variableDeclaration (
   span = SPAN_ZERO
 ): VariableDeclaration {
   return {
-    type: 'VariableDeclaration',
+    kind: 'VariableDeclaration',
     identifier,
     value,
     span
@@ -54,7 +54,7 @@ export function variableDeclaration (
 }
 
 export interface VariableAssignment extends AstNodeBase {
-  type: 'VariableAssignment',
+  kind: 'VariableAssignment',
   left: Expression,
   right: Expression
 }
@@ -65,7 +65,7 @@ export function variableAssignment (
   span = SPAN_ZERO
 ): VariableAssignment {
   return {
-    type: 'VariableAssignment',
+    kind: 'VariableAssignment',
     left,
     right,
     span
@@ -73,7 +73,7 @@ export function variableAssignment (
 }
 
 export interface FunctionDefinition extends AstNodeBase {
-  type: 'FunctionDefinition',
+  kind: 'FunctionDefinition',
   identifier: Identifier,
   parameters: Identifier[],
   body: Statement[]
@@ -86,7 +86,7 @@ export function functionDefinition (
   span = SPAN_ZERO
 ): FunctionDefinition {
   return {
-    type: 'FunctionDefinition',
+    kind: 'FunctionDefinition',
     identifier,
     parameters,
     body,
@@ -95,7 +95,7 @@ export function functionDefinition (
 }
 
 export interface FunctionCall extends AstNodeBase {
-  type: 'FunctionCall',
+  kind: 'FunctionCall',
   callee: Expression,
   parameters: Expression[]
 }
@@ -106,7 +106,7 @@ export function functionCall (
   span = SPAN_ZERO
 ): FunctionCall {
   return {
-    type: 'FunctionCall',
+    kind: 'FunctionCall',
     callee,
     parameters,
     span
@@ -114,7 +114,7 @@ export function functionCall (
 }
 
 export interface Identifier extends AstNodeBase {
-  type: 'Identifier',
+  kind: 'Identifier',
   value: string
 }
 
@@ -123,14 +123,14 @@ export function identifier (
   span = SPAN_ZERO
 ): Identifier {
   return {
-    type: 'Identifier',
+    kind: 'Identifier',
     value,
     span
   }
 }
 
 export interface BinaryOperation extends AstNodeBase {
-  type: 'BinaryOperation',
+  kind: 'BinaryOperation',
   operator: '+' | '-' | '*' | '/',
   left: Expression,
   right: Expression
@@ -143,7 +143,7 @@ export function binaryOperation (
   span = SPAN_ZERO
 ): BinaryOperation {
   return {
-    type: 'BinaryOperation',
+    kind: 'BinaryOperation',
     operator,
     left,
     right,
@@ -152,7 +152,7 @@ export function binaryOperation (
 }
 
 export interface NumberLiteral extends AstNodeBase {
-  type: 'NumberLiteral',
+  kind: 'NumberLiteral',
   value: string
 }
 
@@ -161,14 +161,14 @@ export function numberLiteral (
   span = SPAN_ZERO
 ): NumberLiteral {
   return {
-    type: 'NumberLiteral',
+    kind: 'NumberLiteral',
     value,
     span
   }
 }
 
 export interface BooleanLiteral extends AstNodeBase {
-  type: 'BooleanLiteral',
+  kind: 'BooleanLiteral',
   value: boolean
 }
 
@@ -177,7 +177,7 @@ export function booleanLiteral (
   span = SPAN_ZERO
 ): BooleanLiteral {
   return {
-    type: 'BooleanLiteral',
+    kind: 'BooleanLiteral',
     value,
     span
   }

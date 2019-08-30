@@ -1,13 +1,13 @@
 import { Location } from './location'
 
 export interface Token {
-  readonly type: TokenType,
+  readonly kind: TokenKind,
   readonly value: string,
   readonly start: Location,
   readonly end: Location
 }
 
-export enum TokenType {
+export enum TokenKind {
   PAREN_OPEN, // (
   PAREN_CLOSE, // )
   BRACKET_OPEN, // [
