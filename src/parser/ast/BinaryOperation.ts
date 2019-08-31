@@ -2,7 +2,7 @@ import { AstNodeBase } from './AstNodeBase'
 import { Expression } from './Expression'
 import { SPAN_ZERO } from './Span'
 
-export enum Operation {
+export enum BinaryOperator {
   ADD,
   SUBTRACT,
   MULTIPLY,
@@ -17,13 +17,13 @@ export enum Operation {
 
 export interface BinaryOperation extends AstNodeBase {
   kind: 'BinaryOperation',
-  operator: Operation,
+  operator: BinaryOperator,
   left: Expression,
   right: Expression
 }
 
 export function binaryOperation (
-  operator: Operation,
+  operator: BinaryOperator,
   left: Expression,
   right: Expression,
   span = SPAN_ZERO

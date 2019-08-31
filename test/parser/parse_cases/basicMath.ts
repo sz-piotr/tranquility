@@ -13,24 +13,24 @@ export function basicMath () {
       Ast.variableDeclaration(
         Ast.identifier('name'),
         Ast.binaryOperation(
-          Ast.Operation.SUBTRACT,
+          Ast.BinaryOperator.SUBTRACT,
           Ast.binaryOperation(
-            Ast.Operation.DIVIDE,
+            Ast.BinaryOperator.DIVIDE,
             Ast.binaryOperation(
-              Ast.Operation.ADD,
+              Ast.BinaryOperator.ADD,
               Ast.numberLiteral('4'),
               Ast.numberLiteral('5')
             ),
             Ast.numberLiteral('3')
           ),
           Ast.binaryOperation(
-            Ast.Operation.MULTIPLY,
+            Ast.BinaryOperator.MULTIPLY,
             Ast.numberLiteral('7'),
             Ast.binaryOperation(
-              Ast.Operation.MULTIPLY,
+              Ast.BinaryOperator.MULTIPLY,
               Ast.numberLiteral('8'),
               Ast.binaryOperation(
-                Ast.Operation.DIVIDE,
+                Ast.BinaryOperator.DIVIDE,
                 Ast.numberLiteral('2'),
                 Ast.numberLiteral('3')
               )

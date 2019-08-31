@@ -152,6 +152,7 @@ function parseStream (stream: Scanner) {
       stream.next()
       const right = parseExpression()
       return Ast.variableAssignment(
+        Ast.AssignmentOperator.EQUALS,
         left,
         right,
         { start: left.span.start, end: right.span.end }
@@ -257,18 +258,18 @@ function parseStream (stream: Scanner) {
   }
 }
 
-function getOperation (kind: TokenKind): Ast.Operation {
+function getOperation (kind: TokenKind): Ast.BinaryOperator {
   switch (kind) {
-    case TokenKind.PLUS: return Ast.Operation.ADD
-    case TokenKind.MINUS: return Ast.Operation.SUBTRACT
-    case TokenKind.STAR: return Ast.Operation.MULTIPLY
-    case TokenKind.SLASH: return Ast.Operation.DIVIDE
-    case TokenKind.EQUALS_EQUALS: return Ast.Operation.EQUAL
-    case TokenKind.BANG_EQUALS: return Ast.Operation.NOT_EQUAL
-    case TokenKind.LEFT: return Ast.Operation.LESS
-    case TokenKind.LEFT_EQUALS: return Ast.Operation.LESS_OR_EQUAL
-    case TokenKind.RIGHT: return Ast.Operation.GREATER
-    case TokenKind.RIGHT_EQUALS: return Ast.Operation.GREATER_OR_EQUAL
+    case TokenKind.PLUS: return Ast.BinaryOperator.ADD
+    case TokenKind.MINUS: return Ast.BinaryOperator.SUBTRACT
+    case TokenKind.STAR: return Ast.BinaryOperator.MULTIPLY
+    case TokenKind.SLASH: return Ast.BinaryOperator.DIVIDE
+    case TokenKind.EQUALS_EQUALS: return Ast.BinaryOperator.EQUAL
+    case TokenKind.BANG_EQUALS: return Ast.BinaryOperator.NOT_EQUAL
+    case TokenKind.LEFT: return Ast.BinaryOperator.LESS
+    case TokenKind.LEFT_EQUALS: return Ast.BinaryOperator.LESS_OR_EQUAL
+    case TokenKind.RIGHT: return Ast.BinaryOperator.GREATER
+    case TokenKind.RIGHT_EQUALS: return Ast.BinaryOperator.GREATER_OR_EQUAL
   }
   throw new TypeError('Invalid operator')
 }

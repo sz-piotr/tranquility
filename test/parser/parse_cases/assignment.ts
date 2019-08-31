@@ -16,9 +16,10 @@ export function assignment () {
         Ast.numberLiteral('3')
       ),
       Ast.variableAssignment(
+        Ast.AssignmentOperator.EQUALS,
         Ast.identifier('a'),
         Ast.binaryOperation(
-          Ast.Operation.ADD,
+          Ast.BinaryOperator.ADD,
           Ast.numberLiteral('5'),
           Ast.numberLiteral('7')
         )

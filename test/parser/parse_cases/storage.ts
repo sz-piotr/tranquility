@@ -82,7 +82,7 @@ export function storage () {
               Ast.identifier('check'),
               [
                 Ast.binaryOperation(
-                  Ast.Operation.NOT_EQUAL,
+                  Ast.BinaryOperator.NOT_EQUAL,
                   Ast.identifier('address'),
                   Ast.identifier('zero')
                 )
@@ -92,13 +92,26 @@ export function storage () {
               Ast.identifier('check'),
               [
                 Ast.binaryOperation(
-                  Ast.Operation.NOT_EQUAL,
+                  Ast.BinaryOperator.NOT_EQUAL,
                   Ast.identifier('amount'),
                   Ast.numberLiteral('0')
                 )
               ]
-            )
-            // TODO: rest of burn function
+            ),
+            Ast.statementWithError(
+              Ast.variableAssignment(
+                Ast.AssignmentOperator.SUBTRACT,
+                Ast.identifier('TODO: balances[address]'),
+                Ast.identifier('value'),
+              ),
+              Ast.identifier('TODO: string literal')
+            ),
+            Ast.variableAssignment(
+              Ast.AssignmentOperator.SUBTRACT,
+              Ast.identifier('supply'),
+              Ast.identifier('amount')
+            ),
+            // TODO: event emit
           ]
         )
       ])

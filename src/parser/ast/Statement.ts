@@ -4,6 +4,7 @@ import { StorageDeclaration } from './StorageDeclaration'
 import { FunctionDeclaration } from './FunctionDeclaration'
 import { VariableAssignment } from './VariableAssignment'
 import { VariableDeclaration } from './VariableDeclaration'
+import { StatementWithError } from './StatementWithError'
 
 export type Statement
   = VariableDeclaration
@@ -12,3 +13,5 @@ export type Statement
   | StorageDeclaration
   | ReturnStatement
   | Expression
+  | StatementWithError
+
