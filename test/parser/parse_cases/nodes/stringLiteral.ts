@@ -9,7 +9,7 @@ export function stringLiteral () {
       ""
       "value"
       "a b c"
-      "a \"bc\""
+      "a \\"bc\\""
       "I can't believe it!"
     `)
 
