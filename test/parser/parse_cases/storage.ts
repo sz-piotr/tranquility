@@ -101,10 +101,13 @@ export function storage () {
             Ast.statementWithError(
               Ast.variableAssignment(
                 Ast.AssignmentOperator.SUBTRACT,
-                Ast.identifier('TODO: balances[address]'),
+                Ast.indexAccess(
+                  Ast.identifier('balances'),
+                  Ast.identifier('address'),
+                ),
                 Ast.identifier('value'),
               ),
-              Ast.identifier('TODO: string literal')
+              Ast.stringLiteral('Insufficient funds')
             ),
             Ast.variableAssignment(
               Ast.AssignmentOperator.SUBTRACT,
