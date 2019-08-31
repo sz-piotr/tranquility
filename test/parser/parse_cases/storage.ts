@@ -84,7 +84,7 @@ export function storage () {
                 Ast.binaryOperation(
                   Ast.BinaryOperator.NOT_EQUAL,
                   Ast.identifier('address'),
-                  Ast.identifier('zero')
+                  Ast.zeroLiteral()
                 )
               ]
             ),
@@ -118,7 +118,7 @@ export function storage () {
               Ast.identifier('Transfer'),
               [
                 Ast.identifier('address'),
-                Ast.identifier('zero'),
+                Ast.zeroLiteral(),
                 Ast.identifier('amount')
               ]
             )
