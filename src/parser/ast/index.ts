@@ -1,6 +1,7 @@
 export * from './AstNode'
 export * from './BinaryOperation'
 export * from './BooleanLiteral'
+export * from './EventEmit'
 export * from './Expression'
 export * from './FieldDeclaration'
 export * from './FunctionCall'

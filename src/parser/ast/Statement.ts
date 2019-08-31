@@ -5,6 +5,7 @@ import { FunctionDeclaration } from './FunctionDeclaration'
 import { VariableAssignment } from './VariableAssignment'
 import { VariableDeclaration } from './VariableDeclaration'
 import { StatementWithError } from './StatementWithError'
+import { EventEmit } from './EventEmit'
 
 export type Statement
   = VariableDeclaration
@@ -12,6 +13,7 @@ export type Statement
   | FunctionDeclaration
   | StorageDeclaration
   | ReturnStatement
-  | Expression
   | StatementWithError
+  | EventEmit
+  | Expression
 

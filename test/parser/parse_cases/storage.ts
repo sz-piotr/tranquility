@@ -114,7 +114,14 @@ export function storage () {
               Ast.identifier('supply'),
               Ast.identifier('amount')
             ),
-            // TODO: event emit
+            Ast.eventEmit(
+              Ast.identifier('Transfer'),
+              [
+                Ast.identifier('address'),
+                Ast.identifier('zero'),
+                Ast.identifier('amount')
+              ]
+            )
           ]
         )
       ])
