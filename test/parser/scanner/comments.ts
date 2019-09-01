@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Scanner } from '../../../src/parser/Scanner'
+import { Scanner } from '../../../src/parser/scanner/Scanner'
 import { TokenKind } from '../../../src/parser/tokens'
 import { token, resetLocation } from '../utils'
 

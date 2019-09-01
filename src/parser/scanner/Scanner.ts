@@ -1,5 +1,5 @@
-import { InputStream } from './InputStream'
-import { Token, TokenKind } from './tokens'
+import { InputStream } from '../InputStream'
+import { Token, TokenKind } from '../tokens'
 
 export class Scanner {
   private current?: Token

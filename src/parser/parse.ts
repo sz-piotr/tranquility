@@ -1,4 +1,4 @@
-import { Scanner } from './Scanner'
+import { Scanner } from './scanner/Scanner'
 import { TokenKind, Token } from './tokens'
 import * as Ast from './ast'
 import * as Err from '../errors'
