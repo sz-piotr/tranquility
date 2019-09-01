@@ -22,7 +22,7 @@ export function comments () {
 
       /* unterminated
     `
-    const tokens = Scanner.tokenize(source).map(resetLocation)
+    const tokens = Scanner.scan(source).map(resetLocation)
 
     expect(tokens).to.deep.equal([
       token(TokenKind.IDENTIFIER, 'hello'),

@@ -15,7 +15,7 @@ export class Scanner {
     return new Scanner(new InputStream(source))
   }
 
-  static tokenize (source: string) {
+  static scan (source: string) {
     const scanner = Scanner.fromString(source)
     const tokens: Token[] = []
     do {

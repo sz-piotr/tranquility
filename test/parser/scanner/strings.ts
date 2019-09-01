@@ -13,7 +13,7 @@ export function strings () {
       'before\\nafter'
       "ąę\x00\\z\\x4"
     `
-    const tokens = Scanner.tokenize(source).map(resetLocation)
+    const tokens = Scanner.scan(source).map(resetLocation)
 
     expect(tokens).to.deep.equal([
       token(TokenKind.DOUBLE_QUOTE, '"'),

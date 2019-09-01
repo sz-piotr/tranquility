@@ -25,7 +25,7 @@ export function keywords () {
       [TokenKind.IDENTIFIER, 'blah']
     ]
     const source = keywords.map(([, value]) => value).join(' ')
-    const tokens = Scanner.tokenize(source)
+    const tokens = Scanner.scan(source)
 
     let i = 0
     let last = 0

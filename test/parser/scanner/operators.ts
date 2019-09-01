@@ -73,7 +73,7 @@ export function operators () {
     ]
 
     const source = operators.map(([, value]) => value).join(' ')
-    const tokens = Scanner.tokenize(source)
+    const tokens = Scanner.scan(source)
 
     let i = 0
     let last = 0
