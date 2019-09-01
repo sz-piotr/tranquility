@@ -2,10 +2,14 @@ import { ScannerContext } from './ScannerContext'
 
 export function readWhile (
   ctx: ScannerContext,
-  predicate: (value?: string) => boolean
+  predicate: (value: string) => boolean
 ) {
   let value = ''
-  while (predicate(ctx.peek())) {
+  while (true) {
+    const char = ctx.peek()
+    if (!char || !predicate(char)) {
+      break
+    }
     value += ctx.next()
   }
   return value

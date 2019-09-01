@@ -10,12 +10,14 @@ export const isIdentifierChar = isRegex(/\w/)
 
 export const isHexDigit = isRegex(/[\da-f]/i)
 
-export function isValidStringContent (char: string, doubleQuote: boolean) {
-  const code = char.charCodeAt(0)
-  return (code >= 0x20 &&
-    code <= 0x7E &&
-    char !== '\\' &&
-    (char !== '\'' || doubleQuote) &&
-    (char !== '"' || !doubleQuote)
-  )
+export function isValidStringContent (doubleQuote: boolean) {
+  return function (char: string) {
+    const code = char.charCodeAt(0)
+    return (code >= 0x20 &&
+      code <= 0x7E &&
+      char !== '\\' &&
+      (char !== '\'' || doubleQuote) &&
+      (char !== '"' || !doubleQuote)
+    )
+  }
 }

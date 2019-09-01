@@ -3,8 +3,8 @@ import { TokenKind, Token } from '../tokens'
 
 export class ScannerContext {
   private start = this.stream.location
-  insideString = false
-  insideDoubleQuote = false
+  isInString = false
+  doubleQuote = false
 
   constructor (private stream: Readonly<InputStream>) {
   }

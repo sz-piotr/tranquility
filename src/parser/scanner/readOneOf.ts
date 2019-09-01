@@ -1,7 +1,7 @@
 import { ScannerContext } from './ScannerContext'
 import { TokenKind } from '../tokens'
 
-export function doubleToken (
+export function readOneOf (
   ctx: ScannerContext,
   baseType: TokenKind,
   ...extensions: [string, TokenKind][]

@@ -1,21 +1,21 @@
-import { byteEscape } from './byteEscape'
+import { readEscapeX } from './readEscapeX'
 import { isValidStringContent } from './utils'
-import { readOutsideString } from './readOutsideString'
+import { readRegular } from './readRegular'
 import { readWhile } from './readWhile'
 import { ScannerContext } from './ScannerContext'
 import { Token, TokenKind } from '../tokens'
 
-export function readInsideString (ctx: ScannerContext): Token {
+export function readString (ctx: ScannerContext): Token {
   ctx.begin()
   const char = ctx.peek()
   if (char === undefined || char === '\n' || char === '\r') {
-    ctx.insideString = false
-    return readOutsideString(ctx)
-  } else if (!ctx.insideDoubleQuote && char === '\'') {
-    ctx.insideString = false
+    ctx.isInString = false
+    return readRegular(ctx)
+  } else if (!ctx.doubleQuote && char === '\'') {
+    ctx.isInString = false
     return ctx.token(TokenKind.SINGLE_QUOTE)
-  } else if (ctx.insideDoubleQuote && char === '"') {
-    ctx.insideString = false
+  } else if (ctx.doubleQuote && char === '"') {
+    ctx.isInString = false
     return ctx.token(TokenKind.DOUBLE_QUOTE)
   } else if (char === '\\') {
     ctx.next()
@@ -33,7 +33,7 @@ export function readInsideString (ctx: ScannerContext): Token {
       case '\'': return ctx.token(TokenKind.STRING_ESCAPE_SINGLE_QUOTE)
       case '"': return ctx.token(TokenKind.STRING_ESCAPE_DOUBLE_QUOTE)
       case '\\': return ctx.token(TokenKind.STRING_ESCAPE_BACKSLASH)
-      case 'x': return byteEscape(ctx)
+      case 'x': return readEscapeX(ctx)
       case '\n': return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
       case '\r': return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
       case undefined: return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
@@ -41,10 +41,7 @@ export function readInsideString (ctx: ScannerContext): Token {
     ctx.next()
     return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\' + char)
   }
-  const content = readWhile(
-    ctx,
-    char => !!char && isValidStringContent(char, ctx.insideDoubleQuote)
-  )
+  const content = readWhile(ctx, isValidStringContent(ctx.doubleQuote))
   if (content) {
     return ctx.token(TokenKind.STRING_CONTENT, content)
   } else {

@@ -3,12 +3,12 @@ import { readWhile } from './readWhile'
 import { ScannerContext } from './ScannerContext'
 import { TokenKind } from '../tokens'
 
-export function identifier (ctx: ScannerContext) {
+export function readIdentifier (ctx: ScannerContext) {
   const value = readWhile(ctx, isIdentifierChar)
   return ctx.token(getIdentifierType(value), value)
 }
 
-export function getIdentifierType (identifier: string) {
+function getIdentifierType (identifier: string) {
   switch (identifier) {
     case 'function': return TokenKind.FUNCTION
     case 'event': return TokenKind.EVENT

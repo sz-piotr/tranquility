@@ -2,9 +2,9 @@ import { TokenKind } from '../tokens'
 import { ScannerContext } from './ScannerContext'
 import { skipCommentBlock } from './skipCommentBlock'
 import { skipCommentLine } from './skipCommentLine'
-import { readNext } from './readNext'
+import { read } from './read'
 
-export function slash (ctx: ScannerContext) {
+export function readSlash (ctx: ScannerContext) {
   ctx.next()
   const second = ctx.peek()
   if (second === '=') {
@@ -13,11 +13,11 @@ export function slash (ctx: ScannerContext) {
   } else if (second === '/') {
     ctx.next()
     skipCommentLine(ctx)
-    return readNext(ctx)
+    return read(ctx)
   } else if (second === '*') {
     ctx.next()
     skipCommentBlock(ctx)
-    return readNext(ctx)
+    return read(ctx)
   }
   return ctx.token(TokenKind.SLASH, '/')
 }

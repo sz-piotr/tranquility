@@ -1,7 +1,7 @@
 import { InputStream } from '../InputStream'
 import { Token, TokenKind } from '../tokens'
 import { ScannerContext } from './ScannerContext'
-import { readNext } from './readNext'
+import { read } from './read'
 
 export class Scanner {
   private current?: Token
@@ -26,7 +26,7 @@ export class Scanner {
 
   peek () {
     if (!this.current) {
-      this.current = readNext(this.context)
+      this.current = read(this.context)
     }
     return this.current
   }

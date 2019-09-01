@@ -1,7 +1,7 @@
 import { ScannerContext } from './ScannerContext'
 import { TokenKind } from '../tokens'
 
-export function bang (ctx: ScannerContext) {
+export function readBang (ctx: ScannerContext) {
   ctx.next()
   const second = ctx.peek()
   if (second === '=') {

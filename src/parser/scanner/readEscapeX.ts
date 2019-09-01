@@ -2,7 +2,7 @@ import { isHexDigit } from './utils'
 import { ScannerContext } from './ScannerContext'
 import { TokenKind } from '../tokens'
 
-export function byteEscape (ctx: ScannerContext) {
+export function readEscapeX (ctx: ScannerContext) {
   ctx.next()
   const first = ctx.peek()
   if (isHexDigit(first)) {

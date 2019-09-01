@@ -1,7 +1,7 @@
 import { ScannerContext } from './ScannerContext'
 import { TokenKind } from '../tokens'
 
-export function equals (ctx: ScannerContext) {
+export function readEquals (ctx: ScannerContext) {
   ctx.next()
   const second = ctx.peek()
   if (second === '=') {
