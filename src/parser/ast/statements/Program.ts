@@ -1,6 +1,6 @@
-import { AstNodeBase } from './AstNodeBase'
-import { Statement } from './Statement'
-import { SPAN_ZERO } from './Span'
+import { AstNodeBase } from '../common/AstNodeBase'
+import { Statement } from '../common/Statement'
+import { SPAN_ZERO } from '../common/Span'
 
 export interface Program extends AstNodeBase {
   kind: 'Program',

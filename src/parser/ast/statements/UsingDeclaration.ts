@@ -1,6 +1,6 @@
-import { AstNodeBase } from './AstNodeBase'
-import { Identifier } from './Identifier'
-import { SPAN_ZERO } from './Span'
+import { AstNodeBase } from '../common/AstNodeBase'
+import { Identifier } from '../expressions/Identifier'
+import { SPAN_ZERO } from '../common/Span'
 
 export interface UsingDeclaration extends AstNodeBase {
   kind: 'UsingDeclaration',

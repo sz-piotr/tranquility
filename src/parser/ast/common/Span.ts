@@ -1,4 +1,4 @@
-import { Location } from '../location'
+import { Location } from '../../location'
 
 export interface Span {
   start: Location,

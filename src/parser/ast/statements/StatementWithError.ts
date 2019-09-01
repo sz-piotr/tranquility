@@ -1,7 +1,7 @@
-import { AstNodeBase } from './AstNodeBase'
-import { Statement } from './Statement'
-import { Expression } from './Expression'
-import { SPAN_ZERO } from './Span'
+import { AstNodeBase } from '../common/AstNodeBase'
+import { Statement } from '../common/Statement'
+import { Expression } from '../common/Expression'
+import { SPAN_ZERO } from '../common/Span'
 
 export interface StatementWithError extends AstNodeBase {
   kind: 'StatementWithError',

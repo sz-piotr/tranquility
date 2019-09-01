@@ -1,7 +1,7 @@
-import { AstNodeBase } from './AstNodeBase'
-import { Identifier } from './Identifier'
-import { Statement } from './Statement'
-import { SPAN_ZERO } from './Span'
+import { AstNodeBase } from '../common/AstNodeBase'
+import { Identifier } from '../expressions/Identifier'
+import { Statement } from '../common/Statement'
+import { SPAN_ZERO } from '../common/Span'
 
 export interface FunctionDeclaration extends AstNodeBase {
   kind: 'FunctionDeclaration',

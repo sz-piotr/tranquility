@@ -1,7 +1,7 @@
-import { AstNodeBase } from './AstNodeBase'
-import { Identifier } from './Identifier'
-import { Expression } from './Expression'
-import { SPAN_ZERO } from './Span'
+import { AstNodeBase } from '../common/AstNodeBase'
+import { Identifier } from '../expressions/Identifier'
+import { Expression } from '../common/Expression'
+import { SPAN_ZERO } from '../common/Span'
 
 export interface EventEmit extends AstNodeBase {
   kind: 'EventEmit',

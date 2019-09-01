@@ -1,6 +1,6 @@
-import { AstNodeBase } from './AstNodeBase'
+import { AstNodeBase } from '../common/AstNodeBase'
 import { Identifier } from './Identifier'
-import { SPAN_ZERO } from './Span'
+import { SPAN_ZERO } from '../common/Span'
 
 export interface Type extends AstNodeBase {
   kind: 'Type',

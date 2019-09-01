@@ -1,6 +1,6 @@
-import { AstNodeBase } from './AstNodeBase'
-import { Expression } from './Expression'
-import { SPAN_ZERO } from './Span'
+import { AstNodeBase } from '../common/AstNodeBase'
+import { Expression } from '../common/Expression'
+import { SPAN_ZERO } from '../common/Span'
 
 export interface ReturnStatement extends AstNodeBase {
   kind: 'ReturnStatement',

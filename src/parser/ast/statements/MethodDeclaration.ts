@@ -1,9 +1,9 @@
-import { AstNodeBase } from './AstNodeBase'
-import { Identifier } from './Identifier'
-import { FunctionParameter } from './FunctionParameter'
-import { Type } from './Type'
-import { Statement } from './Statement'
-import { SPAN_ZERO } from './Span'
+import { AstNodeBase } from '../common/AstNodeBase'
+import { Identifier } from '../expressions/Identifier'
+import { FunctionParameter } from '../expressions/FunctionParameter'
+import { Type } from '../expressions/Type'
+import { Statement } from '../common/Statement'
+import { SPAN_ZERO } from '../common/Span'
 
 export interface MethodDeclaration extends AstNodeBase {
   kind: 'MethodDeclaration',
