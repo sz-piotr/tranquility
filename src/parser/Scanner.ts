@@ -4,6 +4,8 @@ import { Token, TokenKind } from './tokens'
 export class Scanner {
   private current?: Token
   private start = this.stream.location
+  private insideString = false
+  private insideDoubleQuote = false
 
   constructor (private stream: Readonly<InputStream>) {
   }
@@ -35,6 +37,12 @@ export class Scanner {
   }
 
   private readNext (): Token {
+    return this.insideString
+      ? this.readInsideString()
+      : this.readOutsideString()
+  }
+
+  private readOutsideString(): Token {
     this.skipWhile(isWhitespace)
     this.start = this.stream.location
 
@@ -105,6 +113,14 @@ export class Scanner {
       case '=': return this.equals()
       case '!': return this.bang()
       case '/': return this.slash()
+      case '\'':
+        this.insideString = true
+        this.insideDoubleQuote = false
+        return this.token(TokenKind.SINGLE_QUOTE)
+      case '"':
+        this.insideString = true
+        this.insideDoubleQuote = true
+        return this.token(TokenKind.DOUBLE_QUOTE)
     }
 
     if (isNumberChar(char)) {
@@ -118,7 +134,53 @@ export class Scanner {
     return this.token(TokenKind.UNRECOGNIZED)
   }
 
-  private skipWhile (predicate: (value: string) => boolean) {
+  private readInsideString(): Token {
+    this.start = this.stream.location
+    const char = this.stream.peek()
+    if (char === undefined || char === '\n' || char === '\r') {
+      this.insideString = false
+      return this.readOutsideString()
+    } else if (!this.insideDoubleQuote && char === '\'') {
+      this.insideString = false
+      return this.token(TokenKind.SINGLE_QUOTE)
+    } else if (this.insideDoubleQuote && char === '"') {
+      this.insideString = false
+      return this.token(TokenKind.DOUBLE_QUOTE)
+    } else if (char === '\\') {
+      this.stream.next()
+      const char = this.stream.peek()
+      switch (char) {
+        case 'n':
+          this.stream.next()
+          return this.token(TokenKind.STRING_ESCAPE_N, '\n')
+        case 'r':
+          this.stream.next()
+          return this.token(TokenKind.STRING_ESCAPE_R, '\r')
+        case 't':
+          this.stream.next()
+          return this.token(TokenKind.STRING_ESCAPE_T, '\t')
+        case '\'': return this.token(TokenKind.STRING_ESCAPE_SINGLE_QUOTE)
+        case '"': return this.token(TokenKind.STRING_ESCAPE_DOUBLE_QUOTE)
+        case '\\': return this.token(TokenKind.STRING_ESCAPE_BACKSLASH)
+        case 'x': return this.byteEscape()
+        case '\n': return this.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
+        case '\r': return this.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
+        case undefined: return this.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
+      }
+      this.stream.next()
+      return this.token(TokenKind.STRING_INVALID_ESCAPE, '\\' + char)
+    }
+    const content = this.readWhile(
+      char => !!char && isValidStringContent(char, this.insideDoubleQuote),
+    )
+    if (content) {
+      return this.token(TokenKind.STRING_CONTENT, content)
+    } else {
+      return this.token(TokenKind.STRING_INVALID_CHAR)
+    }
+  }
+
+  private skipWhile(predicate: (value: string) => boolean) {
     while (true) {
       const char = this.stream.peek()
       if (!char || !predicate(char)) {
@@ -253,6 +315,24 @@ export class Scanner {
     return this.token(getIdentifierType(value), value)
   }
 
+  private byteEscape () {
+    this.stream.next()
+    const first = this.stream.peek()
+    if (isHexDigit(first)) {
+      this.stream.next()
+      const second = this.stream.peek()
+      if (isHexDigit(second)) {
+        this.stream.next()
+        return this.token(
+          TokenKind.STRING_ESCAPE_BYTE,
+          String.fromCharCode(parseInt(first + second, 16))
+        )
+      }
+      return this.token(TokenKind.STRING_INVALID_ESCAPE, '\\x' + first)
+    }
+    return this.token(TokenKind.STRING_INVALID_ESCAPE, '\\x')
+  }
+
   private readWhile (predicate: (value?: string) => boolean) {
     let value = ''
     while (predicate(this.stream.peek())) {
@@ -262,10 +342,23 @@ export class Scanner {
   }
 }
 
-const isRegex = (re: RegExp) => (char?: string) => !!char && re.test(char)
+const isRegex = (re: RegExp) => (char?: string): char is string =>
+  !!char && re.test(char)
 const isWhitespace = isRegex(/\s/)
 const isNumberChar = isRegex(/\d/)
 const isIdentifierChar = isRegex(/\w/)
+const isHexDigit = isRegex(/[\da-f]/i)
+
+function isValidStringContent (char: string, doubleQuote: boolean) {
+  const code = char.charCodeAt(0)
+  return (
+    code >= 0x20 &&
+    code <= 0x7E &&
+    char !== '\\' &&
+    (char !== '\'' || doubleQuote) &&
+    (char !== '"' || !doubleQuote)
+  )
+}
 
 function getIdentifierType (identifier: string) {
   switch (identifier) {
