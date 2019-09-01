@@ -16,4 +16,3 @@ export type Statement
   | StatementWithError
   | EventEmit
   | Expression
-

@@ -6,7 +6,7 @@ import { SPAN_ZERO } from './Span'
 export interface StatementWithError extends AstNodeBase {
   kind: 'StatementWithError',
   statement: Statement,
-  error: Expression,
+  error: Expression
 }
 
 export function statementWithError (

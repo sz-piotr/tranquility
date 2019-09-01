@@ -32,7 +32,7 @@ export function strings () {
       token(TokenKind.STRING_ESCAPE_R, '\r'),
       token(TokenKind.STRING_ESCAPE_T, '\t'),
       token(TokenKind.STRING_ESCAPE_SINGLE_QUOTE, '\''),
-      token(TokenKind.STRING_ESCAPE_DOUBLE_QUOTE, '\"'),
+      token(TokenKind.STRING_ESCAPE_DOUBLE_QUOTE, '"'),
       token(TokenKind.STRING_ESCAPE_BYTE, '\xFF'),
       token(TokenKind.STRING_ESCAPE_BACKSLASH, '\\'),
       token(TokenKind.DOUBLE_QUOTE, '"'),

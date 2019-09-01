@@ -103,9 +103,9 @@ export function storage () {
                 Ast.AssignmentOperator.SUBTRACT,
                 Ast.indexAccess(
                   Ast.identifier('balances'),
-                  Ast.identifier('address'),
+                  Ast.identifier('address')
                 ),
-                Ast.identifier('value'),
+                Ast.identifier('value')
               ),
               Ast.stringLiteral('Insufficient funds')
             ),
