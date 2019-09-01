@@ -1,7 +1,7 @@
 import { AstNodeBase } from '../common/AstNodeBase'
 import { Identifier } from '../expressions/Identifier'
 import { Type } from '../expressions/Type'
-import { SPAN_ZERO } from '../common/Span'
+import { SPAN_ZERO } from '../../location'
 
 export interface FieldDeclaration extends AstNodeBase {
   kind: 'FieldDeclaration',

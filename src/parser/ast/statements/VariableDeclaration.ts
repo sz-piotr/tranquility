@@ -1,7 +1,7 @@
 import { AstNodeBase } from '../common/AstNodeBase'
 import { Identifier } from '../expressions/Identifier'
 import { Expression } from '../common/Expression'
-import { SPAN_ZERO } from '../common/Span'
+import { SPAN_ZERO } from '../../location'
 
 export interface VariableDeclaration extends AstNodeBase {
   kind: 'VariableDeclaration',

@@ -1,5 +1,5 @@
 import { AstNodeBase } from '../common/AstNodeBase'
-import { SPAN_ZERO } from '../common/Span'
+import { SPAN_ZERO } from '../../location'
 
 export interface BooleanLiteral extends AstNodeBase {
   kind: 'BooleanLiteral',

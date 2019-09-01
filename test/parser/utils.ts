@@ -1,6 +1,6 @@
 import { Token, TokenKind } from '../../src/parser/tokens'
-import { location } from '../../src/parser/location'
-import { AstNode, SPAN_ZERO } from '../../src/parser/ast'
+import { location, SPAN_ZERO } from '../../src/parser/location'
+import { AstNode } from '../../src/parser/ast'
 
 export function resetRanges (ast: AstNode): AstNode {
   ast.span = SPAN_ZERO

@@ -3,7 +3,7 @@ import { Identifier } from '../expressions/Identifier'
 import { FunctionParameter } from '../expressions/FunctionParameter'
 import { Type } from '../expressions/Type'
 import { Statement } from '../common/Statement'
-import { SPAN_ZERO } from '../common/Span'
+import { SPAN_ZERO } from '../../location'
 
 export interface MethodDeclaration extends AstNodeBase {
   kind: 'MethodDeclaration',

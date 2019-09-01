@@ -1,6 +1,6 @@
 import { AstNodeBase } from '../common/AstNodeBase'
 import { MemberDeclaration } from '../common/MemberDeclaration'
-import { SPAN_ZERO } from '../common/Span'
+import { SPAN_ZERO } from '../../location'
 
 export interface StorageDeclaration extends AstNodeBase {
   kind: 'StorageDeclaration',

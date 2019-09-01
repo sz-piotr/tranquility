@@ -1,6 +1,6 @@
 import { expect } from 'chai'
-import { InputStream } from '../../src/parser/InputStream'
-import { location } from '../../src/parser/location'
+import { InputStream } from '../../../src/parser/scanner/InputStream'
+import { location } from '../../../src/parser/location'
 
 describe('InputStream', () => {
   it('peek should return the char at location', () => {

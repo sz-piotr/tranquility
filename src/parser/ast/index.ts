@@ -1,7 +1,6 @@
 export * from './common/AstNode'
 export * from './common/Expression'
 export * from './common/MemberDeclaration'
-export * from './common/Span'
 export * from './common/Statement'
 export * from './expressions/BinaryOperation'
 export * from './expressions/FunctionCall'

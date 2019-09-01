@@ -1,4 +1,4 @@
-import { Location, location } from './location'
+import { Location, location } from '../location'
 
 export class InputStream {
   location: Location = {

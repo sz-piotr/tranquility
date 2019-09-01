@@ -1,4 +1,4 @@
-import { Span } from './Span'
+import { Span } from '../../location'
 
 export interface AstNodeBase {
   kind: string,

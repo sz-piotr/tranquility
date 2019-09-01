@@ -1,7 +1,7 @@
 import { AstNodeBase } from '../common/AstNodeBase'
 import { Identifier } from './Identifier'
 import { Type } from './Type'
-import { SPAN_ZERO } from '../common/Span'
+import { SPAN_ZERO } from '../../location'
 
 export interface FunctionParameter extends AstNodeBase {
   kind: 'FunctionParameter',

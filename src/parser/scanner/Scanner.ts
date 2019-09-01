@@ -1,4 +1,4 @@
-import { InputStream } from '../InputStream'
+import { InputStream } from './InputStream'
 import { Token, TokenKind } from '../tokens'
 import { ScannerContext } from './ScannerContext'
 import { read } from './read'

@@ -1,4 +1,4 @@
-import { Span } from '../parser/ast'
+import { Span } from '../parser/location'
 
 export class Error {
   constructor (
