@@ -1,5 +1,5 @@
 {
-  "name": "evm-compiler",
+  "name": "tranquility",
   "private": true,
   "main": "dist/cjs/src/index.js",
   "module": "dist/esm/src/index.js",
