@@ -1,38 +1,23 @@
-// Events are declared as separate entities
 event Transfer {
   from: Address
   to: Address
   value: Uint
 }
 
-// Storages are an abstraction over contract storage manipulation
 storage Token {
-  // They declare what storage they are using
-  balances: Map(Address, Uint)
-  supply: Uint
+  balances: Map<Address, Uint>
+  totalSupply: Uint
 
-  // They also declare a public api
-
-  // Functions that do not modify storage are inferred as view
-  balanceOf (address: Address): Uint {
-    return balances[address]
-  }
-
-  totalSupply (): Uint {
-    return supply
-  }
+  use balances.get as balanceOf
+  use totalSupply
 
   mint (address: Address, amount: Uint) {
-    // Check is the equivalent of solidity require
-    // zero is a special type that means a value composed of 0x00 bytes
     check(address != zero)
     check(amount != 0)
 
-    // Operations on numbers use safe math by default
     balances[address] += amount
-    supply += amount
+    totalSupply += amount
 
-    // Events can be emitted just like in Solidity
     emit Transfer(zero, address, amount)
   }
 
@@ -41,8 +26,6 @@ storage Token {
     check(to != zero)
     check(amount != 0)
 
-    // Since math is safe by default it can throw
-    // To provide a custom message use the -> operator
     balances[from] -= amount -> 'Insufficient funds'
     balances[to] += amount
 
@@ -54,7 +37,7 @@ storage Token {
     check(amount != 0)
 
     balances[address] -= amount -> 'Insufficient funds'
-    supply -= amount
+    totalSupply -= amount
 
     emit Transfer(address, zero, amount)
   }
@@ -67,19 +50,10 @@ event Approval {
 }
 
 storage TokenWithAllowance {
-  // Storages can include other storages as storage
   token: Token
-  allowances: Map(Address, Map(Address, Uint))
+  allowances: Map<Address, Map<Address, Uint>>
 
-  // Storages can use (redeclare as own) functions from nested storages
-  use token.balanceOf
-  use token.totalSupply
-  use token.mint
-  use token.transfer
-  use token.burn
-
-  // This long list can be shortened as:
-  // use token.*
+  use token.*
 
   allowance (owner: Address, spender: Address) {
     return allowances[owner][spender]
@@ -95,13 +69,10 @@ storage TokenWithAllowance {
   }
 
   transferFrom (owner: Address, spender: Address, to: Address, value: Uint) {
-    // To prevent long lines the -> operator can be used on the next line
     let newAllowance = allowance(owner, spender) - value
       -> 'Insufficient allowance'
 
-    // Calling own function is as easy as typing its name
     approve(owner, spender, newAllowance)
-    // Calling a nested storage's one means you have to specify the target
     token.transfer(owner, to, value)
   }
 
@@ -114,28 +85,17 @@ storage TokenWithAllowance {
   }
 }
 
-// Contracts are different from storages in many ways:
-// 1. They can be constructed
-// 2. They can receive messages
-// 3. They can call other contracts
-// Neither storages nor contracts can nest other contracts
-// The reason for the distinction between contracts and storages is to enable
-// easy library authoring without the need for inheritance
 contract ExampleCoin {
   token: TokenWithAllowance
 
-  // Contracts can use only view functions
   use token.balanceOf
   use token.totalSupply
   use token.allowance
 
-  // Constants are compiled to view functions
   name = 'ExampleCoin'
   symbol = 'EXC'
   decimals = 18
 
-  // The first argument to a contract function is always a message
-  // If the contract does not use msg.value the function is non-payable
   transfer (msg: Message, to: Address, amount: Uint) {
     token.transfer(msg.sender, to, amount)
     return true
