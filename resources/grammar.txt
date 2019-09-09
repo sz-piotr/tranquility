@@ -6,6 +6,7 @@ Statement
   | StructDeclaration
   | StorageDeclaration
   | ContractDeclaration
+  | InterfaceDeclaration
   | FunctionDeclaration
   | VariableDeclaration
   | VariableAssignment
@@ -31,6 +32,9 @@ StorageDeclaration
 ContractDeclaration
   | 'contract' ObjectDeclaration
 
+InterfaceDeclaration
+  | 'interface' ObjectDeclaration
+
 ObjectDeclaration
   | IDENTIFIER GenericParameters? '{' MemberDeclaration* '}'
 
@@ -49,7 +53,7 @@ UseDeclaration
   | 'use' Expression ('as' IDENTIFIER)?
 
 MethodDeclaration
-  | IDENTIFIER '(' MethodParams? ')' TypeAnnotation? Block
+  | IDENTIFIER '(' MethodParams? ')' TypeAnnotation? Block?
 
 MethodParams
   | MethodParam (',' MethodParam)*
