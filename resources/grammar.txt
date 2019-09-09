@@ -1,0 +1,210 @@
+Program
+  | Statement*
+
+Statement
+  | EventDeclaration
+  | StructDeclaration
+  | StorageDeclaration
+  | ContractDeclaration
+  | FunctionDeclaration
+  | VariableDeclaration
+  | VariableAssignment
+  | IfStatement
+  | ElseStatement
+  | WhileLoop
+  | ForLoop
+  | ReturnStatement
+  | EmitStatement
+  | Expression
+
+// TODO: ContractCall (syntax yet undecided)
+
+EventDeclaration
+  | 'event' ObjectDeclaration
+
+StructDeclaration
+  | 'struct' ObjectDeclaration
+
+StorageDeclaration
+  | 'storage' ObjectDeclaration
+
+ContractDeclaration
+  | 'contract' ObjectDeclaration
+
+ObjectDeclaration
+  | IDENTIFIER GenericParameters? '{' MemberDeclaration* '}'
+
+GenericParameters
+  | '<' IDENTIFIER (',' IDENTIFIER)* '>'
+
+MemberDeclaration
+  | FieldDeclaration
+  | UseDeclaration
+  | MethodDeclaration
+
+FieldDeclaration
+  | IDENTIFIER TypeAnnotation? (AssignmentOperator expression)?
+
+UseDeclaration
+  | 'use' Expression ('as' IDENTIFIER)?
+
+MethodDeclaration
+  | IDENTIFIER '(' MethodParams? ')' TypeAnnotation? Block
+
+MethodParams
+  | MethodParam (',' MethodParam)*
+
+MethodParam
+  | IDENTIFIER TypeAnnotation?
+
+TypeAnnotation
+  | ':' Type
+
+Type
+  | IDENTIFIER TypeParams?
+
+TypeParams
+  | '<' Type (',' Type)* '>'
+
+FunctionDeclaration
+  | 'function' MethodDeclaration
+
+VariableDeclaration
+  | 'let' FieldDeclaration
+
+IfStatement
+  | 'if' Expression Block ElseStatement?
+
+ElseStatement
+  | 'else' 'if'? Expression Block ElseStatement?
+
+WhileLoop
+  | 'while' Expression Block
+
+ForLoop
+  | 'for' IDENTIFIER (',' IDENTIFIER)? 'in' Expression Block
+
+Block
+  | '{' Statement* '}'
+
+ReturnStatement
+  | 'return' Expression
+
+EmitStatement
+  | 'emit' Expression
+
+Expression
+  | ExceptionExpression
+
+ExceptionExpression
+  | VariableAssignment '->' VariableAssignment
+
+VariableAssignment
+  | LogicalOr AssignmentOperator LogicalOr
+
+AssignmentOperator
+  | '='
+  | '-='
+  | '+='
+  | '*='
+  | '/='
+  | '%='
+  | '^='
+  | '&='
+
+LogicalOr
+  | LogicalAnd (LogicalOrOperator LogicalAnd)*
+
+LogicalOrOperator
+  | 'or'
+  | '||'
+
+LogicalAnd
+  | Equality (LogicalAndOperator Equality)*
+
+LogicalAndOperator
+  | 'and'
+  | '&&'
+
+Equality
+  | Comparison (EqualityOperator Comparison)*
+
+EqualityOperator
+  | '=='
+  | '==='
+  | '!='
+  | '!=='
+
+Comparison
+  | AddSub (ComparisonOperator AddSub)*
+
+ComparisonOperator
+  | '>='
+  | '>'
+  | '<='
+  | '<'
+
+AddSub
+  | MulDivRem (AddSubOperator MulDivRem)*
+
+AddSubOperator
+  | '+'
+  | '-'
+
+MulDivRem
+  | Unary (MulDivRemOperator Unary)*
+
+MulDivRemOperator
+  | '*'
+  | '/'
+  | '%'
+
+Unary
+  | UnaryOperator? Access
+
+UnaryOperator
+  | '+'
+  | '-'
+  | '!'
+
+Access
+  | LiteralOrParenthesized AccessMethod*
+
+AccessMethod
+  | ('.' IDENTIFIER)
+  | '[' Expression ']'
+  | '(' FunctionParameters? ')'
+
+FunctionCall
+  | Access '(' FunctionParameters? ')'
+
+FunctionParameters
+  | Expression (',' Expression)?
+
+LiteralOrParenthesized
+  | '(' Expression ')'
+  | Literal
+
+Literal
+  | Number
+  | String
+  | 'true'
+  | 'false'
+  | 'zero'
+
+Number
+  | Integer ('.' Integer)? ('e' Integer)?
+  | Hexadecimal
+  | Binary
+
+Integer
+  | DIGIT ('_'? DIGIT)*
+
+Hexadecimal
+  | '0x' HEX_DIGIT ('_'? HEX_DIGIT)*
+
+Binary
+  | '0b' BINARY_DIGIT ('_'? BINARY_DIGIT)*
+
+String
+  | // TODO:
