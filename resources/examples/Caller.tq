@@ -1,0 +1,27 @@
+interface ERC20 {
+  transfer (address: Address, value: Uint): Boolean
+}
+
+contract Caller {
+  transfer (token: Address, recipient: Address, value: Uint) {
+    call token ERC20.transfer(recipient, value)
+  }
+
+  differentCalls (address: Address, data: Bytes) {
+    call address data
+    read address data
+    delegate address data
+
+    gas 2_300
+    call address data
+
+    pay 1e18 address
+
+    pay 1e18
+    call address data
+
+    pay 1e18
+    gas 2_300
+    call address data
+  }
+}
