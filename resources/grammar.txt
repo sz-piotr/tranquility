@@ -39,7 +39,7 @@ ObjectDeclaration
   | IDENTIFIER GenericParameters? '{' MemberDeclaration* '}'
 
 GenericParameters
-  | '<' IDENTIFIER (',' IDENTIFIER)* '>'
+  | '<' IDENTIFIER (',' IDENTIFIER)* ','? '>'
 
 MemberDeclaration
   | FieldDeclaration
@@ -56,7 +56,7 @@ MethodDeclaration
   | IDENTIFIER '(' MethodParams? ')' TypeAnnotation? Block?
 
 MethodParams
-  | MethodParam (',' MethodParam)*
+  | MethodParam (',' MethodParam)* ','?
 
 MethodParam
   | IDENTIFIER TypeAnnotation?
@@ -68,7 +68,7 @@ Type
   | IDENTIFIER TypeParams?
 
 TypeParams
-  | '<' Type (',' Type)* '>'
+  | '<' Type (',' Type)* ','? '>'
 
 FunctionDeclaration
   | 'function' MethodDeclaration
@@ -86,7 +86,7 @@ WhileLoop
   | 'while' Expression Block
 
 ForLoop
-  | 'for' IDENTIFIER (',' IDENTIFIER)? 'in' Expression Block
+  | 'for' IDENTIFIER (',' IDENTIFIER)* ','? 'in' Expression Block
 
 Block
   | '{' Statement* '}'
@@ -183,7 +183,7 @@ FunctionCall
   | Access '(' FunctionParameters? ')'
 
 FunctionParameters
-  | Expression (',' Expression)?
+  | Expression (',' Expression)* ','?
 
 LiteralOrParenthesized
   | '(' Expression ')'
