@@ -4,7 +4,7 @@ import * as Ast from '../../../../src/parser/ast'
 import { resetRanges } from '../../utils'
 
 export function zeroLiteral () {
-  it.skip('zeroLiteral', () => {
+  it('zeroLiteral', () => {
     const result = parse(`
       zero
     `)
