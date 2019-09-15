@@ -5,7 +5,7 @@ import { AstNode } from '../../src/parser/ast'
 export function resetRanges (ast: AstNode): AstNode {
   ast.span = SPAN_ZERO
   if (ast.kind === 'Program') {
-    ast.children.forEach(resetRanges)
+    ast.statements.forEach(resetRanges)
   } else if (ast.kind === 'VariableDeclaration') {
     resetRanges(ast.identifier)
     resetRanges(ast.value)

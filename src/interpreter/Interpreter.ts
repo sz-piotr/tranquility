@@ -41,7 +41,7 @@ export class Interpreter {
 
   private evalProgram (node: Ast.Program) {
     let result
-    for (const child of node.children) {
+    for (const child of node.statements) {
       result = this.evalNode(child)
     }
     return result
