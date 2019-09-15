@@ -13,3 +13,9 @@ export function error1 <T> (createMessage: (arg: T) => string) {
     return new Error(message, { start: span.start, end: span.end })
   }
 }
+
+export function error0 (message: string) {
+  return function (span: Span) {
+    return new Error(message, { start: span.start, end: span.end })
+  }
+}

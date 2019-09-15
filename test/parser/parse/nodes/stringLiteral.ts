@@ -4,7 +4,7 @@ import * as Ast from '../../../../src/parser/ast'
 import { resetRanges } from '../../utils'
 
 export function stringLiteral () {
-  it.skip('stringLiteral', () => {
+  it('stringLiteral', () => {
     const result = parse(`
       ""
       "value"
@@ -15,9 +15,10 @@ export function stringLiteral () {
 
     const expected = new Ast.Program([
       new Ast.StringLiteral(''),
+      new Ast.StringLiteral('value'),
       new Ast.StringLiteral('a b c'),
       new Ast.StringLiteral('a "bc"'),
-      new Ast.StringLiteral('I can\'t believe it')
+      new Ast.StringLiteral('I can\'t believe it!')
     ])
 
     expect(resetRanges(result.ast)).to.deep.equal(expected)

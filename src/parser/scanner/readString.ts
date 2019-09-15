@@ -23,20 +23,23 @@ export function readString (ctx: ScannerContext): Token {
     switch (char) {
       case 'n':
         ctx.next()
-        return ctx.token(TokenKind.STRING_ESCAPE_N, '\n')
+        return ctx.token(TokenKind.STRING_CONTENT, '\n')
       case 'r':
         ctx.next()
-        return ctx.token(TokenKind.STRING_ESCAPE_R, '\r')
+        return ctx.token(TokenKind.STRING_CONTENT, '\r')
       case 't':
         ctx.next()
-        return ctx.token(TokenKind.STRING_ESCAPE_T, '\t')
-      case '\'': return ctx.token(TokenKind.STRING_ESCAPE_SINGLE_QUOTE)
-      case '"': return ctx.token(TokenKind.STRING_ESCAPE_DOUBLE_QUOTE)
-      case '\\': return ctx.token(TokenKind.STRING_ESCAPE_BACKSLASH)
-      case 'x': return readEscapeX(ctx)
-      case '\n': return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
-      case '\r': return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
-      case undefined: return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
+        return ctx.token(TokenKind.STRING_CONTENT, '\t')
+      case '\'':
+      case '"':
+      case '\\':
+        return ctx.token(TokenKind.STRING_CONTENT)
+      case 'x':
+        return readEscapeX(ctx)
+      case '\n':
+      case '\r':
+      case undefined:
+        return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\')
     }
     ctx.next()
     return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\' + char)

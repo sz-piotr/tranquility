@@ -10,10 +10,8 @@ export function readEscapeX (ctx: ScannerContext) {
     const second = ctx.peek()
     if (isHexDigit(second)) {
       ctx.next()
-      return ctx.token(
-        TokenKind.STRING_ESCAPE_BYTE,
-        String.fromCharCode(parseInt(first + second, 16))
-      )
+      const value = String.fromCharCode(parseInt(first + second, 16))
+      return ctx.token(TokenKind.STRING_CONTENT, value)
     }
     return ctx.token(TokenKind.STRING_INVALID_ESCAPE, '\\x' + first)
   }
