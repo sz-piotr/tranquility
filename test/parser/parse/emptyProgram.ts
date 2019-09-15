@@ -9,7 +9,7 @@ export function emptyProgram () {
 
     `)
 
-    const expected = Ast.program([])
+    const expected = new Ast.Program([])
 
     expect(resetRanges(result.ast)).to.deep.equal(expected)
   })

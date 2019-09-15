@@ -10,7 +10,7 @@ export function parseExpression (ctx: ParserContext): Ast.Expression {
   while (ctx.at(TokenKind.PLUS) || ctx.at(TokenKind.MINUS)) {
     const { kind } = ctx.next()
     const right = parseTerm(ctx)
-    result = Ast.binaryOperation(
+    result = new Ast.BinaryOperation(
       getOperation(kind),
       result,
       right,

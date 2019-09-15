@@ -23,10 +23,10 @@ export function numberLiteral () {
       // -50
     `)
 
-    const expected = Ast.program([
-      Ast.numberLiteral('1'),
-      Ast.numberLiteral('0'),
-      Ast.numberLiteral('123')
+    const expected = new Ast.Program([
+      new Ast.NumberLiteral('1'),
+      new Ast.NumberLiteral('0'),
+      new Ast.NumberLiteral('123')
     ])
 
     expect(resetRanges(result.ast)).to.deep.equal(expected)

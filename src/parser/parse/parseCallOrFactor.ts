@@ -18,7 +18,7 @@ export function parseCallOrFactor (ctx: ParserContext): Ast.Expression {
       ctx.expect(TokenKind.COMMA)
     }
     const { end } = ctx.expect(TokenKind.PAREN_CLOSE)
-    result = Ast.functionCall(
+    result = new Ast.FunctionCall(
       result,
       parameters,
       { start, end }

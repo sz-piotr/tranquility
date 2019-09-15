@@ -1,6 +1,15 @@
-import { AstNodeBase } from '../common/AstNodeBase'
 import { Expression } from '../common/Expression'
 import { SPAN_ZERO } from '../../location'
+
+export class BinaryOperation {
+  public kind = 'BinaryOperation' as const
+  constructor (
+    public operator: BinaryOperator,
+    public left: Expression,
+    public right: Expression,
+    public span = SPAN_ZERO
+  ) {}
+}
 
 export enum BinaryOperator {
   ADD,
@@ -13,26 +22,4 @@ export enum BinaryOperator {
   GREATER_OR_EQUAL,
   LESS,
   LESS_OR_EQUAL
-}
-
-export interface BinaryOperation extends AstNodeBase {
-  kind: 'BinaryOperation',
-  operator: BinaryOperator,
-  left: Expression,
-  right: Expression
-}
-
-export function binaryOperation (
-  operator: BinaryOperator,
-  left: Expression,
-  right: Expression,
-  span = SPAN_ZERO
-): BinaryOperation {
-  return {
-    kind: 'BinaryOperation',
-    operator,
-    left,
-    right,
-    span
-  }
 }

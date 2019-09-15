@@ -3,5 +3,5 @@ import * as Ast from '../ast'
 
 export function parseZero (ctx: ParserContext) {
   const { start, end } = ctx.next()
-  return Ast.zeroLiteral({ start, end })
+  return new Ast.ZeroLiteral({ start, end })
 }

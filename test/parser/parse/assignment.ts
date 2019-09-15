@@ -10,18 +10,18 @@ export function assignment () {
       a = 5 + 7
     `)
 
-    const expected = Ast.program([
-      Ast.variableDeclaration(
-        Ast.identifier('a'),
-        Ast.numberLiteral('3')
+    const expected = new Ast.Program([
+      new Ast.VariableDeclaration(
+        new Ast.Identifier('a'),
+        new Ast.NumberLiteral('3')
       ),
-      Ast.variableAssignment(
+      new Ast.VariableAssignment(
         Ast.AssignmentOperator.EQUALS,
-        Ast.identifier('a'),
-        Ast.binaryOperation(
+        new Ast.Identifier('a'),
+        new Ast.BinaryOperation(
           Ast.BinaryOperator.ADD,
-          Ast.numberLiteral('5'),
-          Ast.numberLiteral('7')
+          new Ast.NumberLiteral('5'),
+          new Ast.NumberLiteral('7')
         )
       )
     ])

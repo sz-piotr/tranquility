@@ -17,5 +17,5 @@ export function parseFunctionDefinition (ctx: ParserContext) {
   const body = parseFunctionBody(ctx)
   const { end } = ctx.expect(TokenKind.CURLY_CLOSE)
 
-  return Ast.functionDeclaration(identifier, parameters, body, { start, end })
+  return new Ast.FunctionDeclaration(identifier, parameters, body, { start, end })
 }

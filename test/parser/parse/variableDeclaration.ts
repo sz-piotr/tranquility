@@ -9,10 +9,10 @@ export function variableDeclaration () {
       let name = 1
     `)
 
-    const expected = Ast.program([
-      Ast.variableDeclaration(
-        Ast.identifier('name'),
-        Ast.numberLiteral('1')
+    const expected = new Ast.Program([
+      new Ast.VariableDeclaration(
+        new Ast.Identifier('name'),
+        new Ast.NumberLiteral('1')
       )
     ])
 

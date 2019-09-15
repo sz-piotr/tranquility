@@ -13,11 +13,11 @@ export function stringLiteral () {
       "I can't believe it!"
     `)
 
-    const expected = Ast.program([
-      Ast.stringLiteral(''),
-      Ast.stringLiteral('a b c'),
-      Ast.stringLiteral('a "bc"'),
-      Ast.stringLiteral('I can\'t believe it')
+    const expected = new Ast.Program([
+      new Ast.StringLiteral(''),
+      new Ast.StringLiteral('a b c'),
+      new Ast.StringLiteral('a "bc"'),
+      new Ast.StringLiteral('I can\'t believe it')
     ])
 
     expect(resetRanges(result.ast)).to.deep.equal(expected)

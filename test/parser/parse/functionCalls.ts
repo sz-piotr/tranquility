@@ -21,40 +21,40 @@ export function functionCalls () {
       )
     `)
 
-    const expected = Ast.program([
-      Ast.functionCall(
-        Ast.identifier('foo'),
+    const expected = new Ast.Program([
+      new Ast.FunctionCall(
+        new Ast.Identifier('foo'),
         []
       ),
-      Ast.functionCall(
-        Ast.functionCall(
-          Ast.functionCall(
-            Ast.identifier('foo'),
+      new Ast.FunctionCall(
+        new Ast.FunctionCall(
+          new Ast.FunctionCall(
+            new Ast.Identifier('foo'),
             [
-              Ast.numberLiteral('1'),
-              Ast.identifier('bar'),
-              Ast.binaryOperation(
+              new Ast.NumberLiteral('1'),
+              new Ast.Identifier('bar'),
+              new Ast.BinaryOperation(
                 Ast.BinaryOperator.ADD,
-                Ast.identifier('a'),
-                Ast.functionCall(
-                  Ast.identifier('b'),
+                new Ast.Identifier('a'),
+                new Ast.FunctionCall(
+                  new Ast.Identifier('b'),
                   []
                 )
               )
             ]
           ),
           [
-            Ast.binaryOperation(
+            new Ast.BinaryOperation(
               Ast.BinaryOperator.ADD,
-              Ast.functionCall(
-                Ast.identifier('x'),
+              new Ast.FunctionCall(
+                new Ast.Identifier('x'),
                 []
               ),
-              Ast.functionCall(
-                Ast.binaryOperation(
+              new Ast.FunctionCall(
+                new Ast.BinaryOperation(
                   Ast.BinaryOperator.ADD,
-                  Ast.identifier('a'),
-                  Ast.identifier('b')
+                  new Ast.Identifier('a'),
+                  new Ast.Identifier('b')
                 ),
                 []
               )
@@ -63,22 +63,22 @@ export function functionCalls () {
         ),
         []
       ),
-      Ast.functionCall(
-        Ast.functionCall(
-          Ast.identifier('foo'),
+      new Ast.FunctionCall(
+        new Ast.FunctionCall(
+          new Ast.Identifier('foo'),
           [
-            Ast.functionCall(
-              Ast.functionCall(
-                Ast.identifier('yes'),
+            new Ast.FunctionCall(
+              new Ast.FunctionCall(
+                new Ast.Identifier('yes'),
                 []
               ),
               []
             ),
-            Ast.identifier('no')
+            new Ast.Identifier('no')
           ]
         ),
         [
-          Ast.numberLiteral('1')
+          new Ast.NumberLiteral('1')
         ]
       )
     ])

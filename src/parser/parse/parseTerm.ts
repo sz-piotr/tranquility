@@ -10,7 +10,7 @@ export function parseTerm (ctx: ParserContext) {
   while (ctx.at(TokenKind.STAR) || ctx.at(TokenKind.SLASH)) {
     const { kind } = ctx.next()
     const right = parseCallOrFactor(ctx)
-    result = Ast.binaryOperation(
+    result = new Ast.BinaryOperation(
       getOperation(kind),
       result,
       right,

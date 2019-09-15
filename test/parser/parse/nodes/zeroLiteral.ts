@@ -9,8 +9,8 @@ export function zeroLiteral () {
       zero
     `)
 
-    const expected = Ast.program([
-      Ast.zeroLiteral()
+    const expected = new Ast.Program([
+      new Ast.ZeroLiteral()
     ])
 
     expect(resetRanges(result.ast)).to.deep.equal(expected)

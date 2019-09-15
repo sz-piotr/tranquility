@@ -17,39 +17,39 @@ export function smallProgram () {
       }
     `)
 
-    const expected = Ast.program([
-      Ast.functionDeclaration(
-        Ast.identifier('main'),
+    const expected = new Ast.Program([
+      new Ast.FunctionDeclaration(
+        new Ast.Identifier('main'),
         [],
         [
-          Ast.variableDeclaration(
-            Ast.identifier('a'),
-            Ast.numberLiteral('1')
+          new Ast.VariableDeclaration(
+            new Ast.Identifier('a'),
+            new Ast.NumberLiteral('1')
           ),
-          Ast.variableDeclaration(
-            Ast.identifier('b'),
-            Ast.numberLiteral('2')
+          new Ast.VariableDeclaration(
+            new Ast.Identifier('b'),
+            new Ast.NumberLiteral('2')
           ),
-          Ast.functionCall(
-            Ast.identifier('add'),
+          new Ast.FunctionCall(
+            new Ast.Identifier('add'),
             [
-              Ast.identifier('a'),
-              Ast.identifier('b')
+              new Ast.Identifier('a'),
+              new Ast.Identifier('b')
             ]
           )
         ]
       ),
-      Ast.functionDeclaration(
-        Ast.identifier('add'),
+      new Ast.FunctionDeclaration(
+        new Ast.Identifier('add'),
         [
-          Ast.identifier('a'),
-          Ast.identifier('b')
+          new Ast.Identifier('a'),
+          new Ast.Identifier('b')
         ],
         [
-          Ast.binaryOperation(
+          new Ast.BinaryOperation(
             Ast.BinaryOperator.ADD,
-            Ast.identifier('a'),
-            Ast.identifier('b')
+            new Ast.Identifier('a'),
+            new Ast.Identifier('b')
           )
         ]
       )

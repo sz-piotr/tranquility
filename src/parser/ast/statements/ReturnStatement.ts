@@ -1,19 +1,10 @@
-import { AstNodeBase } from '../common/AstNodeBase'
 import { Expression } from '../common/Expression'
 import { SPAN_ZERO } from '../../location'
 
-export interface ReturnStatement extends AstNodeBase {
-  kind: 'ReturnStatement',
-  value: Expression
-}
-
-export function returnStatement (
-  value: Expression,
-  span = SPAN_ZERO
-): ReturnStatement {
-  return {
-    kind: 'ReturnStatement',
-    value,
-    span
-  }
+export class ReturnStatement {
+  public kind = 'ReturnStatement' as const
+  constructor (
+    public value: Expression,
+    public span = SPAN_ZERO
+  ) {}
 }

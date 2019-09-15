@@ -1,4 +1,3 @@
-import { AstNodeBase } from '../common/AstNodeBase'
 import { Expression } from '../common/Expression'
 import { SPAN_ZERO } from '../../location'
 
@@ -10,24 +9,12 @@ export enum AssignmentOperator {
   DIVIDE,
 }
 
-export interface VariableAssignment extends AstNodeBase {
-  kind: 'VariableAssignment',
-  operator: AssignmentOperator,
-  left: Expression,
-  right: Expression
-}
-
-export function variableAssignment (
-  operator: AssignmentOperator,
-  left: Expression,
-  right: Expression,
-  span = SPAN_ZERO
-): VariableAssignment {
-  return {
-    kind: 'VariableAssignment',
-    operator,
-    left,
-    right,
-    span
-  }
+export class VariableAssignment {
+  public kind = 'VariableAssignment' as const
+  constructor (
+    public operator: AssignmentOperator,
+    public left: Expression,
+    public right: Expression,
+    public span = SPAN_ZERO
+  ) {}
 }

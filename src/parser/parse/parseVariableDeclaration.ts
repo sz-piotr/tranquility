@@ -9,5 +9,5 @@ export function parseVariableDeclaration (ctx: ParserContext) {
   const identifier = parseIdentifier(ctx)
   ctx.expect(TokenKind.EQUALS)
   const value = parseExpression(ctx)
-  return Ast.variableDeclaration(identifier, value, { start, end: value.span.end })
+  return new Ast.VariableDeclaration(identifier, value, { start, end: value.span.end })
 }

@@ -8,7 +8,7 @@ export function parseAssignmentOrExpression (ctx: ParserContext) {
   if (ctx.at(TokenKind.EQUALS)) {
     ctx.next()
     const right = parseExpression(ctx)
-    return Ast.variableAssignment(
+    return new Ast.VariableAssignment(
       Ast.AssignmentOperator.EQUALS,
       left,
       right,

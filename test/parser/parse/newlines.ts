@@ -13,17 +13,17 @@ export function newlines () {
       ')'
     const result = parse(source)
 
-    const expected = Ast.program([
-      Ast.identifier('lineOne', {
+    const expected = new Ast.Program([
+      new Ast.Identifier('lineOne', {
         start: location(0, 0, 0),
         end: location(7, 0, 7)
       }),
-      Ast.identifier('lineTwo', {
+      new Ast.Identifier('lineTwo', {
         start: location(19, 1, 0),
         end: location(26, 1, 7)
       }),
-      Ast.functionCall(
-        Ast.identifier('lineThree', {
+      new Ast.FunctionCall(
+        new Ast.Identifier('lineThree', {
           start: location(33, 2, 3),
           end: location(42, 2, 12)
         }),

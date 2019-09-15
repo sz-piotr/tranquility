@@ -10,9 +10,9 @@ export function booleanLiteral () {
       false
     `)
 
-    const expected = Ast.program([
-      Ast.booleanLiteral(true),
-      Ast.booleanLiteral(false)
+    const expected = new Ast.Program([
+      new Ast.BooleanLiteral(true),
+      new Ast.BooleanLiteral(false)
     ])
 
     expect(resetRanges(result.ast)).to.deep.equal(expected)

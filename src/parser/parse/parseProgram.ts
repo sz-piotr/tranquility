@@ -17,7 +17,7 @@ export function parseProgram (ctx: ParserContext): Ast.Program {
   }
   ctx.expect(TokenKind.EOF)
 
-  return Ast.program(children, { start, end: ctx.peek().end })
+  return new Ast.Program(children, { start, end: ctx.peek().end })
 }
 
 function handleError (ctx: ParserContext, e: unknown) {

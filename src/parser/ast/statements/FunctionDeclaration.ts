@@ -1,26 +1,13 @@
-import { AstNodeBase } from '../common/AstNodeBase'
 import { Identifier } from '../expressions/Identifier'
 import { Statement } from '../common/Statement'
 import { SPAN_ZERO } from '../../location'
 
-export interface FunctionDeclaration extends AstNodeBase {
-  kind: 'FunctionDeclaration',
-  identifier: Identifier,
-  parameters: Identifier[],
-  body: Statement[]
-}
-
-export function functionDeclaration (
-  identifier: Identifier,
-  parameters: Identifier[],
-  body: Statement[],
-  span = SPAN_ZERO
-): FunctionDeclaration {
-  return {
-    kind: 'FunctionDeclaration',
-    identifier,
-    parameters,
-    body,
-    span
-  }
+export class FunctionDeclaration {
+  public kind = 'FunctionDeclaration' as const
+  constructor (
+    public identifier: Identifier,
+    public parameters: Identifier[],
+    public body: Statement[],
+    public span = SPAN_ZERO
+  ) {}
 }

@@ -28,98 +28,98 @@ export function storage () {
       }
     `)
 
-    const expected = Ast.program([
-      Ast.storageDeclaration([
+    const expected = new Ast.Program([
+      new Ast.StorageDeclaration([
 
-        Ast.fieldDeclaration(
-          Ast.identifier('balances'),
-          Ast.type(
-            Ast.identifier('Map'),
+        new Ast.FieldDeclaration(
+          new Ast.Identifier('balances'),
+          new Ast.Type(
+            new Ast.Identifier('Map'),
             [
-              Ast.type(Ast.identifier('Address'), []),
-              Ast.type(Ast.identifier('Uint'), [])
+              new Ast.Type(new Ast.Identifier('Address'), []),
+              new Ast.Type(new Ast.Identifier('Uint'), [])
             ]
           )
         ),
 
-        Ast.fieldDeclaration(
-          Ast.identifier('supply'),
-          Ast.type(Ast.identifier('Uint'), [])
+        new Ast.FieldDeclaration(
+          new Ast.Identifier('supply'),
+          new Ast.Type(new Ast.Identifier('Uint'), [])
         ),
 
-        Ast.usingDeclaration(
-          Ast.identifier('balances'),
-          Ast.identifier('get'),
-          Ast.identifier('balanceOf')
+        new Ast.UsingDeclaration(
+          new Ast.Identifier('balances'),
+          new Ast.Identifier('get'),
+          new Ast.Identifier('balanceOf')
         ),
 
-        Ast.methodDeclaration(
-          Ast.identifier('totalSupply'),
+        new Ast.MethodDeclaration(
+          new Ast.Identifier('totalSupply'),
           [],
-          Ast.type(Ast.identifier('Uint'), []),
+          new Ast.Type(new Ast.Identifier('Uint'), []),
           [
-            Ast.returnStatement(
-              Ast.identifier('supply')
+            new Ast.ReturnStatement(
+              new Ast.Identifier('supply')
             )
           ]
         ),
 
-        Ast.methodDeclaration(
-          Ast.identifier('burn'),
+        new Ast.MethodDeclaration(
+          new Ast.Identifier('burn'),
           [
-            Ast.functionParameter(
-              Ast.identifier('address'),
-              Ast.type(Ast.identifier('Address'), [])
+            new Ast.FunctionParameter(
+              new Ast.Identifier('address'),
+              new Ast.Type(new Ast.Identifier('Address'), [])
             ),
-            Ast.functionParameter(
-              Ast.identifier('amount'),
-              Ast.type(Ast.identifier('Uint'), [])
+            new Ast.FunctionParameter(
+              new Ast.Identifier('amount'),
+              new Ast.Type(new Ast.Identifier('Uint'), [])
             )
           ],
           undefined,
           [
-            Ast.functionCall(
-              Ast.identifier('check'),
+            new Ast.FunctionCall(
+              new Ast.Identifier('check'),
               [
-                Ast.binaryOperation(
+                new Ast.BinaryOperation(
                   Ast.BinaryOperator.NOT_EQUAL,
-                  Ast.identifier('address'),
-                  Ast.zeroLiteral()
+                  new Ast.Identifier('address'),
+                  new Ast.ZeroLiteral()
                 )
               ]
             ),
-            Ast.functionCall(
-              Ast.identifier('check'),
+            new Ast.FunctionCall(
+              new Ast.Identifier('check'),
               [
-                Ast.binaryOperation(
+                new Ast.BinaryOperation(
                   Ast.BinaryOperator.NOT_EQUAL,
-                  Ast.identifier('amount'),
-                  Ast.numberLiteral('0')
+                  new Ast.Identifier('amount'),
+                  new Ast.NumberLiteral('0')
                 )
               ]
             ),
-            Ast.statementWithError(
-              Ast.variableAssignment(
+            new Ast.StatementWithError(
+              new Ast.VariableAssignment(
                 Ast.AssignmentOperator.SUBTRACT,
-                Ast.indexAccess(
-                  Ast.identifier('balances'),
-                  Ast.identifier('address')
+                new Ast.IndexAccess(
+                  new Ast.Identifier('balances'),
+                  new Ast.Identifier('address')
                 ),
-                Ast.identifier('value')
+                new Ast.Identifier('value')
               ),
-              Ast.stringLiteral('Insufficient funds')
+              new Ast.StringLiteral('Insufficient funds')
             ),
-            Ast.variableAssignment(
+            new Ast.VariableAssignment(
               Ast.AssignmentOperator.SUBTRACT,
-              Ast.identifier('supply'),
-              Ast.identifier('amount')
+              new Ast.Identifier('supply'),
+              new Ast.Identifier('amount')
             ),
-            Ast.eventEmit(
-              Ast.identifier('Transfer'),
+            new Ast.EventEmit(
+              new Ast.Identifier('Transfer'),
               [
-                Ast.identifier('address'),
-                Ast.zeroLiteral(),
-                Ast.identifier('amount')
+                new Ast.Identifier('address'),
+                new Ast.ZeroLiteral(),
+                new Ast.Identifier('amount')
               ]
             )
           ]

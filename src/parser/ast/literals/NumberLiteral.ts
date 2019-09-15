@@ -1,18 +1,9 @@
-import { AstNodeBase } from '../common/AstNodeBase'
 import { SPAN_ZERO } from '../../location'
 
-export interface NumberLiteral extends AstNodeBase {
-  kind: 'NumberLiteral',
-  value: string
-}
-
-export function numberLiteral (
-  value: string,
-  span = SPAN_ZERO
-): NumberLiteral {
-  return {
-    kind: 'NumberLiteral',
-    value,
-    span
-  }
+export class NumberLiteral {
+  public kind = 'NumberLiteral' as const
+  constructor (
+    public value: string,
+    public span = SPAN_ZERO
+  ) {}
 }

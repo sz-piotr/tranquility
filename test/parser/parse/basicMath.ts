@@ -9,30 +9,30 @@ export function basicMath () {
       let name = (4 + 5) / 3 - 7 * (((8)) * (2 / 3))
     `)
 
-    const expected = Ast.program([
-      Ast.variableDeclaration(
-        Ast.identifier('name'),
-        Ast.binaryOperation(
+    const expected = new Ast.Program([
+      new Ast.VariableDeclaration(
+        new Ast.Identifier('name'),
+        new Ast.BinaryOperation(
           Ast.BinaryOperator.SUBTRACT,
-          Ast.binaryOperation(
+          new Ast.BinaryOperation(
             Ast.BinaryOperator.DIVIDE,
-            Ast.binaryOperation(
+            new Ast.BinaryOperation(
               Ast.BinaryOperator.ADD,
-              Ast.numberLiteral('4'),
-              Ast.numberLiteral('5')
+              new Ast.NumberLiteral('4'),
+              new Ast.NumberLiteral('5')
             ),
-            Ast.numberLiteral('3')
+            new Ast.NumberLiteral('3')
           ),
-          Ast.binaryOperation(
+          new Ast.BinaryOperation(
             Ast.BinaryOperator.MULTIPLY,
-            Ast.numberLiteral('7'),
-            Ast.binaryOperation(
+            new Ast.NumberLiteral('7'),
+            new Ast.BinaryOperation(
               Ast.BinaryOperator.MULTIPLY,
-              Ast.numberLiteral('8'),
-              Ast.binaryOperation(
+              new Ast.NumberLiteral('8'),
+              new Ast.BinaryOperation(
                 Ast.BinaryOperator.DIVIDE,
-                Ast.numberLiteral('2'),
-                Ast.numberLiteral('3')
+                new Ast.NumberLiteral('2'),
+                new Ast.NumberLiteral('3')
               )
             )
           )

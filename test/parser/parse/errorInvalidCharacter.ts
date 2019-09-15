@@ -9,8 +9,8 @@ export function errorInvalidCharacter () {
   it('errorInvalidCharacter', () => {
     const result = parse('foo § bar')
 
-    const expected = Ast.program([
-      Ast.identifier('foo')
+    const expected = new Ast.Program([
+      new Ast.Identifier('foo')
     ])
 
     expect(resetRanges(result.ast)).to.deep.equal(expected)
