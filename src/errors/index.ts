@@ -18,6 +18,8 @@ export const InvalidStringEscape = error1(
 
 export const UnterminatedString = error0('Unterminated string literal.')
 
+export const SingleQuoteString = error0('Single quote string literal.')
+
 export const UnexpectedToken = error1(
   (value: string) => `Unexpected token ${JSON.stringify(value)}`
 )

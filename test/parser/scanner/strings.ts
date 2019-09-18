@@ -22,6 +22,7 @@ export function strings () {
 
       token(TokenKind.DOUBLE_QUOTE, '"'),
       token(TokenKind.STRING_CONTENT, 'Unterminated'),
+      token(TokenKind.STRING_END, ''),
 
       token(TokenKind.SINGLE_QUOTE, '\''),
       token(TokenKind.STRING_CONTENT, 'Single'),

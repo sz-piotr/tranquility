@@ -8,27 +8,30 @@ export function parseString (ctx: ParserContext) {
     ? ctx.expect(TokenKind.SINGLE_QUOTE)
     : ctx.expect(TokenKind.DOUBLE_QUOTE)
   let content = ''
-  let end = start
 
   while (true) {
-    if (ctx.at(TokenKind.SINGLE_QUOTE) || ctx.at(TokenKind.DOUBLE_QUOTE)) {
+    if (ctx.at(TokenKind.DOUBLE_QUOTE)) {
       const { end } = ctx.next()
+      return new Ast.StringLiteral(content, { start, end })
+    } if (ctx.at(TokenKind.SINGLE_QUOTE)) {
+      const { end } = ctx.next()
+      ctx.error(Err.SingleQuoteString({ start, end }))
+      return new Ast.StringLiteral(content, { start, end })
+    } else if (ctx.at(TokenKind.STRING_END)) {
+      const end = ctx.next().start
+      ctx.error(Err.UnterminatedString({ start, end }))
       return new Ast.StringLiteral(content, { start, end })
     } else if (ctx.at(TokenKind.STRING_CONTENT)) {
       const token = ctx.next()
       content += token.value
-      end = token.end
     } else if (ctx.at(TokenKind.STRING_INVALID_CHAR)) {
       const token = ctx.next()
       ctx.error(Err.InvalidStringCharacter(token.value, token))
-      end = token.end
     } else if (ctx.at(TokenKind.STRING_INVALID_ESCAPE)) {
       const token = ctx.next()
       ctx.error(Err.InvalidCharacter(token.value, token))
-      end = token.end
     } else {
-      ctx.error(Err.UnterminatedString({ start, end }))
-      return new Ast.StringLiteral(content, { start, end })
+      return ctx.fail()
     }
   }
 }

@@ -1,6 +1,5 @@
 import { readEscapeX } from './readEscapeX'
 import { isValidStringContent } from './utils'
-import { readRegular } from './readRegular'
 import { readWhile } from './readWhile'
 import { ScannerContext } from './ScannerContext'
 import { Token, TokenKind } from '../tokens'
@@ -10,7 +9,7 @@ export function readString (ctx: ScannerContext): Token {
   const char = ctx.peek()
   if (char === undefined || char === '\n' || char === '\r') {
     ctx.isInString = false
-    return readRegular(ctx)
+    return ctx.token(TokenKind.STRING_END, '')
   } else if (!ctx.doubleQuote && char === '\'') {
     ctx.isInString = false
     return ctx.token(TokenKind.SINGLE_QUOTE)
