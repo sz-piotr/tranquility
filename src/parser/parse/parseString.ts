@@ -29,7 +29,7 @@ export function parseString (ctx: ParserContext) {
       ctx.error(new Err.InvalidStringCharacter(token.value, token))
     } else if (ctx.at(TokenKind.STRING_INVALID_ESCAPE)) {
       const token = ctx.next()
-      ctx.error(new Err.InvalidCharacter(token.value, token))
+      ctx.error(new Err.InvalidStringEscape(token.value, token))
     } else {
       return ctx.fail()
     }
