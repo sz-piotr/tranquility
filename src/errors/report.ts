@@ -1,6 +1,6 @@
-import { Error } from './model'
+import { CompilationError } from './CompilationError'
 
-export function report (err: Error, source: string) {
+export function report (err: CompilationError, source: string) {
   const { start, end } = err.span
 
   const at = `${start.line + 1}:${start.column + 1}`

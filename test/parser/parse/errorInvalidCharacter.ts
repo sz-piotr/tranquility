@@ -15,7 +15,7 @@ export function errorInvalidCharacter () {
 
     expect(resetRanges(result.ast)).to.deep.equal(expected)
     expect(result.errors).to.deep.equal([
-      Err.InvalidCharacter('§', {
+      new Err.InvalidCharacter('§', {
         start: location(4, 0, 4),
         end: location(5, 0, 5)
       })

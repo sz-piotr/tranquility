@@ -1,7 +1,7 @@
 import { Environment } from './Environment'
 import { parse } from '../parser/parse'
 import * as Ast from '../parser/ast'
-import { Error, report } from '../errors'
+import { CompilationError, report } from '../errors'
 
 export class Interpreter {
   private environment = new Environment()
@@ -19,7 +19,7 @@ export class Interpreter {
     }
   }
 
-  private report (errors: Error[], source: string) {
+  private report (errors: CompilationError[], source: string) {
     for (const error of errors) {
       console.error(report(error, source))
     }

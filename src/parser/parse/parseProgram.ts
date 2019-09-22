@@ -24,9 +24,9 @@ function handleError (ctx: ParserContext, e: unknown) {
   if (e instanceof TypeError && e.message === 'Unexpected token') {
     const token = ctx.peek()
     if (token.kind === TokenKind.UNRECOGNIZED) {
-      ctx.error(Err.InvalidCharacter(token.value, token))
+      ctx.error(new Err.InvalidCharacter(token.value, token))
     } else {
-      ctx.error(Err.UnexpectedToken(token.value, token))
+      ctx.error(new Err.UnexpectedToken(token.value, token))
     }
     synchronize(ctx)
   } else {

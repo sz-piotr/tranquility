@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { Error, report } from '../../src/errors'
+import { CompilationError, report } from '../../src/errors'
 import { location } from '../../src/parser/location'
 
 describe('report', () => {
@@ -8,7 +8,7 @@ describe('report', () => {
       'bla bla bla\r\n' +
       '  foo(bar + 1)\n' +
       'bla bla bla'
-    const error = new Error('some message', {
+    const error = new CompilationError('some message', {
       start: location(19, 1, 6),
       end: location(22, 1, 9)
     })

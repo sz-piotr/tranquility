@@ -1,9 +1,9 @@
 import { Scanner } from '../scanner/Scanner'
-import * as Err from '../../errors'
+import { CompilationError } from '../../errors'
 import { TokenKind } from '../tokens'
 
 export class ParserContext {
-  readonly errors: Err.Error[] = []
+  readonly errors: CompilationError[] = []
 
   constructor (
     private scanner: Scanner
@@ -29,7 +29,7 @@ export class ParserContext {
     return this.fail()
   }
 
-  error (e: Err.Error) {
+  error (e: CompilationError) {
     this.errors.push(e)
   }
 
