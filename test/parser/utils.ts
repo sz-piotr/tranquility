@@ -1,29 +1,37 @@
 import { Token, TokenKind } from '../../src/parser/tokens'
 import { location, SPAN_ZERO } from '../../src/parser/location'
 import { AstNode } from '../../src/parser/ast'
+import { CompilationError } from '../../src/errors'
 
-export function resetRanges (ast: AstNode): AstNode {
+export function resetAstSpans (ast: AstNode): AstNode {
   ast.span = SPAN_ZERO
   if (ast.kind === 'Program') {
-    ast.statements.forEach(resetRanges)
+    ast.statements.forEach(resetAstSpans)
   } else if (ast.kind === 'VariableDeclaration') {
-    resetRanges(ast.identifier)
-    resetRanges(ast.value)
+    resetAstSpans(ast.identifier)
+    resetAstSpans(ast.value)
   } else if (ast.kind === 'VariableAssignment') {
-    resetRanges(ast.left)
-    resetRanges(ast.right)
+    resetAstSpans(ast.left)
+    resetAstSpans(ast.right)
   } else if (ast.kind === 'BinaryOperation') {
-    resetRanges(ast.left)
-    resetRanges(ast.right)
+    resetAstSpans(ast.left)
+    resetAstSpans(ast.right)
   } else if (ast.kind === 'FunctionCall') {
-    resetRanges(ast.callee)
-    ast.parameters.forEach(resetRanges)
+    resetAstSpans(ast.callee)
+    ast.parameters.forEach(resetAstSpans)
   } else if (ast.kind === 'FunctionDeclaration') {
-    resetRanges(ast.identifier)
-    ast.parameters.forEach(resetRanges)
-    ast.body.forEach(resetRanges)
+    resetAstSpans(ast.identifier)
+    ast.parameters.forEach(resetAstSpans)
+    ast.body.forEach(resetAstSpans)
   }
   return ast
+}
+
+export function resetErrorSpans (errors: CompilationError[]) {
+  for (const error of errors) {
+    error.span = SPAN_ZERO
+  }
+  return errors
 }
 
 type LocationArray = [number, number, number]

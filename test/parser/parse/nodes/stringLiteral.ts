@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { parse } from '../../../../src/parser/parse'
 import * as Ast from '../../../../src/parser/ast'
-import { resetRanges } from '../../utils'
+import { resetAstSpans } from '../../utils'
 
 export function stringLiteral () {
   it('stringLiteral', () => {
@@ -32,7 +32,7 @@ export function stringLiteral () {
       new Ast.StringLiteral('Invalid escape  xd')
     ])
 
-    expect(resetRanges(result.ast)).to.deep.equal(expected)
+    expect(resetAstSpans(result.ast)).to.deep.equal(expected)
     // TODO: Check errors!
     // expect(result.errors).to.deep.equal([])
   })

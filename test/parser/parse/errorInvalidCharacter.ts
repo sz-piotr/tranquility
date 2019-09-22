@@ -3,7 +3,7 @@ import { parse } from '../../../src/parser/parse'
 import { location } from '../../../src/parser/location'
 import * as Ast from '../../../src/parser/ast'
 import * as Err from '../../../src/errors'
-import { resetRanges } from '../utils'
+import { resetAstSpans } from '../utils'
 
 export function errorInvalidCharacter () {
   it('errorInvalidCharacter', () => {
@@ -13,7 +13,7 @@ export function errorInvalidCharacter () {
       new Ast.Identifier('foo')
     ])
 
-    expect(resetRanges(result.ast)).to.deep.equal(expected)
+    expect(resetAstSpans(result.ast)).to.deep.equal(expected)
     expect(result.errors).to.deep.equal([
       new Err.InvalidCharacter('§', {
         start: location(4, 0, 4),

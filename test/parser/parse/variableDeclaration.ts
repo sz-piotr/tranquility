@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { parse } from '../../../src/parser/parse'
 import * as Ast from '../../../src/parser/ast'
-import { resetRanges } from '../utils'
+import { resetAstSpans } from '../utils'
 
 export function variableDeclaration () {
   it('variableDeclaration', () => {
@@ -16,6 +16,6 @@ export function variableDeclaration () {
       )
     ])
 
-    expect(resetRanges(result.ast)).to.deep.equal(expected)
+    expect(resetAstSpans(result.ast)).to.deep.equal(expected)
   })
 }
