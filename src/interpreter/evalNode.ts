@@ -7,6 +7,7 @@ import { evalIdentifier } from './evalIdentifier'
 import { evalNumberLiteral } from './evalNumberLiteral'
 import { evalVariableAssignment } from './evalVariableAssignment'
 import { evalVariableDeclaration } from './evalVariableDeclaration'
+import { evalStringLiteral } from './evalStringLiteral'
 
 export function evalNode (
   node: AstNode,
@@ -20,6 +21,7 @@ export function evalNode (
     case 'VariableDeclaration': return evalVariableDeclaration(node, environment)
     case 'VariableAssignment': return evalVariableAssignment(node, environment)
     case 'Identifier': return evalIdentifier(node, environment)
+    case 'StringLiteral': return evalStringLiteral(node)
     default: throw new TypeError('Unsupported node kind')
   }
 }
