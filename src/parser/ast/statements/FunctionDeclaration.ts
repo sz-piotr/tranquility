@@ -3,7 +3,7 @@ import { Statement } from '../common/Statement'
 import { SPAN_ZERO } from '../../location'
 
 export class FunctionDeclaration {
-  public kind = 'FunctionDeclaration' as const
+  kind = 'FunctionDeclaration' as const
   constructor (
     public identifier: Identifier,
     public parameters: Identifier[],

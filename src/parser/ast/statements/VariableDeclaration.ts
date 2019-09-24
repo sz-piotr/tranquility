@@ -3,7 +3,7 @@ import { Expression } from '../common/Expression'
 import { SPAN_ZERO } from '../../location'
 
 export class VariableDeclaration {
-  public kind = 'VariableDeclaration' as const
+  kind = 'VariableDeclaration' as const
   constructor (
     public identifier: Identifier,
     public value: Expression,

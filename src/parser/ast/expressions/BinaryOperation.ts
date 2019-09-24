@@ -2,7 +2,7 @@ import { Expression } from '../common/Expression'
 import { SPAN_ZERO } from '../../location'
 
 export class BinaryOperation {
-  public kind = 'BinaryOperation' as const
+  kind = 'BinaryOperation' as const
   constructor (
     public operator: BinaryOperator,
     public left: Expression,

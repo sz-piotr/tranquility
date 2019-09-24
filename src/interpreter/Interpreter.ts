@@ -1,7 +1,7 @@
 import { Environment } from './Environment'
 import { parse } from '../parser/parse'
-import * as Ast from '../parser/ast'
 import { CompilationError, report } from '../errors'
+import { evalNode } from './evalNode'
 
 export class Interpreter {
   private environment = new Environment()
@@ -12,7 +12,7 @@ export class Interpreter {
       this.report(errors, source)
     } else {
       try {
-        return this.evalNode(ast)
+        return evalNode(ast, this.environment)
       } catch (e) {
         console.error(e)
       }
@@ -23,68 +23,5 @@ export class Interpreter {
     for (const error of errors) {
       console.error(report(error, source))
     }
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  private evalNode (node: Ast.AstNode): any {
-    switch (node.kind) {
-      case 'Program': return this.evalProgram(node)
-      case 'BinaryOperation': return this.evalBinaryOperation(node)
-      case 'NumberLiteral': return this.evalNumberLiteral(node)
-      case 'BooleanLiteral': return this.evalBooleanLiteral(node)
-      case 'VariableDeclaration': return this.evalVariableDeclaration(node)
-      case 'VariableAssignment': return this.evalVariableAssignment(node)
-      case 'Identifier': return this.evalIdentifier(node)
-      default: throw new TypeError('Unsupported node kind')
-    }
-  }
-
-  private evalProgram (node: Ast.Program) {
-    let result
-    for (const child of node.statements) {
-      result = this.evalNode(child)
-    }
-    return result
-  }
-
-  private evalVariableDeclaration (node: Ast.VariableDeclaration) {
-    this.environment.define(
-      node.identifier.value,
-      this.evalNode(node.value)
-    )
-  }
-
-  private evalVariableAssignment (node: Ast.VariableAssignment) {
-    if (node.left.kind !== 'Identifier') {
-      throw new TypeError('Invalid assignment target')
-    }
-    this.environment.assign(
-      node.left.value,
-      this.evalNode(node.right)
-    )
-  }
-
-  private evalBinaryOperation (node: Ast.BinaryOperation) {
-    const operator = node.operator
-    const left = this.evalNode(node.left)
-    const right = this.evalNode(node.right)
-    switch (operator) {
-      case Ast.BinaryOperator.ADD: return left + right
-      case Ast.BinaryOperator.SUBTRACT: return left - right
-      case Ast.BinaryOperator.MULTIPLY: return left * right
-      case Ast.BinaryOperator.DIVIDE: return left / right
-    }
-  }
-
-  private evalNumberLiteral (node: Ast.NumberLiteral) {
-    return Number.parseFloat(node.value)
-  }
-
-  private evalBooleanLiteral (node: Ast.BooleanLiteral) {
-    return node.value
-  }
-
-  private evalIdentifier (node: Ast.Identifier) {
-    return this.environment.get(node.value)
   }
 }

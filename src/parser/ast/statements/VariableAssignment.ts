@@ -10,7 +10,7 @@ export enum AssignmentOperator {
 }
 
 export class VariableAssignment {
-  public kind = 'VariableAssignment' as const
+  kind = 'VariableAssignment' as const
   constructor (
     public operator: AssignmentOperator,
     public left: Expression,

@@ -3,7 +3,7 @@ import { Type } from '../expressions/Type'
 import { SPAN_ZERO } from '../../location'
 
 export class FieldDeclaration {
-  public kind = 'FieldDeclaration' as const
+  kind = 'FieldDeclaration' as const
   constructor (
     public identifier: Identifier,
     public type: Type,

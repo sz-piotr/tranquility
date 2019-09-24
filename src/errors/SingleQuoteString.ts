@@ -6,7 +6,7 @@ export class SingleQuoteString extends CompilationError {
     super(
       'Single quote string literal',
       'In Tranquility only "double quote strings" are supported.',
-      span,
+      span
     )
   }
 }

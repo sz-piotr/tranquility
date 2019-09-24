@@ -5,7 +5,7 @@ import { Statement } from '../common/Statement'
 import { SPAN_ZERO } from '../../location'
 
 export class MethodDeclaration {
-  public kind = 'MethodDeclaration' as const
+  kind = 'MethodDeclaration' as const
   constructor (
     public identifier: Identifier,
     public parameters: FunctionParameter[],

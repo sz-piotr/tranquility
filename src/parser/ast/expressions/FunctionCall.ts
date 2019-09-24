@@ -2,7 +2,7 @@ import { Expression } from '../common/Expression'
 import { SPAN_ZERO } from '../../location'
 
 export class FunctionCall {
-  public kind = 'FunctionCall' as const
+  kind = 'FunctionCall' as const
   constructor (
     public callee: Expression,
     public parameters: Expression[],

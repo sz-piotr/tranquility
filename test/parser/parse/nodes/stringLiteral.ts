@@ -39,7 +39,7 @@ export function stringLiteral () {
       new Err.UnterminatedString(),
       new Err.InvalidStringEscape('\\'),
       new Err.UnterminatedString(),
-      new Err.InvalidStringEscape('\\a'),
+      new Err.InvalidStringEscape('\\a')
     ]
 
     expect(resetAstSpans(result.ast)).to.deep.equal(expected)
