@@ -8,12 +8,12 @@ describe('report', () => {
       'bla bla bla\r\n' +
       '  foo(bar + 1)\n' +
       'bla bla bla'
-    const error = new CompilationError('some message', {
+    const error = new CompilationError('some message', '', {
       start: location(19, 1, 6),
       end: location(22, 1, 9)
     })
     expect(report(error, source)).to.equal(
-      'Error: some message at 2:7\n' +
+      'Error at 2:7: some message\n' +
       '   2|   foo(bar + 1)\n' +
       '            ^^^'
     )

@@ -14,7 +14,11 @@ export function report (err: CompilationError, source: string) {
   const spaces = ' '.repeat(lineNumber.length + start.column)
   const underline = spaces + squiggles
 
-  return `Error: ${err.message} at ${at}\n${line}\n${underline}`
+  let message = `Error at ${at}: ${err.message}\n${line}\n${underline}`
+  if (err.description) {
+    message += `\n${err.description}`
+  }
+  return message
 }
 
 function findLineEnd (input: string, from: number) {
