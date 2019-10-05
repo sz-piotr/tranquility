@@ -114,4 +114,50 @@ describe('Bytes32Value', () => {
       expect(result.toString()).to.equal(expected)
     })
   })
+
+  describe('addUnsigned', () => {
+    it('can add without carry', () => {
+      const a = '0123456789abcd'.padEnd(64, '0')
+      const b = 'dcba9876543210'.padEnd(64, '0')
+      const c = 'dddddddddddddd'.padEnd(64, '0')
+
+      expect(
+        Bytes32Value.fromString(a)
+          .addUnsigned(Bytes32Value.fromString(b))
+          .toString()
+      ).to.equal(c)
+    })
+
+    it('can add with carry', () => {
+      const a = '1'.padStart(64, '0')
+      const b = 'e'.padEnd(64, 'f')
+      const c = 'f'.padEnd(64, '0')
+
+      expect(
+        Bytes32Value.fromString(a)
+          .addUnsigned(Bytes32Value.fromString(b))
+          .toString()
+      ).to.equal(c)
+    })
+
+    it('throws when overflows by one', () => {
+      const a = '1'.padStart(64, '0')
+      const b = ALL_ONES
+
+      expect(() =>
+        Bytes32Value.fromString(a)
+          .addUnsigned(Bytes32Value.fromString(b))
+      ).to.throw('Overflow')
+    })
+
+    it('throws when overflows by a lot', () => {
+      const a = '8'.padEnd(64, '0')
+      const b = '8'.padEnd(64, '0')
+
+      expect(() =>
+        Bytes32Value.fromString(a)
+          .addUnsigned(Bytes32Value.fromString(b))
+      ).to.throw('Overflow')
+    })
+  })
 })
