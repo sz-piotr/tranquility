@@ -3,7 +3,7 @@ import { TokenKind } from '../tokens'
 import { parseExpression } from './parseExpression'
 import { parseLiteral } from './parseLiteral'
 
-export function parseFactor (ctx: ParserContext) {
+export function parseLiteralOrParenthesized (ctx: ParserContext) {
   if (ctx.at(TokenKind.PAREN_OPEN)) {
     ctx.next()
     const expression = parseExpression(ctx)

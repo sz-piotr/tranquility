@@ -2,11 +2,11 @@ import { ParserContext } from './ParserContext'
 import * as Ast from '../ast'
 import { TokenKind } from '../tokens'
 import { parseExpression } from './parseExpression'
-import { parseFactor } from './parseFactor'
+import { parseLiteralOrParenthesized } from './parseLiteralOrParenthesized'
 
 export function parseCallOrFactor (ctx: ParserContext): Ast.Expression {
   const { start } = ctx.peek()
-  let result = parseFactor(ctx)
+  let result = parseLiteralOrParenthesized(ctx)
   while (ctx.at(TokenKind.PAREN_OPEN)) {
     ctx.expect(TokenKind.PAREN_OPEN)
     const parameters: Ast.Expression[] = []

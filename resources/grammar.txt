@@ -178,27 +178,25 @@ UnaryOperator
   | '-'
   | '!'
 
-Access
+(+) Access
   | LiteralOrParenthesized AccessMethod*
 
-AccessMethod
-  | ('.' IDENTIFIER)
+(+) AccessMethod
+  | '.' IDENTIFIER
   | '[' Expression ']'
   | '(' FunctionParameters? ')'
 
-FunctionCall
-  | Access '(' FunctionParameters? ')'
-
-FunctionParameters
+(+) FunctionParameters
   | Expression (',' Expression)* ','?
 
-LiteralOrParenthesized
+(+) LiteralOrParenthesized
   | '(' Expression ')'
   | Literal
 
-Literal
+(+) Literal
   | Number
-  | String
+  | IDENTIFIER
+  | STRING
   | 'true'
   | 'false'
   | 'zero'
@@ -216,6 +214,3 @@ Hexadecimal
 
 Binary
   | '0b' BINARY_DIGIT ('_'? BINARY_DIGIT)*
-
-String
-  | // TODO:
