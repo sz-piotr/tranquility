@@ -5,7 +5,7 @@ import { UnaryOperation } from '../ast'
 import { getUnaryOperator } from './getOperator'
 
 export function parseUnaryOperation (ctx: ParserContext) {
-  if (ctx.at(TokenKind.PLUS) || ctx.at(TokenKind.MINUS) || ctx.at(TokenKind.BANG)) {
+  if (ctx.atAnyOf(TokenKind.PLUS, TokenKind.MINUS, TokenKind.BANG)) {
     const { start, kind } = ctx.next()
     const expression = parseAccess(ctx)
     const { end } = expression.span

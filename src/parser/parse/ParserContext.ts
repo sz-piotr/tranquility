@@ -22,6 +22,11 @@ export class ParserContext {
     return token.kind === kind
   }
 
+  atAnyOf (...kinds: TokenKind[]) {
+    const token = this.scanner.peek()
+    return kinds.includes(token.kind)
+  }
+
   expect (kind: TokenKind) {
     if (this.at(kind)) {
       return this.scanner.next()
