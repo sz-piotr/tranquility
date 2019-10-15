@@ -1,7 +1,7 @@
 import { ParserContext } from './ParserContext'
 import * as Ast from '../ast'
 import { TokenKind } from '../tokens'
-import { getOperation } from './getOperation'
+import { getBinaryOperator } from './getOperator'
 import { parseCallOrFactor } from './parseCallOrFactor'
 
 export function parseTerm (ctx: ParserContext) {
@@ -11,7 +11,7 @@ export function parseTerm (ctx: ParserContext) {
     const { kind } = ctx.next()
     const right = parseCallOrFactor(ctx)
     result = new Ast.BinaryOperation(
-      getOperation(kind),
+      getBinaryOperator(kind),
       result,
       right,
       { start, end: ctx.peek().end }

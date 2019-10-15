@@ -12,7 +12,7 @@ import { evalStringLiteral } from './evalStringLiteral'
 export function evalNode (
   node: AstNode,
   environment: Environment
-): any {
+): any { // TODO: return TranquilityValue
   switch (node.kind) {
     case 'Program': return evalProgram(node, environment)
     case 'BinaryOperation': return evalBinaryOperation(node, environment)

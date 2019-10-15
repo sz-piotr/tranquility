@@ -6,6 +6,7 @@ import { IndexAccess } from '../expressions/IndexAccess'
 import { MemberAccess } from '../expressions/MemberAccess'
 import { NumberLiteral } from '../literals/NumberLiteral'
 import { StringLiteral } from '../literals/StringLiteral'
+import { UnaryOperation } from '../expressions/UnaryOperation'
 import { ZeroLiteral } from '../literals/ZeroLiteral'
 
 export type Expression
@@ -17,4 +18,5 @@ export type Expression
   | MemberAccess
   | NumberLiteral
   | StringLiteral
+  | UnaryOperation
   | ZeroLiteral

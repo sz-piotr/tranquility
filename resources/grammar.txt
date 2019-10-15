@@ -163,17 +163,17 @@ AddSubOperator
   | '-'
 
 MulDivRem
-  | Unary (MulDivRemOperator Unary)*
+  | UnaryOperation (MulDivRemOperator UnaryOperation)*
 
 MulDivRemOperator
   | '*'
   | '/'
   | '%'
 
-Unary
+(+) UnaryOperation
   | UnaryOperator? Access
 
-UnaryOperator
+(+) UnaryOperator
   | '+'
   | '-'
   | '!'
