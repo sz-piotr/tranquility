@@ -16,10 +16,13 @@ export enum BinaryOperator {
   SUBTRACT,
   MULTIPLY,
   DIVIDE,
+  REMAINDER,
   EQUAL,
   NOT_EQUAL,
   GREATER,
   GREATER_OR_EQUAL,
   LESS,
-  LESS_OR_EQUAL
+  LESS_OR_EQUAL,
+  AND,
+  OR
 }

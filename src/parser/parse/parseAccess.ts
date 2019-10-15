@@ -7,8 +7,8 @@ import { parseIndexAccess } from './parseIndexAccess'
 import { parseFunctionCall } from './parseFunctionCall'
 
 export function parseAccess (ctx: ParserContext) {
-  const { start } = ctx.peek()
   let result: Expression = parseLiteralOrParenthesized(ctx)
+  const { start } = result.span
 
   while (true) {
     if (ctx.at(TokenKind.DOT)) {

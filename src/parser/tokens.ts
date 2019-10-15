@@ -83,6 +83,8 @@ export enum TokenKind {
   WHILE,
   IF,
   ELSE,
+  AND,
+  OR,
   ZERO,
   RETURN,
 

@@ -20,6 +20,8 @@ function getIdentifierType (identifier: string) {
     case 'while': return TokenKind.WHILE
     case 'if': return TokenKind.IF
     case 'else': return TokenKind.ELSE
+    case 'and': return TokenKind.AND
+    case 'or': return TokenKind.OR
     case 'zero': return TokenKind.ZERO
     case 'return': return TokenKind.RETURN
     case 'true': return TokenKind.BOOLEAN

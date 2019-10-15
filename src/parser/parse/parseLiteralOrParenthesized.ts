@@ -5,9 +5,10 @@ import { parseLiteral } from './parseLiteral'
 
 export function parseLiteralOrParenthesized (ctx: ParserContext) {
   if (ctx.at(TokenKind.PAREN_OPEN)) {
-    ctx.next()
+    const { start } = ctx.next()
     const expression = parseExpression(ctx)
-    ctx.expect(TokenKind.PAREN_CLOSE)
+    const { end } = ctx.expect(TokenKind.PAREN_CLOSE)
+    expression.span = { start, end }
     return expression
   }
   return parseLiteral(ctx)

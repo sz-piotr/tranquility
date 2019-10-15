@@ -108,7 +108,7 @@ Expression
   | ExceptionExpression
 
 ExceptionExpression
-  | VariableAssignment '->' VariableAssignment
+  | VariableAssignment ('->' VariableAssignment)?
 
 VariableAssignment
   | LogicalOr AssignmentOperator LogicalOr
@@ -162,10 +162,10 @@ AddSubOperator
   | '+'
   | '-'
 
-MulDivRem
+(+) MulDivRem
   | UnaryOperation (MulDivRemOperator UnaryOperation)*
 
-MulDivRemOperator
+(+) MulDivRemOperator
   | '*'
   | '/'
   | '%'
