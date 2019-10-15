@@ -1,7 +1,7 @@
 import { ParserContext } from './ParserContext'
-import { parseAddSub } from './parseAddSub'
 import { Expression } from '../ast'
+import { parseComparison } from './parseComparison'
 
 export function parseExpression (ctx: ParserContext): Expression {
-  return parseAddSub(ctx)
+  return parseComparison(ctx)
 }

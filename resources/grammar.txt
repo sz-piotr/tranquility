@@ -142,14 +142,12 @@ Equality
 
 EqualityOperator
   | '=='
-  | '==='
   | '!='
-  | '!=='
 
-Comparison
+(+) Comparison
   | AddSub (ComparisonOperator AddSub)*
 
-ComparisonOperator
+(+) ComparisonOperator
   | '>='
   | '>'
   | '<='
