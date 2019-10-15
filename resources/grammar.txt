@@ -83,6 +83,19 @@ FunctionDeclaration
 VariableDeclaration
   | 'let' FieldDeclaration
 
+VariableAssignment
+  | Expression AssignmentOperator Expression
+
+AssignmentOperator
+  | '='
+  | '-='
+  | '+='
+  | '*='
+  | '/='
+  | '%='
+  | '^='
+  | '&='
+
 IfStatement
   | 'if' Expression Block ElseStatement?
 
@@ -108,20 +121,7 @@ Expression
   | ExceptionExpression
 
 ExceptionExpression
-  | VariableAssignment ('->' VariableAssignment)?
-
-VariableAssignment
-  | LogicalOr (AssignmentOperator LogicalOr)?
-
-AssignmentOperator
-  | '='
-  | '-='
-  | '+='
-  | '*='
-  | '/='
-  | '%='
-  | '^='
-  | '&='
+  | LogicalOr ('->' LogicalOr)?
 
 (+) LogicalOr
   | LogicalAnd ('or' LogicalAnd)*
