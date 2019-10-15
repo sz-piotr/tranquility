@@ -1,14 +1,14 @@
 import { ParserContext } from './ParserContext'
 import { TokenKind } from '../tokens'
-import { parseMulDivRem } from './parseMulDivRem'
+import { parseLogicalAnd } from './parseLogicalAnd'
 import { makeBinaryOperation } from './makeBinaryOperation'
 
-export function parseAddSub (ctx: ParserContext) {
-  let left = parseMulDivRem(ctx)
+export function parseLogicalOr (ctx: ParserContext) {
+  let left = parseLogicalAnd(ctx)
 
-  while (ctx.atAnyOf(TokenKind.PLUS, TokenKind.MINUS)) {
+  while (ctx.atAnyOf(TokenKind.OR)) {
     const { kind } = ctx.next()
-    const right = parseMulDivRem(ctx)
+    const right = parseLogicalAnd(ctx)
     left = makeBinaryOperation(kind, left, right)
   }
 

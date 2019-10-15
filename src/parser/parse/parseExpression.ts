@@ -1,7 +1,7 @@
 import { ParserContext } from './ParserContext'
 import { Expression } from '../ast'
-import { parseComparison } from './parseComparison'
+import { parseLogicalOr } from './parseLogicalOr'
 
 export function parseExpression (ctx: ParserContext): Expression {
-  return parseComparison(ctx)
+  return parseLogicalOr(ctx)
 }

@@ -111,7 +111,7 @@ ExceptionExpression
   | VariableAssignment ('->' VariableAssignment)?
 
 VariableAssignment
-  | LogicalOr AssignmentOperator LogicalOr
+  | LogicalOr (AssignmentOperator LogicalOr)?
 
 AssignmentOperator
   | '='
@@ -123,24 +123,16 @@ AssignmentOperator
   | '^='
   | '&='
 
-LogicalOr
-  | LogicalAnd (LogicalOrOperator LogicalAnd)*
+(+) LogicalOr
+  | LogicalAnd ('or' LogicalAnd)*
 
-LogicalOrOperator
-  | 'or'
-  | '||'
+(+) LogicalAnd
+  | Equality ('and' Equality)*
 
-LogicalAnd
-  | Equality (LogicalAndOperator Equality)*
-
-LogicalAndOperator
-  | 'and'
-  | '&&'
-
-Equality
+(+) Equality
   | Comparison (EqualityOperator Comparison)*
 
-EqualityOperator
+(+) EqualityOperator
   | '=='
   | '!='
 

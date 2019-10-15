@@ -1,14 +1,14 @@
 import { ParserContext } from './ParserContext'
 import { TokenKind } from '../tokens'
-import { parseMulDivRem } from './parseMulDivRem'
+import { parseComparison } from './parseComparison'
 import { makeBinaryOperation } from './makeBinaryOperation'
 
-export function parseAddSub (ctx: ParserContext) {
-  let left = parseMulDivRem(ctx)
+export function parseEquality (ctx: ParserContext) {
+  let left = parseComparison(ctx)
 
-  while (ctx.atAnyOf(TokenKind.PLUS, TokenKind.MINUS)) {
+  while (ctx.atAnyOf(TokenKind.EQUALS_EQUALS, TokenKind.BANG_EQUALS)) {
     const { kind } = ctx.next()
-    const right = parseMulDivRem(ctx)
+    const right = parseComparison(ctx)
     left = makeBinaryOperation(kind, left, right)
   }
 
