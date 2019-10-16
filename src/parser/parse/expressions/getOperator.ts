@@ -1,5 +1,5 @@
-import { TokenKind } from '../tokens'
-import { UnaryOperator, BinaryOperator } from '../ast'
+import { TokenKind } from '../../tokens'
+import { UnaryOperator, BinaryOperator } from '../../ast'
 
 export function getBinaryOperator (kind: TokenKind): BinaryOperator {
   switch (kind) {

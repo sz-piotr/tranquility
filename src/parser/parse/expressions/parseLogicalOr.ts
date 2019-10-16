@@ -1,5 +1,5 @@
-import { ParserContext } from './ParserContext'
-import { TokenKind } from '../tokens'
+import { ParserContext } from '../ParserContext'
+import { TokenKind } from '../../tokens'
 import { parseLogicalAnd } from './parseLogicalAnd'
 import { makeBinaryOperation } from './makeBinaryOperation'
 

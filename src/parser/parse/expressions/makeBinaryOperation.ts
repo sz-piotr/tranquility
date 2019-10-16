@@ -1,5 +1,5 @@
-import { Expression, BinaryOperation } from '../ast'
-import { TokenKind } from '../tokens'
+import { Expression, BinaryOperation } from '../../ast'
+import { TokenKind } from '../../tokens'
 import { getBinaryOperator } from './getOperator'
 
 export function makeBinaryOperation (kind: TokenKind, left: Expression, right: Expression) {

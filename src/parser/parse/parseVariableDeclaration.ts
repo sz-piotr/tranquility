@@ -1,7 +1,7 @@
 import { ParserContext } from './ParserContext'
 import { TokenKind } from '../tokens'
 import * as Ast from '../ast'
-import { parseExpression } from './parseExpression'
+import { parseExpression } from './expressions/parseExpression'
 import { parseIdentifier } from './literals/parseIdentifier'
 
 export function parseVariableDeclaration (ctx: ParserContext) {

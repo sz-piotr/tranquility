@@ -1,8 +1,8 @@
-import { ParserContext } from './ParserContext'
-import { TokenKind } from '../tokens'
-import { Expression, FunctionCall } from '../ast'
+import { ParserContext } from '../ParserContext'
+import { TokenKind } from '../../tokens'
+import { Expression, FunctionCall } from '../../ast'
 import { parseExpression } from './parseExpression'
-import { Location } from '../location'
+import { Location } from '../../location'
 
 export function parseFunctionCall (ctx: ParserContext, result: Expression, start: Location) {
   ctx.expect(TokenKind.PAREN_OPEN)

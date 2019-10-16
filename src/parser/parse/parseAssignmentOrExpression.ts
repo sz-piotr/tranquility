@@ -1,7 +1,7 @@
 import { ParserContext } from './ParserContext'
 import { TokenKind } from '../tokens'
 import * as Ast from '../ast'
-import { parseExpression } from './parseExpression'
+import { parseExpression } from './expressions/parseExpression'
 
 export function parseAssignmentOrExpression (ctx: ParserContext) {
   const left = parseExpression(ctx)

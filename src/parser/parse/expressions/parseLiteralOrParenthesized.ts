@@ -1,7 +1,7 @@
-import { ParserContext } from './ParserContext'
-import { TokenKind } from '../tokens'
+import { ParserContext } from '../ParserContext'
+import { TokenKind } from '../../tokens'
 import { parseExpression } from './parseExpression'
-import { parseLiteral } from './literals/parseLiteral'
+import { parseLiteral } from '../literals/parseLiteral'
 
 export function parseLiteralOrParenthesized (ctx: ParserContext) {
   if (ctx.at(TokenKind.PAREN_OPEN)) {

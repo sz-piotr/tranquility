@@ -1,7 +1,7 @@
-import { ParserContext } from './ParserContext'
-import { TokenKind } from '../tokens'
+import { ParserContext } from '../ParserContext'
+import { TokenKind } from '../../tokens'
 import { parseLogicalOr } from './parseLogicalOr'
-import { ExceptionExpression } from '../ast'
+import { ExceptionExpression } from '../../ast'
 
 export function parseExceptionExpression (ctx: ParserContext) {
   let expression = parseLogicalOr(ctx)

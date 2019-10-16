@@ -1,7 +1,7 @@
-import { ParserContext } from './ParserContext'
-import { TokenKind } from '../tokens'
+import { ParserContext } from '../ParserContext'
+import { TokenKind } from '../../tokens'
 import { parseAccess } from './parseAccess'
-import { UnaryOperation } from '../ast'
+import { UnaryOperation } from '../../ast'
 import { getUnaryOperator } from './getOperator'
 
 export function parseUnaryOperation (ctx: ParserContext) {
