@@ -1,5 +1,6 @@
 import { BinaryOperation } from '../expressions/BinaryOperation'
 import { BooleanLiteral } from '../literals/BooleanLiteral'
+import { ExceptionExpression } from '../expressions/ExceptionExpression'
 import { FunctionCall } from '../expressions/FunctionCall'
 import { Identifier } from '../expressions/Identifier'
 import { IndexAccess } from '../expressions/IndexAccess'
@@ -12,6 +13,7 @@ import { ZeroLiteral } from '../literals/ZeroLiteral'
 export type Expression
   = BinaryOperation
   | BooleanLiteral
+  | ExceptionExpression
   | FunctionCall
   | Identifier
   | IndexAccess
