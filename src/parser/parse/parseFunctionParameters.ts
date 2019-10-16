@@ -1,7 +1,7 @@
 import { ParserContext } from './ParserContext'
 import * as Ast from '../ast'
 import { TokenKind } from '../tokens'
-import { parseIdentifier } from './parseIdentifier'
+import { parseIdentifier } from './literals/parseIdentifier'
 
 export function parseFunctionParameters (ctx: ParserContext) {
   const parameters: Ast.Identifier[] = []

@@ -1,6 +1,6 @@
 import { Expression } from '../common/Expression'
 import { SPAN_ZERO } from '../../location'
-import { Identifier } from './Identifier'
+import { Identifier } from '../literals/Identifier'
 
 export class MemberAccess {
   kind = 'MemberAccess' as const

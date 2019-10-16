@@ -1,4 +1,4 @@
-import { Identifier } from './Identifier'
+import { Identifier } from '../literals/Identifier'
 import { Type } from './Type'
 import { SPAN_ZERO } from '../../location'
 

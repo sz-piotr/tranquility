@@ -1,5 +1,5 @@
-import { ParserContext } from './ParserContext'
-import { TokenKind } from '../tokens'
+import { ParserContext } from '../ParserContext'
+import { TokenKind } from '../../tokens'
 import { parseNumber } from './parseNumber'
 import { parseBoolean } from './parseBoolean'
 import { parseIdentifier } from './parseIdentifier'

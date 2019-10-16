@@ -1,5 +1,5 @@
 import { ParserContext } from './ParserContext'
-import { parseIdentifier } from './parseIdentifier'
+import { parseIdentifier } from './literals/parseIdentifier'
 import { Expression, MemberAccess } from '../ast'
 import { Location } from '../location'
 import { TokenKind } from '../tokens'

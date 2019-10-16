@@ -1,4 +1,4 @@
-import { Identifier } from '../expressions/Identifier'
+import { Identifier } from '../literals/Identifier'
 import { Type } from '../expressions/Type'
 import { SPAN_ZERO } from '../../location'
 

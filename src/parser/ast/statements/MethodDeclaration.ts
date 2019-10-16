@@ -1,4 +1,4 @@
-import { Identifier } from '../expressions/Identifier'
+import { Identifier } from '../literals/Identifier'
 import { FunctionParameter } from '../expressions/FunctionParameter'
 import { Type } from '../expressions/Type'
 import { Statement } from '../common/Statement'

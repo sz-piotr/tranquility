@@ -1,7 +1,7 @@
-import { ParserContext } from './ParserContext'
-import { TokenKind } from '../tokens'
-import * as Ast from '../ast'
-import * as Err from '../../errors'
+import { ParserContext } from '../ParserContext'
+import { TokenKind } from '../../tokens'
+import * as Ast from '../../ast'
+import * as Err from '../../../errors'
 
 export function parseString (ctx: ParserContext) {
   const { start } = ctx.at(TokenKind.SINGLE_QUOTE)

@@ -1,7 +1,7 @@
 import { ParserContext } from './ParserContext'
 import { TokenKind } from '../tokens'
 import * as Ast from '../ast'
-import { parseIdentifier } from './parseIdentifier'
+import { parseIdentifier } from './literals/parseIdentifier'
 import { parseFunctionParameters } from './parseFunctionParameters'
 import { parseBlock } from './parseBlock'
 
