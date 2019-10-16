@@ -1,10 +1,10 @@
 import { ParserContext } from './ParserContext'
-import * as Ast from '../ast'
-import * as Err from '../../errors'
 import { TokenKind } from '../tokens'
 import { parseStatement } from './parseStatement'
+import { Program } from '../ast'
+import { InvalidCharacter, UnexpectedToken } from '../../errors'
 
-export function parseProgram (ctx: ParserContext): Ast.Program {
+export function parseProgram (ctx: ParserContext) {
   const children = []
   const { start } = ctx.peek()
 
@@ -17,16 +17,16 @@ export function parseProgram (ctx: ParserContext): Ast.Program {
   }
   ctx.expect(TokenKind.EOF)
 
-  return new Ast.Program(children, { start, end: ctx.peek().end })
+  return new Program(children, { start, end: ctx.peek().end })
 }
 
 function handleError (ctx: ParserContext, e: unknown) {
   if (e instanceof TypeError && e.message === 'Unexpected token') {
     const token = ctx.peek()
     if (token.kind === TokenKind.UNRECOGNIZED) {
-      ctx.error(new Err.InvalidCharacter(token.value, token))
+      ctx.error(new InvalidCharacter(token.value, token))
     } else {
-      ctx.error(new Err.UnexpectedToken(token.value, token))
+      ctx.error(new UnexpectedToken(token.value, token))
     }
     synchronize(ctx)
   } else {

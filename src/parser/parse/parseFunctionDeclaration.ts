@@ -1,9 +1,9 @@
 import { ParserContext } from './ParserContext'
 import { TokenKind } from '../tokens'
-import * as Ast from '../ast'
 import { parseIdentifier } from './literals/parseIdentifier'
 import { parseFunctionParameters } from './parseFunctionParameters'
 import { parseBlock } from './parseBlock'
+import { FunctionDeclaration } from '../ast'
 
 export function parseFunctionDeclaration (ctx: ParserContext) {
   const { start } = ctx.expect(TokenKind.FUNCTION)
@@ -15,7 +15,7 @@ export function parseFunctionDeclaration (ctx: ParserContext) {
 
   const { statements, span: { end } } = parseBlock(ctx)
 
-  return new Ast.FunctionDeclaration(
+  return new FunctionDeclaration(
     identifier,
     parameters,
     statements,

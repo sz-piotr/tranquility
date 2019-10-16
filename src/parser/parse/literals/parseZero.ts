@@ -1,7 +1,7 @@
 import { ParserContext } from '../ParserContext'
-import * as Ast from '../../ast'
+import { ZeroLiteral } from '../../ast'
 
 export function parseZero (ctx: ParserContext) {
   const { start, end } = ctx.next()
-  return new Ast.ZeroLiteral({ start, end })
+  return new ZeroLiteral({ start, end })
 }
