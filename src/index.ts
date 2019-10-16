@@ -33,7 +33,7 @@ function runPrompt () {
     }
 
     const result = interpreter.eval(source)
-    console.log(result)
+    console.log(result.toPrint())
 
     rl.prompt()
   }).on('close', () => {

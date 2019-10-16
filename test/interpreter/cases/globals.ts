@@ -1,5 +1,6 @@
 import { expect } from 'chai'
 import { Interpreter } from '../../../src/interpreter/Interpreter'
+import { NumberValue } from '../../../src/model'
 
 export function globals () {
   it('globals', () => {
@@ -11,6 +12,7 @@ export function globals () {
       c
     `
     const interpreter = new Interpreter()
-    expect(interpreter.eval(source)).to.equal(400)
+    const result = interpreter.eval(source)
+    expect(result).to.deep.equal(new NumberValue(400))
   })
 }

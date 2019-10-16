@@ -5,7 +5,7 @@ import {
   SingleQuoteString,
   UnterminatedString,
   InvalidStringCharacter,
-  InvalidStringEscape,
+  InvalidStringEscape
 } from '../../../errors'
 
 export function parseString (ctx: ParserContext) {

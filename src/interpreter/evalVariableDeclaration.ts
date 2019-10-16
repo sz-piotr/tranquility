@@ -1,13 +1,13 @@
 import { VariableDeclaration } from '../parser/ast'
 import { Environment } from './Environment'
 import { evalNode } from './evalNode'
+import { Nothing } from '../model'
 
 export function evalVariableDeclaration (
   node: VariableDeclaration,
   environment: Environment
 ) {
-  environment.define(
-    node.identifier.value,
-    evalNode(node.value, environment)
-  )
+  const value = evalNode(node.value, environment)
+  environment.define(node.identifier.value, value)
+  return Nothing
 }

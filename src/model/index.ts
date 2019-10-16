@@ -1,1 +1,6 @@
-export { Bytes32Value } from './Bytes32Value'
+export * from './BooleanValue'
+export * from './Bytes32Value'
+export * from './Nothing'
+export * from './NumberValue'
+export * from './ProgramValue'
+export * from './StringValue'

@@ -11,7 +11,7 @@ export function parseExceptionExpression (ctx: ParserContext) {
     const exception = parseLogicalOr(ctx)
     expression = new ExceptionExpression(expression, exception, {
       start: expression.span.start,
-      end: exception.span.end,
+      end: exception.span.end
     })
   }
 

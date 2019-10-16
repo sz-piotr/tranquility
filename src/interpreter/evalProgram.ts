@@ -1,6 +1,7 @@
 import { Program } from '../parser/ast'
 import { evalNode } from './evalNode'
 import { Environment } from './Environment'
+import { Nothing } from '../model'
 
 export function evalProgram (
   node: Program,
@@ -10,5 +11,5 @@ export function evalProgram (
   for (const child of node.statements) {
     result = evalNode(child, environment)
   }
-  return result
+  return result || Nothing
 }

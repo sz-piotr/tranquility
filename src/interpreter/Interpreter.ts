@@ -2,6 +2,7 @@ import { Environment } from './Environment'
 import { parse } from '../parser/parse'
 import { CompilationError, report } from '../errors'
 import { evalNode } from './evalNode'
+import { Nothing } from '../model'
 
 export class Interpreter {
   private environment = new Environment()
@@ -17,6 +18,7 @@ export class Interpreter {
         console.error(e)
       }
     }
+    return Nothing
   }
 
   private report (errors: CompilationError[], source: string) {

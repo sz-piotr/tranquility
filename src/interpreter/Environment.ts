@@ -1,13 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ProgramValue } from '../model'
 
 export class Environment {
-  private values = new Map<string, any>()
+  private values = new Map<string, ProgramValue>()
 
-  define (name: string, value: any) {
+  define (name: string, value: ProgramValue) {
     this.values.set(name, value)
   }
 
-  assign (name: string, value: any) {
+  assign (name: string, value: ProgramValue) {
     if (this.values.has(name)) {
       return this.values.set(name, value)
     } else {
@@ -17,7 +17,8 @@ export class Environment {
 
   get (name: string) {
     if (this.values.has(name)) {
-      return this.values.get(name)
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      return this.values.get(name)!
     } else {
       throw new TypeError(`Variable ${name} is not defined`)
     }

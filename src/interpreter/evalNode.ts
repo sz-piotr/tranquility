@@ -8,11 +8,12 @@ import { evalNumberLiteral } from './evalNumberLiteral'
 import { evalVariableAssignment } from './evalVariableAssignment'
 import { evalVariableDeclaration } from './evalVariableDeclaration'
 import { evalStringLiteral } from './evalStringLiteral'
+import { ProgramValue } from '../model'
 
 export function evalNode (
   node: AstNode,
   environment: Environment
-): any { // TODO: return TranquilityValue
+): ProgramValue {
   switch (node.kind) {
     case 'Program': return evalProgram(node, environment)
     case 'BinaryOperation': return evalBinaryOperation(node, environment)
