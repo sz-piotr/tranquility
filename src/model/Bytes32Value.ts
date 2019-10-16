@@ -12,6 +12,7 @@ export class Bytes32Value {
     if (!RE_BYTES_32.test(value)) {
       throw new TypeError('fromHexString requires a 32 byte hex string')
     }
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     const bytes = value.match(/../g)!.map(x => parseInt(x, 16))
     const data = new Array(16).fill(0)
     for (let dataIndex = 0; dataIndex < 16; dataIndex++) {
@@ -68,7 +69,7 @@ export class Bytes32Value {
 
   addUnsigned (other: Bytes32Value) {
     let carry = 0
-    let result = new Array(16).fill(0)
+    const result = new Array(16).fill(0)
     for (let i = 15; i >= 0; i--) {
       const sum = this.data[i] + other.data[i] + carry
       result[i] = sum & MASK_16BIT

@@ -17,7 +17,7 @@ describe('Bytes32Value', () => {
       '1234567890ABCDEF'.padStart(64, '0'),
       '1234567890abcdef'.padStart(64, '0'),
       '00FFFF00'.repeat(8),
-      'FF0000FF'.repeat(8),
+      'FF0000FF'.repeat(8)
     ]
     for (const input of cases) {
       it(`can be constructed from ${input}`, () => {
@@ -48,7 +48,7 @@ describe('Bytes32Value', () => {
       ['1 AND 1 = 1', ALL_ONES, ALL_ONES, ALL_ONES],
       ['10 AND 00 = 00', DEADBEEF_START, ALL_ZEROS, ALL_ZEROS],
       ['10 AND 11 = 10', DEADBEEF_START, ALL_ONES, DEADBEEF_START],
-      ['10 AND 01 = 00', DEADBEEF_START, DEADBEEF_END, ALL_ZEROS],
+      ['10 AND 01 = 00', DEADBEEF_START, DEADBEEF_END, ALL_ZEROS]
     ]
     for (const [name, a, b, expected] of cases) {
       it(name, () => {
@@ -69,7 +69,7 @@ describe('Bytes32Value', () => {
       ['1 OR 1 = 1', ALL_ONES, ALL_ONES, ALL_ONES],
       ['10 OR 00 = 10', DEADBEEF_START, ALL_ZEROS, DEADBEEF_START],
       ['10 OR 11 = 11', DEADBEEF_START, ALL_ONES, ALL_ONES],
-      ['100 AND 001 = 101', DEADBEEF_START, DEADBEEF_END, DEADBEEF_TWICE],
+      ['100 AND 001 = 101', DEADBEEF_START, DEADBEEF_END, DEADBEEF_TWICE]
     ]
     for (const [name, a, b, expected] of cases) {
       it(name, () => {
@@ -90,7 +90,7 @@ describe('Bytes32Value', () => {
       ['1 OR 1 = 1', ALL_ONES, ALL_ONES, ALL_ZEROS],
       ['10 OR 00 = 10', DEADBEEF_START, ALL_ZEROS, DEADBEEF_START],
       ['10 OR 11 = 01', DEADBEEF_START, ALL_ONES, '21524cc0'.padEnd(64, 'f')],
-      ['100 AND 001 = 101', DEADBEEF_START, DEADBEEF_END, DEADBEEF_TWICE],
+      ['100 AND 001 = 101', DEADBEEF_START, DEADBEEF_END, DEADBEEF_TWICE]
     ]
     for (const [name, a, b, expected] of cases) {
       it(name, () => {
