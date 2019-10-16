@@ -117,10 +117,10 @@ ReturnStatement
 EmitStatement
   | 'emit' Expression
 
-Expression
+(+) Expression
   | ExceptionExpression
 
-ExceptionExpression
+(+) ExceptionExpression
   | LogicalOr ('->' LogicalOr)?
 
 (+) LogicalOr
