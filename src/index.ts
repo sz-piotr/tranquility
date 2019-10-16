@@ -20,6 +20,8 @@ function runFile (fileName: string) {
   return new Interpreter().eval(source)
 }
 
+const FORMAT_GREEN = '\x1b[32m%s\x1b[0m'
+
 function runPrompt () {
   const interpreter = new Interpreter()
   const rl = createInterface({ input: process.stdin, output: process.stdout })
@@ -33,7 +35,7 @@ function runPrompt () {
     }
 
     const result = interpreter.eval(source)
-    console.log(result.toPrint())
+    console.log(FORMAT_GREEN, result.toPrint())
 
     rl.prompt()
   }).on('close', () => {

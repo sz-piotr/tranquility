@@ -9,6 +9,7 @@ import { evalVariableAssignment } from './evalVariableAssignment'
 import { evalVariableDeclaration } from './evalVariableDeclaration'
 import { evalStringLiteral } from './evalStringLiteral'
 import { ProgramValue } from '../model'
+import { evalFunctionCall } from './evalFunctionCall'
 
 export function evalNode (
   node: AstNode,
@@ -23,6 +24,7 @@ export function evalNode (
     case 'VariableAssignment': return evalVariableAssignment(node, environment)
     case 'Identifier': return evalIdentifier(node, environment)
     case 'StringLiteral': return evalStringLiteral(node)
+    case 'FunctionCall': return evalFunctionCall(node, environment)
     default: throw new TypeError('Unsupported node kind')
   }
 }
